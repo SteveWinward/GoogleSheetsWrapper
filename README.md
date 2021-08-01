@@ -35,6 +35,12 @@ public class TestRecord : BaseRecord
         FieldType = SheetFieldType.Currency)]
     public double DonationAmount { get; set; }
 
+    [SheetField(
+        DisplayName = "Date",
+        ColumnID = 4,
+        FieldType = SheetFieldType.DateTime)]
+    public DateTime DateTime { get; set; }
+
     public TestRecord() { }
 
     public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
