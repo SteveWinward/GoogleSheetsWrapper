@@ -1,5 +1,6 @@
 using GoogleSheetsWrapper.Tests.TestObjects;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace GoogleSheetsWrapper.Tests
@@ -19,7 +20,8 @@ namespace GoogleSheetsWrapper.Tests
             {
                 "Name",
                 "Number",
-                "Previous Donation Amount"
+                "Previous Donation Amount",
+                "Date"
             };
 
             var sheetsHelper = new SheetHelper<TestRecord>("", "", "");
@@ -54,7 +56,8 @@ namespace GoogleSheetsWrapper.Tests
             {
                 "Steve",
                 "+1(703)-999-2222",
-                "$ 100.00"
+                "$ 100.00",
+                "33.625"
             };
 
             var record = new TestRecord(row, 1);
@@ -62,6 +65,9 @@ namespace GoogleSheetsWrapper.Tests
             Assert.AreEqual("Steve", record.Name);
             Assert.AreEqual(7039992222, record.PhoneNumber);
             Assert.AreEqual(100, record.DonationAmount);
+
+            var dt = new DateTime(1900, 2, 1, 15, 0, 0);
+            Assert.AreEqual(dt, record.DateTime);
         }
 
         [Test]
