@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Steve Winward</Authors>
+    <Product />
+    <PackageProjectUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +16,13 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.53.0.2371" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
