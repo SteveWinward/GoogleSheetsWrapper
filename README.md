@@ -1,9 +1,9 @@
 # GoogleSheetsWrapper
 ## Google Sheets API .NET Wrapper Library
 
-This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and formats. 
+This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
 
-Most Google Sheets API operations including
+The following Google Sheets API operations are supported: 
 
 * Reading all rows
 * Appending new rows
