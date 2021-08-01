@@ -24,6 +24,13 @@ namespace GoogleSheetsWrapper
             this.InitSheetRanges();
         }
 
+        public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials)
+        {
+            this.SheetsHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
+
+            this.SheetsHelper.Init(jsonCredentials);
+        }
+
         protected void InitSheetRanges()
         {
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
