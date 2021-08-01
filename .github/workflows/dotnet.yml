@@ -8,12 +8,14 @@ on:
 
 env:
   DOTNET_VERSION: '3.1.x'
-  WORKING_DIRECTORY: 'src'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'src'
 
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +25,6 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{ env.WORKING_DIRECTORY }}
     - name: Build
       run: dotnet build --no-restore
     - name: Test
