@@ -1,16 +1,18 @@
 # GoogleSheetsWrapper
 ## Google Sheets API .NET Wrapper Library
 
-This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and formats. 
+This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
 
-Most Google Sheets API operations including
+The following Google Sheets API operations are supported: 
 
 * Reading all rows
 * Appending new rows
 * Deleting rows
 * Updating specific cells
 
-Are encapsulated in the SheetsHelper class. There are also base classes, BaseRecord and BaseRepository to simply transforming raw Google Sheets rows into .NET objects. 
+All operations above are encapsulated in the SheetHelper class. 
+
+There are also base classes, BaseRecord and BaseRepository to simply transforming raw Google Sheets rows into .NET objects. 
 
 Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index (1 based index and not 0 based index)
 
