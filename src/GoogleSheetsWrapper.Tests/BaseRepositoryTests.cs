@@ -57,7 +57,7 @@ namespace GoogleSheetsWrapper.Tests
                 "Steve",
                 "+1(703)-999-2222",
                 "$ 100.00",
-                "33.625"
+                "33.625"  // DateTime in serial format for the date time of February 1, 1900 at 3:00 PM
             };
 
             var record = new TestRecord(row, 1);
@@ -68,12 +68,6 @@ namespace GoogleSheetsWrapper.Tests
 
             var dt = new DateTime(1900, 2, 1, 15, 0, 0);
             Assert.AreEqual(dt, record.DateTime);
-        }
-
-        [Test]
-        public void Test_SheetDataRange_Test1()
-        {
-
         }
     }
 }

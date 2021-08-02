@@ -143,23 +143,23 @@ namespace GoogleSheetsWrapper
         public static SheetFieldAttribute GetSheetFieldAttribute<T>
             (Expression<Func<T, object>> expression)
         {
+            MemberExpression memberExpression;
+
             if (expression.Body is MemberExpression)
             {
-                var memberExpression = (MemberExpression)expression.Body;
-                var propertyInfo = (PropertyInfo)memberExpression.Member;
-                return propertyInfo.GetCustomAttribute<SheetFieldAttribute>();
+                memberExpression = (MemberExpression)expression.Body;
             }
-            else if (expression.Body is UnaryExpression)
+            else if (expression.Body is UnaryExpression unaryExpression)
             {
-                var unaryExpression = (UnaryExpression)expression.Body;
-                var memberExpression = (MemberExpression)unaryExpression.Operand;
-                var propertyInfo = (PropertyInfo)memberExpression.Member;
-                return propertyInfo.GetCustomAttribute<SheetFieldAttribute>();
+                memberExpression = (MemberExpression)unaryExpression.Operand;
             }
             else
             {
                 throw new ArgumentException();
             }
+
+            var propertyInfo = (PropertyInfo)memberExpression.Member;
+            return propertyInfo.GetCustomAttribute<SheetFieldAttribute>();
         }
     }
 }

@@ -29,6 +29,8 @@ namespace GoogleSheetsWrapper
             this.SheetsHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
 
             this.SheetsHelper.Init(jsonCredentials);
+
+            this.InitSheetRanges();
         }
 
         protected void InitSheetRanges()
@@ -42,36 +44,37 @@ namespace GoogleSheetsWrapper
             this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 2, maxColumnId);
         }
 
+        /// <summary>
+        /// Create a new record to the end of the current sheets table
+        /// </summary>
+        /// <param name="record"></param>
         public void AddRecord(T record)
         {
             this.SheetsHelper.AppendRow(record);
         }
 
+        /// <summary>
+        /// Create a list of records to the end of the current sheets table
+        /// </summary>
+        /// <param name="records"></param>
         public void AddRecords(List<T> records)
         {
             this.SheetsHelper.AppendRows(records);
         }
 
+        /// <summary>
+        /// Delete the specified record
+        /// </summary>
+        /// <param name="record"></param>
         public void DeleteRecord(T record)
         {
             this.SheetsHelper.DeleteRow(record.RowId);
         }
 
-        public List<BatchUpdateRequestObject> FilterUpdates(
-            List<BatchUpdateRequestObject> data,
-            List<Expression<Func<T, object>>> expressions)
-        {
-            var result = new List<BatchUpdateRequestObject>();
-
-            foreach (var exp in expressions)
-            {
-                var columnID = SheetFieldAttributeUtils.GetColumnId(exp);
-                result.Add(data.Where(b => b.FieldAttribute.ColumnID == columnID).First());
-            }
-
-            return result;
-        }
-
+        /// <summary>
+        /// Get all of the records back from the Google Sheets tab
+        /// </summary>
+        /// <returns></returns>
         public List<T> GetAllRecords()
         {
             var result = this.SheetsHelper.GetRows(SheetDataRange);
@@ -89,6 +92,12 @@ namespace GoogleSheetsWrapper
             return records;
         }
 
+        /// <summary>
+        /// Save multiple field values to the row
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="properties"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse SaveFields(T record, List<Expression<Func<T, object>>> properties)
         {
             var data = record.ConvertToCellData(this.SheetsHelper.TabName);
@@ -98,11 +107,21 @@ namespace GoogleSheetsWrapper
             return this.SheetsHelper.BatchUpdate(updates);
         }
 
+        /// <summary>
+        /// Save a single field value to the row
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse SaveField(T record, Expression<Func<T, object>> expression)
         {
             return this.SaveFields(record, new List<Expression<Func<T, object>>>() { expression });
         }
 
+        /// <summary>
+        /// Ensure the header names for the Google Sheet matches the expected names based on the SheetFieldAttribute metadata
+        /// </summary>
+        /// <returns></returns>
         public SchemaValidationResult ValidateSchema()
         {
             var headers = this.SheetsHelper.GetRows(SheetHeaderRange);
@@ -110,6 +129,11 @@ namespace GoogleSheetsWrapper
             return this.ValidateSchema(headers[0]);
         }
 
+        /// <summary>
+        /// Ensure the header names for the Google Sheet matches the expected names based on the SheetFieldAttribute metadata
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public SchemaValidationResult ValidateSchema(IList<object> row)
         {
             var result = new SchemaValidationResult()
@@ -135,6 +159,27 @@ namespace GoogleSheetsWrapper
                     result.IsValid = false;
                     result.ErrorMessage += $"Expected column name: '{attribute.DisplayName}' however, current column name is: '{row[attribute.ColumnID - 1]}'. ";
                 }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="expressions"></param>
+        /// <returns></returns>
+        internal List<BatchUpdateRequestObject> FilterUpdates(
+            List<BatchUpdateRequestObject> data,
+            List<Expression<Func<T, object>>> expressions)
+        {
+            var result = new List<BatchUpdateRequestObject>();
+
+            foreach (var exp in expressions)
+            {
+                var columnID = SheetFieldAttributeUtils.GetColumnId(exp);
+                result.Add(data.Where(b => b.FieldAttribute.ColumnID == columnID).First());
             }
 
             return result;
