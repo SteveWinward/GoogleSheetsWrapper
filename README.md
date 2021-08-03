@@ -4,6 +4,10 @@ You can install this library via NuGet below,
 
 https://www.nuget.org/packages/GoogleSheetsWrapper
 
+You can also explore the entire the latest NuGet package below via FuGet,
+
+[![GoogleSheetsWrapper on fuget.org](https://www.fuget.org/packages/GoogleSheetsWrapper/badge.svg)](https://www.fuget.org/packages/GoogleSheetsWrapper)
+
 ## Google Sheets API .NET Wrapper Library
 
 This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
