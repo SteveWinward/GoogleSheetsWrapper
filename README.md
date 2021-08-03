@@ -1,4 +1,9 @@
 # GoogleSheetsWrapper
+## NuGet Install
+You can install this library via NuGet below,
+
+https://www.nuget.org/packages/GoogleSheetsWrapper
+
 ## Google Sheets API .NET Wrapper Library
 
 This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
