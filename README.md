@@ -81,6 +81,14 @@ sheetHelper.Init(settings.JsonCredential);
 // Create a Repository for the TestRecord class
 var repository = new TestRepository(sheetHelper);
 
+// Validate that the header names match the expected format defined with the SheetFieldAttribute values
+var result = repository.ValidateSchema();
+
+if(!result.IsValid)
+{
+    throw new ArgumentException(result.ErrorMessage);
+}
+
 // Get all rows from the Google Sheet
 var allRecords = repository.GetAllRecords();
 
