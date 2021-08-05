@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSheetsWrapper", "GoogleSheetsWrapper\GoogleSheetsWrapper.csproj", "{2A6DCD68-A10D-4E9B-A162-22612AC6C353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSheetsWrapper", "GoogleSheetsWrapper\GoogleSheetsWrapper.csproj", "{2A6DCD68-A10D-4E9B-A162-22612AC6C353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSheetsWrapper.Tests", "GoogleSheetsWrapper.Tests\GoogleSheetsWrapper.Tests.csproj", "{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSheetsWrapper.Tests", "GoogleSheetsWrapper.Tests\GoogleSheetsWrapper.Tests.csproj", "{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
