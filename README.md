@@ -21,7 +21,7 @@ The following Google Sheets API operations are supported:
 
 All operations above are encapsulated in the SheetHelper class. 
 
-There are also base classes, BaseRecord and BaseRepository to simply transforming raw Google Sheets rows into .NET objects. 
+There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
 
 Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index (1 based index and not 0 based index)
 
