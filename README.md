@@ -72,8 +72,7 @@ public class TestRepository : BaseRepository<TestRecord>
 
 Using the Google Sheets Wrapper library.  
 
->***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found here: 
-https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys*
+>***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found [here](#authentication)
 
 ```csharp
 // You need to implement your own configuration management solution here!
