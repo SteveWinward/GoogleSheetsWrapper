@@ -121,3 +121,30 @@ repository.AddRecord(new TestRecord()
 });
 
 ```
+
+
+## Authentication
+You need to setup a Google API Service Account before you can use this library.  
+
+1. Create a service account.  Steps to do that are documented below,
+
+    https://cloud.google.com/docs/authentication/production#create_service_account
+
+2. After you download the JSON key, you need to decide how you want to store it and load it into the application.  
+
+3. Use the service account identity that is created and add that email address to grant it permissions to the Google Sheets Spreadsheet you want to interact with.
+
+4. Configure your code with the following parameters to initialize a SheetHelper object
+
+```csharp
+// You need to implement your own configuration management solution here!
+var settings = AppSettings.FromEnvironment();
+
+// Create a SheetHelper class for the specified Google Sheet and Tab name
+var sheetHelper = new SheetHelper<TestRecord>(
+    settings.GoogleSpreadsheetId,
+    settings.GoogleServiceAccountName,
+    settings.GoogleMainSheetName);
+
+sheetHelper.Init(settings.JsonCredential);
+```
