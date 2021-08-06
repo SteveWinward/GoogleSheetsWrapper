@@ -46,6 +46,12 @@ namespace GoogleSheetsWrapper
 
                         property.SetValue(record, dt);
                     }
+                    else if (attribute.FieldType == SheetFieldType.Number)
+                    {
+                        var value = double.Parse(stringValue);
+
+                        property.SetValue(record, value);
+                    }
                     else
                     {
                         throw new ArgumentException($"{attribute.FieldType} not supported yet!");
@@ -64,6 +70,8 @@ namespace GoogleSheetsWrapper
             if (attribute.FieldType == SheetFieldType.String)
             {
                 cell.UserEnteredValue.StringValue = property.GetValue(record)?.ToString();
+
+                // TODO: Should we add an option to format the text here?
             }
             else if (attribute.FieldType == SheetFieldType.Currency)
             {
@@ -72,7 +80,7 @@ namespace GoogleSheetsWrapper
                 {
                     NumberFormat = new NumberFormat()
                     {
-                        Pattern = "\"$\"#,##0.00",
+                        Pattern = attribute.NumberFormatPattern,
                         Type = "CURRENCY"
                     }
                 };
@@ -84,7 +92,7 @@ namespace GoogleSheetsWrapper
                 {
                     NumberFormat = new NumberFormat()
                     {
-                        Pattern = "(###)\" \"###\"-\"####",
+                        Pattern = attribute.NumberFormatPattern,
                         Type = "NUMBER"
                     }
                 };
@@ -96,7 +104,19 @@ namespace GoogleSheetsWrapper
                 {
                     NumberFormat = new NumberFormat()
                     {
-                        Pattern = "M/d/yyyy H:mm:ss",
+                        Pattern = attribute.NumberFormatPattern,
+                        Type = "NUMBER"
+                    }
+                };
+            }
+            else if (attribute.FieldType == SheetFieldType.Number)
+            {
+                cell.UserEnteredValue.NumberValue = double.Parse(property.GetValue(record).ToString());
+                cell.UserEnteredFormat = new CellFormat()
+                {
+                    NumberFormat = new NumberFormat()
+                    {
+                        Pattern = attribute.NumberFormatPattern,
                         Type = "NUMBER"
                     }
                 };
