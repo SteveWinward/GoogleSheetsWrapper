@@ -21,9 +21,11 @@ The following Google Sheets API operations are supported:
 
 All operations above are encapsulated in the SheetHelper class. 
 
-There are also base classes, BaseRecord and BaseRepository to simply transforming raw Google Sheets rows into .NET objects. 
+There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
 
-Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index (1 based index and not 0 based index)
+Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
+
+> The column index is 1 based and not 0 based. The first colum 'A' is equivalent to the column ID of 1. 
 
 ```csharp
 public class TestRecord : BaseRecord
@@ -72,8 +74,7 @@ public class TestRepository : BaseRepository<TestRecord>
 
 Using the Google Sheets Wrapper library.  
 
->***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found here: 
-https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys*
+>***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found [here](#authentication)
 
 ```csharp
 // You need to implement your own configuration management solution here!
@@ -120,4 +121,31 @@ repository.AddRecord(new TestRecord()
     Date = DateTime.Now()
 });
 
+```
+
+
+## Authentication
+You need to setup a Google API Service Account before you can use this library.  
+
+1. Create a service account.  Steps to do that are documented below,
+
+    https://cloud.google.com/docs/authentication/production#create_service_account
+
+2. After you download the JSON key, you need to decide how you want to store it and load it into the application.  
+
+3. Use the service account identity that is created and add that email address to grant it permissions to the Google Sheets Spreadsheet you want to interact with.
+
+4. Configure your code with the following parameters to initialize a SheetHelper object
+
+```csharp
+// You need to implement your own configuration management solution here!
+var settings = AppSettings.FromEnvironment();
+
+// Create a SheetHelper class for the specified Google Sheet and Tab name
+var sheetHelper = new SheetHelper<TestRecord>(
+    settings.GoogleSpreadsheetId,
+    settings.GoogleServiceAccountName,
+    settings.GoogleMainSheetName);
+
+sheetHelper.Init(settings.JsonCredential);
 ```
