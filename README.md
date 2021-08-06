@@ -23,7 +23,9 @@ All operations above are encapsulated in the SheetHelper class.
 
 There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
 
-Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index (1 based index and not 0 based index)
+Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
+
+> The column index is 1 based and not 0 based. The first colum 'A' is equivalent to the column ID of 1. 
 
 ```csharp
 public class TestRecord : BaseRecord
