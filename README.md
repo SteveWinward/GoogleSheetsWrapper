@@ -6,7 +6,7 @@ https://www.nuget.org/packages/GoogleSheetsWrapper
 
 You can also explore the entire the latest NuGet package below via FuGet,
 
-[![GoogleSheetsWrapper on fuget.org](https://www.fuget.org/packages/GoogleSheetsWrapper/badge.svg)](https://www.fuget.org/packages/GoogleSheetsWrapper)
+https://www.fuget.org/packages/GoogleSheetsWrapper
 
 ## Google Sheets API .NET Wrapper Library
 
