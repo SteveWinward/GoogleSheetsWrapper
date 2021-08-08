@@ -1,5 +1,5 @@
 # GoogleSheetsWrapper
-![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)
+[![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/)
 
 ![GitHub](https://img.shields.io/github/license/SteveWinward/GoogleSheetsWrapper)
 
