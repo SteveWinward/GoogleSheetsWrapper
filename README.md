@@ -1,12 +1,8 @@
 # GoogleSheetsWrapper
-## NuGet Install
-You can install this library via NuGet below,
+## NuGet
+You can get the latest version of the NuGet package below,
 
-https://www.nuget.org/packages/GoogleSheetsWrapper
-
-You can also explore the entire the latest NuGet package below via FuGet,
-
-https://www.fuget.org/packages/GoogleSheetsWrapper
+![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)
 
 ## Google Sheets API .NET Wrapper Library
 
