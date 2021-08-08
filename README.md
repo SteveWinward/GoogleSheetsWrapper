@@ -23,41 +23,50 @@ All operations above are encapsulated in the SheetHelper class.
 
 There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
 
+## Extend BaseRecord and BaseRepository
+
 Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
 
 > The column index is 1 based and not 0 based. The first colum 'A' is equivalent to the column ID of 1. 
 
 ```csharp
 public class TestRecord : BaseRecord
-{
-    [SheetField(
-        DisplayName = "Name",
-        ColumnID = 1,
-        FieldType = SheetFieldType.String)]
-    public string Name { get; set; }
+    {
+        [SheetField(
+            DisplayName = "Name",
+            ColumnID = 1,
+            FieldType = SheetFieldType.String)]
+        public string Name { get; set; }
 
-    [SheetField(
-        DisplayName = "Number",
-        ColumnID = 2,
-        FieldType = SheetFieldType.PhoneNumber)]
-    public long PhoneNumber { get; set; }
+        [SheetField(
+            DisplayName = "Number",
+            ColumnID = 2,
+            FieldType = SheetFieldType.PhoneNumber)]
+        public long PhoneNumber { get; set; }
 
-    [SheetField(
-        DisplayName = "Previous Donation Amount",
-        ColumnID = 3,
-        FieldType = SheetFieldType.Currency)]
-    public double DonationAmount { get; set; }
+        [SheetField(
+            DisplayName = "Price Amount",
+            ColumnID = 3,
+            FieldType = SheetFieldType.Currency)]
+        public double PriceAmount { get; set; }
 
-    [SheetField(
-        DisplayName = "Date",
-        ColumnID = 4,
-        FieldType = SheetFieldType.DateTime)]
-    public DateTime DateTime { get; set; }
+        [SheetField(
+            DisplayName = "Date",
+            ColumnID = 4,
+            FieldType = SheetFieldType.DateTime)]
+        public DateTime DateTime { get; set; }
 
-    public TestRecord() { }
+        [SheetField(
+            DisplayName = "Quantity",
+            ColumnID = 5,
+            FieldType = SheetFieldType.Number)]
+        public double Quantity { get; set; }
 
-    public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
-}
+
+        public TestRecord() { }
+
+        public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
+    }
 ```
 
 Extending the BaseRepository allows you to define your own access layer to the Google Sheets tab you want to work with. 
@@ -72,7 +81,7 @@ public class TestRepository : BaseRepository<TestRecord>
 }
 ```
 
-Using the Google Sheets Wrapper library.  
+## Core Operations  
 
 >***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found [here](#authentication)
 
@@ -117,12 +126,33 @@ repository.AddRecord(new TestRecord()
 {
     Name = "John",
     Number = 2021112222,
-    DonationAmount = 250.50,
-    Date = DateTime.Now()
+    PriceAmount = 250.50,
+    Date = DateTime.Now(),
+    Quantity = 123
 });
 
 ```
 
+## Export Google Sheet to CSV
+
+```csharp
+var exporter = new SheetExporter(
+    settings.GoogleSpreadsheetId, 
+    settings.GoogleServiceAccountName, 
+    settings.GoogleMainSheetName);
+
+exporter.Init(settings.JsonCredential);
+
+var filepath = @"C:\Output\output.csv";
+
+using (var writer = new StreamWriter(filepath))
+{
+    // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
+    var range = new SheetRange("TAB_NAME", 1, 1, 8);
+    exporter.ExportAsCsv(range, writer);
+}
+
+```
 
 ## Authentication
 You need to setup a Google API Service Account before you can use this library.  
