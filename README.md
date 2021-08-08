@@ -31,42 +31,41 @@ Extending the BaseRecord class you can decorate properties with the SheetFieldAt
 
 ```csharp
 public class TestRecord : BaseRecord
-    {
-        [SheetField(
-            DisplayName = "Name",
-            ColumnID = 1,
-            FieldType = SheetFieldType.String)]
-        public string Name { get; set; }
+{
+    [SheetField(
+        DisplayName = "Name",
+        ColumnID = 1,
+        FieldType = SheetFieldType.String)]
+    public string Name { get; set; }
 
-        [SheetField(
-            DisplayName = "Number",
-            ColumnID = 2,
-            FieldType = SheetFieldType.PhoneNumber)]
-        public long PhoneNumber { get; set; }
+    [SheetField(
+        DisplayName = "Number",
+        ColumnID = 2,
+        FieldType = SheetFieldType.PhoneNumber)]
+    public long PhoneNumber { get; set; }
 
-        [SheetField(
-            DisplayName = "Price Amount",
-            ColumnID = 3,
-            FieldType = SheetFieldType.Currency)]
-        public double PriceAmount { get; set; }
+    [SheetField(
+        DisplayName = "Price Amount",
+        ColumnID = 3,
+        FieldType = SheetFieldType.Currency)]
+    public double PriceAmount { get; set; }
 
-        [SheetField(
-            DisplayName = "Date",
-            ColumnID = 4,
-            FieldType = SheetFieldType.DateTime)]
-        public DateTime DateTime { get; set; }
+    [SheetField(
+        DisplayName = "Date",
+        ColumnID = 4,
+        FieldType = SheetFieldType.DateTime)]
+    public DateTime DateTime { get; set; }
 
-        [SheetField(
-            DisplayName = "Quantity",
-            ColumnID = 5,
-            FieldType = SheetFieldType.Number)]
-        public double Quantity { get; set; }
+    [SheetField(
+        DisplayName = "Quantity",
+        ColumnID = 5,
+        FieldType = SheetFieldType.Number)]
+    public double Quantity { get; set; }
 
+    public TestRecord() { }
 
-        public TestRecord() { }
-
-        public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
-    }
+    public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
+}
 ```
 
 Extending the BaseRepository allows you to define your own access layer to the Google Sheets tab you want to work with. 
