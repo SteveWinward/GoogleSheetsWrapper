@@ -1,8 +1,9 @@
 # GoogleSheetsWrapper
-## NuGet
-You can get the latest version of the NuGet package below,
-
 ![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)
+
+![GitHub](https://img.shields.io/github/license/SteveWinward/GoogleSheetsWrapper)
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SteveWinward/GoogleSheetsWrapper/.NET)
 
 ## Google Sheets API .NET Wrapper Library
 
