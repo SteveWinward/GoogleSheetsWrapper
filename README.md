@@ -108,9 +108,9 @@ var allRecords = repository.GetAllRecords();
 // Get the first record
 var firstRecord = allRecords.First();
 
-// Update the DonationAmount field and save it back to Google Sheets
-firstRecord.DonationAmount = 99.99;
-repository.SaveField(firstRecord, (r) => r.DonationAmount);
+// Update the PriceAmount field and save it back to Google Sheets
+firstRecord.PriceAmount = 99.99;
+repository.SaveField(firstRecord, (r) => r.PriceAmount);
 
 // Delete the first record from Google Sheets
 repository.DeleteRecord(firstRecord);
