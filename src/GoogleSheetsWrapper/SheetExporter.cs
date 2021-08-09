@@ -58,7 +58,7 @@ namespace GoogleSheetsWrapper
             {
                 Id = document.WorkbookPart.GetIdOfPart(worksheetPart),
                 SheetId = 1,
-                Name = this.TabName
+                Name = string.IsNullOrEmpty(this.TabName) ? "Sheet1" : this.TabName
             };
             sheets.Append(sheet);
 
