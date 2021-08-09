@@ -1,12 +1,5 @@
 # GoogleSheetsWrapper
-## NuGet Install
-You can install this library via NuGet below,
-
-https://www.nuget.org/packages/GoogleSheetsWrapper
-
-You can also explore the entire the latest NuGet package below via FuGet,
-
-https://www.fuget.org/packages/GoogleSheetsWrapper
+[![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/) [![GitHub](https://img.shields.io/github/license/SteveWinward/GoogleSheetsWrapper)](LICENSE) ![build status](https://github.com/SteveWinward/GoogleSheetsWrapper/actions/workflows/dotnet.yml/badge.svg)
 
 ## Google Sheets API .NET Wrapper Library
 
