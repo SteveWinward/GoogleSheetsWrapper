@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GoogleSheetsWrapper
 {
-    public class SheetRange
+    public class SheetRange : IEquatable<SheetRange>
     {
         public string A1Notation { get; private set; }
 
@@ -22,6 +22,8 @@ namespace GoogleSheetsWrapper
         public int? EndColumn { get; set; }
 
         public int? EndRow { get; set; }
+
+        public string TabName { get; set; }
 
         private static readonly List<string> aToZ
             = Enumerable.Range('A', 26)
@@ -73,6 +75,7 @@ namespace GoogleSheetsWrapper
             this.StartRow = startRow;
             this.EndRow = endRow;
             this.EndColumn = endColumn;
+            this.TabName = tabName == null ? string.Empty : tabName;
         }
 
         /// <summary>
@@ -96,6 +99,58 @@ namespace GoogleSheetsWrapper
             columnLettersNotation = new string(columnLettersNotation.ToCharArray().Reverse().ToArray());
 
             return columnLettersNotation;
+        }
+
+        /// <summary>
+        /// The resulting column id is on a 1 based index (ie A => 1)
+        /// </summary>
+        /// <param name="letters"></param>
+        /// <returns></returns>
+        public static int GetColumnIDFromLetters(string letters)
+        {
+            int result = 0;
+
+            letters = letters.ToUpper();
+
+            for (int i = 0; i < letters.Count(); i++)
+            {
+                var currentLetter = letters[i];
+                var currentLetterNumber = (int)currentLetter;
+
+                result *= 26;
+                result += currentLetterNumber - 'A' + 1;
+            }
+
+            return result;
+        }
+
+        public int GetHashCode(SheetRange obj)
+        {
+            return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
+        }
+
+        public bool Equals(SheetRange other)
+        {
+            return
+                this.A1Notation == other.A1Notation &&
+                this.CanSupportA1Notation == other.CanSupportA1Notation &&
+                this.EndColumn == other.EndColumn &&
+                this.EndRow == other.EndRow &&
+                this.IsSingleCellRange == other.IsSingleCellRange &&
+                this.R1C1Notation == other.R1C1Notation &&
+                this.StartColumn == other.StartColumn &&
+                this.StartRow == other.StartRow &&
+                this.TabName == other.TabName;
+        }
+
+        public override bool Equals(object other)
+        {
+            return this.Equals((SheetRange)other);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.GetHashCode(this);
         }
     }
 }
