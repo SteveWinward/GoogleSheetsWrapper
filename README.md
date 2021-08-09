@@ -137,11 +137,32 @@ exporter.Init(settings.JsonCredential);
 
 var filepath = @"C:\Output\output.csv";
 
-using (var writer = new StreamWriter(filepath))
+using (var stream = new FileStream(filepath))
 {
     // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
     var range = new SheetRange("TAB_NAME", 1, 1, 8);
     exporter.ExportAsCsv(range, writer);
+}
+
+```
+
+## Export Google Sheet to Excel File
+
+```csharp
+var exporter = new SheetExporter(
+    settings.GoogleSpreadsheetId, 
+    settings.GoogleServiceAccountName, 
+    settings.GoogleMainSheetName);
+
+exporter.Init(settings.JsonCredential);
+
+var filepath = @"C:\Output\output.xlsx";
+
+using (var stream = new FileStream(filepath))
+{
+    // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
+    var range = new SheetRange("TAB_NAME", 1, 1, 8);
+    exporter.ExportAsExcel(range, writer);
 }
 
 ```

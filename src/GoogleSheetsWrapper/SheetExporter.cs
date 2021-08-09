@@ -17,21 +17,20 @@ namespace GoogleSheetsWrapper
         {
         }
 
-        public void ExportAsCsv(SheetRange range, StreamWriter streamWriter)
+        public void ExportAsCsv(SheetRange range, Stream stream)
         {
             var rows = this.GetRowsFormatted(range);
 
-            using (var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
+            using StreamWriter streamWriter = new StreamWriter(stream);
+            using var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+            foreach (var row in rows)
             {
-                foreach (var row in rows)
+                foreach (var cell in row)
                 {
-                    foreach (var cell in row)
-                    {
-                        csv.WriteField(cell?.ToString());
-                    }
-
-                    csv.NextRecord();
+                    csv.WriteField(cell?.ToString());
                 }
+
+                csv.NextRecord();
             }
         }
 
