@@ -75,7 +75,9 @@ public class TestRepository : BaseRepository<TestRecord>
 
 ## Core Operations  
 
->***Note** that to do this you will need to setup a Google Service Account and create a service account key.  More details can be found [here](#authentication)
+Before you run the following code you will need to setup a Google Service Account and create a service account key.  You also need to decide how to store your environment variables and secrets (ie the Google service account key)
+
+More details can be found [here](#authentication)
 
 ```csharp
 // You need to implement your own configuration management solution here!
