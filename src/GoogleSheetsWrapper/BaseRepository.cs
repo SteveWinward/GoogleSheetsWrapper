@@ -48,18 +48,18 @@ namespace GoogleSheetsWrapper
         /// Create a new record to the end of the current sheets table
         /// </summary>
         /// <param name="record"></param>
-        public void AddRecord(T record)
+        public BatchUpdateSpreadsheetResponse AddRecord(T record)
         {
-            this.SheetsHelper.AppendRow(record);
+            return this.SheetsHelper.AppendRow(record);
         }
 
         /// <summary>
         /// Create a list of records to the end of the current sheets table
         /// </summary>
         /// <param name="records"></param>
-        public void AddRecords(List<T> records)
+        public BatchUpdateSpreadsheetResponse AddRecords(List<T> records)
         {
-            this.SheetsHelper.AppendRows(records);
+            return this.SheetsHelper.AppendRows(records);
         }
 
         /// <summary>

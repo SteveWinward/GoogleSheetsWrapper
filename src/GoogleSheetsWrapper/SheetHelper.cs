@@ -17,12 +17,12 @@ namespace GoogleSheetsWrapper
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
             : base(spreadsheetID, serviceAccountEmail, tabName) { }
 
-        public void AppendRow(T record)
+        public BatchUpdateSpreadsheetResponse AppendRow(T record)
         {
-            this.AppendRows(new List<T>() { record });
+            return this.AppendRows(new List<T>() { record });
         }
 
-        public void AppendRows(List<T> records)
+        public BatchUpdateSpreadsheetResponse AppendRows(List<T> records)
         {
             var rows = new List<RowData>();
 
@@ -55,7 +55,7 @@ namespace GoogleSheetsWrapper
             };
 
             // Finally update the sheet.
-            this.Service.Spreadsheets
+            return this.Service.Spreadsheets
                 .BatchUpdate(batchRequst, this.SpreadsheetID)
                 .Execute();
         }
