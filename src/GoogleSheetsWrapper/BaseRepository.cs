@@ -33,6 +33,9 @@ namespace GoogleSheetsWrapper
             this.InitSheetRanges();
         }
 
+        /// <summary>
+        /// Determines the proper sheet ranges to query the Sheets table
+        /// </summary>
         protected void InitSheetRanges()
         {
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
