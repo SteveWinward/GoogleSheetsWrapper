@@ -36,7 +36,11 @@ namespace GoogleSheetsWrapper
                     else if (attribute.FieldType == SheetFieldType.PhoneNumber)
                     {
                         var value = PhoneNumberParsing.RemoveUSInterationalPhoneCode(stringValue);
-                        property.SetValue(record, long.Parse(value));
+
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            property.SetValue(record, long.Parse(value));
+                        }
                     }
                     else if (attribute.FieldType == SheetFieldType.DateTime)
                     {
