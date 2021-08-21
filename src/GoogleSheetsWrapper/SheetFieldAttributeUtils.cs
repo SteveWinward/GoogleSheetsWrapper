@@ -87,7 +87,17 @@ namespace GoogleSheetsWrapper
             }
             else if (attribute.FieldType == SheetFieldType.PhoneNumber)
             {
-                cell.UserEnteredValue.NumberValue = double.Parse(property.GetValue(record).ToString());
+                double parsedNumber = double.Parse(property.GetValue(record).ToString());
+
+                if (parsedNumber != 0)
+                {
+                    cell.UserEnteredValue.NumberValue = parsedNumber;
+                }
+                else
+                {
+                    cell.UserEnteredValue.NumberValue = null;
+                }
+
                 cell.UserEnteredFormat = new CellFormat()
                 {
                     NumberFormat = new NumberFormat()
