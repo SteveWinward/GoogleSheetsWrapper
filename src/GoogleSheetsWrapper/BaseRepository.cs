@@ -41,9 +41,10 @@ namespace GoogleSheetsWrapper
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
 
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
+            var minColumnId = attributes.Min(a => a.Key.ColumnID);
 
-            this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, 1, 1, maxColumnId, 1);
-            this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, 1, 2, maxColumnId);
+            this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 1, maxColumnId, 1);
+            this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 2, maxColumnId);
         }
 
         /// <summary>
@@ -87,7 +88,12 @@ namespace GoogleSheetsWrapper
             {
                 var currentRecord = result[r];
 
-                var record = (T)Activator.CreateInstance(typeof(T), currentRecord, r + this.SheetDataRange.StartRow);
+                var record = (T)Activator.CreateInstance(
+                    typeof(T),
+                    currentRecord,
+                    r + this.SheetDataRange.StartRow,
+                    this.SheetDataRange.StartColumn);
+
                 records.Add(record);
             }
 

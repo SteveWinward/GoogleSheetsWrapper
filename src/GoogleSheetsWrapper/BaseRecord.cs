@@ -20,9 +20,20 @@ namespace GoogleSheetsWrapper
         /// <param name="row"></param>
         /// <param name="rowId"></param>
         public BaseRecord(IList<object> row, int rowId)
+            : this(row, rowId, 1)
+        {
+        }
+
+        /// <summary>
+        /// Convert a Google Sheet API row result into a BaseRecord with an column id offset
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="rowId"></param>
+        /// <param name="minColumnId"></param>
+        public BaseRecord(IList<object> row, int rowId, int minColumnId)
         {
             this.RowId = rowId;
-            SheetFieldAttributeUtils.PopulateRecord(this, row);
+            SheetFieldAttributeUtils.PopulateRecord(this, row, minColumnId);
         }
 
         /// <summary>

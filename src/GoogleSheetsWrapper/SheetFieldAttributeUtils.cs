@@ -12,7 +12,7 @@ namespace GoogleSheetsWrapper
 {
     public class SheetFieldAttributeUtils
     {
-        public static void PopulateRecord<T>(T record, IList<object> row) where T : BaseRecord
+        public static void PopulateRecord<T>(T record, IList<object> row, int minColumnId = 1) where T : BaseRecord
         {
             var properties = record.GetType().GetProperties();
 
@@ -20,9 +20,9 @@ namespace GoogleSheetsWrapper
             {
                 var attribute = property.GetCustomAttribute<SheetFieldAttribute>();
 
-                if ((attribute != null) && (row.Count >= attribute.ColumnID))
+                if ((attribute != null) && (row.Count > (attribute.ColumnID - minColumnId)))
                 {
-                    var stringValue = row[attribute.ColumnID - 1]?.ToString();
+                    var stringValue = row[attribute.ColumnID - minColumnId]?.ToString();
 
                     if (attribute.FieldType == SheetFieldType.String)
                     {
