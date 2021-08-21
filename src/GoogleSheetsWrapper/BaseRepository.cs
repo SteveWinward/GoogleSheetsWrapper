@@ -40,11 +40,10 @@ namespace GoogleSheetsWrapper
         {
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
 
-            var minColumnId = attributes.Min(a => a.Key.ColumnID);
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
 
-            this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 1, maxColumnId, 1);
-            this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 2, maxColumnId);
+            this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, 1, 1, maxColumnId, 1);
+            this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, 1, 2, maxColumnId);
         }
 
         /// <summary>
