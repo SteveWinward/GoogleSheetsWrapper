@@ -73,9 +73,20 @@ namespace GoogleSheetsWrapper
 
             if (attribute.FieldType == SheetFieldType.String)
             {
-                cell.UserEnteredValue.StringValue = property.GetValue(record)?.ToString();
+                var stringValue = property.GetValue(record);
 
-                // TODO: Should we add an option to format the text here?
+                if (stringValue == null)
+                {
+                    cell.UserEnteredValue.StringValue = string.Empty;
+                }
+                else if (string.IsNullOrWhiteSpace(stringValue.ToString()))
+                {
+                    cell.UserEnteredValue.StringValue = string.Empty;
+                }
+                else
+                {
+                    cell.UserEnteredValue.StringValue = stringValue.ToString();
+                }
             }
             else if (attribute.FieldType == SheetFieldType.Currency)
             {
