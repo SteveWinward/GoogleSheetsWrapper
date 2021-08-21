@@ -30,8 +30,11 @@ namespace GoogleSheetsWrapper
                     }
                     else if (attribute.FieldType == SheetFieldType.Currency)
                     {
-                        var value = CurrencyParsing.ParseCurrencyString(stringValue);
-                        property.SetValue(record, value);
+                        if (!string.IsNullOrWhiteSpace(stringValue))
+                        {
+                            var value = CurrencyParsing.ParseCurrencyString(stringValue);
+                            property.SetValue(record, value);
+                        }
                     }
                     else if (attribute.FieldType == SheetFieldType.PhoneNumber)
                     {
@@ -52,9 +55,12 @@ namespace GoogleSheetsWrapper
                     }
                     else if (attribute.FieldType == SheetFieldType.Number)
                     {
-                        var value = double.Parse(stringValue);
+                        if (!string.IsNullOrWhiteSpace(stringValue))
+                        {
+                            var value = double.Parse(stringValue);
 
-                        property.SetValue(record, value);
+                            property.SetValue(record, value);
+                        }
                     }
                     else
                     {
