@@ -20,7 +20,7 @@ There are also base classes, BaseRecord and BaseRepository to simplify transform
 
 Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
 
-> The column index is 1 based and not 0 based. The first colum 'A' is equivalent to the column ID of 1. 
+> The column index is 1 based and not 0 based. The first column 'A' is equivalent to the column ID of 1. 
 
 ```csharp
 public class TestRecord : BaseRecord
@@ -47,7 +47,7 @@ public class TestRecord : BaseRecord
         DisplayName = "Date",
         ColumnID = 4,
         FieldType = SheetFieldType.DateTime)]
-    public DateTime DateTime { get; set; }
+    public DateTime? DateTime { get; set; }
 
     [SheetField(
         DisplayName = "Quantity",
@@ -55,9 +55,13 @@ public class TestRecord : BaseRecord
         FieldType = SheetFieldType.Number)]
     public double Quantity { get; set; }
 
+
     public TestRecord() { }
 
-    public TestRecord(IList<object> row, int rowId) : base(row, rowId) { }
+    public TestRecord(IList<object> row, int rowId, int minColumnId = 1)
+        : base(row, rowId, minColumnId)
+    {
+    }
 }
 ```
 

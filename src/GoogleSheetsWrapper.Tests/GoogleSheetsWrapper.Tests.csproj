@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestObjects\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GoogleSheetsWrapper\GoogleSheetsWrapper.csproj" />
   </ItemGroup>
 

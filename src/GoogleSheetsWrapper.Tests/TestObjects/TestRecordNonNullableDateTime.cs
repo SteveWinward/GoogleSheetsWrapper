@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GoogleSheetsWrapper.Tests.TestObjects
 {
-    public class TestRecord : BaseRecord
+    public class TestRecordNonNullableDateTime : BaseRecord
     {
         [SheetField(
             DisplayName = "Name",
@@ -29,7 +29,7 @@ namespace GoogleSheetsWrapper.Tests.TestObjects
             DisplayName = "Date",
             ColumnID = 4,
             FieldType = SheetFieldType.DateTime)]
-        public DateTime? DateTime { get; set; }
+        public DateTime DateTime { get; set; }
 
         [SheetField(
             DisplayName = "Quantity",
@@ -38,9 +38,9 @@ namespace GoogleSheetsWrapper.Tests.TestObjects
         public double Quantity { get; set; }
 
 
-        public TestRecord() { }
+        public TestRecordNonNullableDateTime() { }
 
-        public TestRecord(IList<object> row, int rowId, int minColumnId = 1)
+        public TestRecordNonNullableDateTime(IList<object> row, int rowId, int minColumnId = 1)
             : base(row, rowId, minColumnId)
         {
         }

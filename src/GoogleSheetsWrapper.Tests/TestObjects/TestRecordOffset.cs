@@ -5,42 +5,42 @@ using System.Text;
 
 namespace GoogleSheetsWrapper.Tests.TestObjects
 {
-    public class TestRecord : BaseRecord
+    public class TestRecordOffset : BaseRecord
     {
         [SheetField(
             DisplayName = "Name",
-            ColumnID = 1,
+            ColumnID = 11,
             FieldType = SheetFieldType.String)]
         public string Name { get; set; }
 
         [SheetField(
             DisplayName = "Number",
-            ColumnID = 2,
+            ColumnID = 12,
             FieldType = SheetFieldType.PhoneNumber)]
         public long PhoneNumber { get; set; }
 
         [SheetField(
             DisplayName = "Price Amount",
-            ColumnID = 3,
+            ColumnID = 13,
             FieldType = SheetFieldType.Currency)]
         public double PriceAmount { get; set; }
 
         [SheetField(
             DisplayName = "Date",
-            ColumnID = 4,
+            ColumnID = 14,
             FieldType = SheetFieldType.DateTime)]
-        public DateTime? DateTime { get; set; }
+        public DateTime DateTime { get; set; }
 
         [SheetField(
             DisplayName = "Quantity",
-            ColumnID = 5,
+            ColumnID = 15,
             FieldType = SheetFieldType.Number)]
         public double Quantity { get; set; }
 
 
-        public TestRecord() { }
+        public TestRecordOffset() { }
 
-        public TestRecord(IList<object> row, int rowId, int minColumnId = 1)
+        public TestRecordOffset(IList<object> row, int rowId, int minColumnId = 1)
             : base(row, rowId, minColumnId)
         {
         }

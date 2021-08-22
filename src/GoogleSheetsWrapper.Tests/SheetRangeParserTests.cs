@@ -1,7 +1,7 @@
 using GoogleSheetsWrapper;
 using NUnit.Framework;
 
-namespace CAR.Core.Tests
+namespace GoogleSheetsWrapper.Tests
 {
     public class SheetRangeParserTests
     {

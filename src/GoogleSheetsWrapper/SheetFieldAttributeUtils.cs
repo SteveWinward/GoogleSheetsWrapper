@@ -47,11 +47,16 @@ namespace GoogleSheetsWrapper
                     }
                     else if (attribute.FieldType == SheetFieldType.DateTime)
                     {
-                        var serialNumber = double.Parse(stringValue);
+                        DateTime? dt = new DateTime();
 
-                        DateTime dt = DateTimeUtils.ConvertFromSerialNumber(serialNumber);
+                        if (!string.IsNullOrWhiteSpace(stringValue))
+                        {
+                            var serialNumber = double.Parse(stringValue);
 
-                        property.SetValue(record, dt);
+                            dt = DateTimeUtils.ConvertFromSerialNumber(serialNumber);
+
+                            property.SetValue(record, dt);
+                        }
                     }
                     else if (attribute.FieldType == SheetFieldType.Number)
                     {

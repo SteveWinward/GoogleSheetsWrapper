@@ -15,20 +15,26 @@ namespace GoogleSheetsWrapper
 
         public SheetRange SheetHeaderRange { get; private set; }
 
+        public bool HasHeaderRow { get; private set; }
+
         public BaseRepository() { }
 
-        public BaseRepository(SheetHelper<T> sheetsHelper)
+        public BaseRepository(SheetHelper<T> sheetsHelper, bool hasHeaderRow = true)
         {
             this.SheetsHelper = sheetsHelper;
+
+            this.HasHeaderRow = hasHeaderRow;
 
             this.InitSheetRanges();
         }
 
-        public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials)
+        public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials, bool hasHeaderRow = true)
         {
             this.SheetsHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
 
             this.SheetsHelper.Init(jsonCredentials);
+
+            this.HasHeaderRow = hasHeaderRow;
 
             this.InitSheetRanges();
         }
@@ -43,8 +49,15 @@ namespace GoogleSheetsWrapper
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
             var minColumnId = attributes.Min(a => a.Key.ColumnID);
 
-            this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 1, maxColumnId, 1);
-            this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 2, maxColumnId);
+            if (this.HasHeaderRow)
+            {
+                this.SheetHeaderRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 1, maxColumnId, 1);
+                this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 2, maxColumnId);
+            }
+            else
+            {
+                this.SheetDataRange = new SheetRange(this.SheetsHelper.TabName, minColumnId, 1, maxColumnId);
+            }
         }
 
         /// <summary>
@@ -132,6 +145,11 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public SchemaValidationResult ValidateSchema()
         {
+            if (!this.HasHeaderRow)
+            {
+                throw new ArgumentException("ValidateSchema cannot be called when the HasHeaderRow property is set to false");
+            }
+
             var headers = this.SheetsHelper.GetRows(SheetHeaderRange);
 
             return this.ValidateSchema(headers[0]);
@@ -144,6 +162,11 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public SchemaValidationResult ValidateSchema(IList<object> row)
         {
+            if (!this.HasHeaderRow)
+            {
+                throw new ArgumentException("ValidateSchema cannot be called when the HasHeaderRow property is set to false");
+            }
+
             var result = new SchemaValidationResult()
             {
                 IsValid = true,

@@ -15,22 +15,12 @@ namespace GoogleSheetsWrapper
         public BaseRecord() { }
 
         /// <summary>
-        /// Convert a Google Sheet API row result into a BaseRecord
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="rowId"></param>
-        public BaseRecord(IList<object> row, int rowId)
-            : this(row, rowId, 1)
-        {
-        }
-
-        /// <summary>
         /// Convert a Google Sheet API row result into a BaseRecord with an column id offset
         /// </summary>
         /// <param name="row"></param>
         /// <param name="rowId"></param>
         /// <param name="minColumnId"></param>
-        public BaseRecord(IList<object> row, int rowId, int minColumnId)
+        public BaseRecord(IList<object> row, int rowId, int minColumnId = 1)
         {
             this.RowId = rowId;
             SheetFieldAttributeUtils.PopulateRecord(this, row, minColumnId);
