@@ -115,13 +115,7 @@ namespace GoogleSheetsWrapper.Tests
 
             var record = new TestRecord(row, 1);
 
-            Assert.AreEqual("Steve", record.Name);
-            Assert.AreEqual(0, record.PhoneNumber);
-            Assert.AreEqual(100, record.PriceAmount);
-            Assert.AreEqual(1234.56, record.Quantity);
-
-            var dt = new DateTime(1900, 2, 1, 15, 0, 0);
-            Assert.AreEqual(dt, record.DateTime);
+            Assert.IsNull(record.PhoneNumber);
         }
 
         [Test]
@@ -138,13 +132,7 @@ namespace GoogleSheetsWrapper.Tests
 
             var record = new TestRecord(row, 1);
 
-            Assert.AreEqual("Steve", record.Name);
-            Assert.AreEqual(7039992222, record.PhoneNumber);
-            Assert.AreEqual(0, record.PriceAmount);
-            Assert.AreEqual(1234.56, record.Quantity);
-
-            var dt = new DateTime(1900, 2, 1, 15, 0, 0);
-            Assert.AreEqual(dt, record.DateTime);
+            Assert.IsNull(record.PriceAmount);
         }
 
         [Test]
@@ -160,11 +148,6 @@ namespace GoogleSheetsWrapper.Tests
             };
 
             var record = new TestRecord(row, 1);
-
-            Assert.AreEqual("Steve", record.Name);
-            Assert.AreEqual(7039992222, record.PhoneNumber);
-            Assert.AreEqual(100, record.PriceAmount);
-            Assert.AreEqual(1234.56, record.Quantity);
 
             Assert.IsNull(record.DateTime);
         }

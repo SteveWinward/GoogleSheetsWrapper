@@ -17,13 +17,13 @@ namespace GoogleSheetsWrapper.Tests.TestObjects
             DisplayName = "Number",
             ColumnID = 2,
             FieldType = SheetFieldType.PhoneNumber)]
-        public long PhoneNumber { get; set; }
+        public long? PhoneNumber { get; set; }
 
         [SheetField(
             DisplayName = "Price Amount",
             ColumnID = 3,
             FieldType = SheetFieldType.Currency)]
-        public double PriceAmount { get; set; }
+        public double? PriceAmount { get; set; }
 
         [SheetField(
             DisplayName = "Date",
@@ -35,7 +35,7 @@ namespace GoogleSheetsWrapper.Tests.TestObjects
             DisplayName = "Quantity",
             ColumnID = 5,
             FieldType = SheetFieldType.Number)]
-        public double Quantity { get; set; }
+        public double? Quantity { get; set; }
 
 
         public TestRecord() { }

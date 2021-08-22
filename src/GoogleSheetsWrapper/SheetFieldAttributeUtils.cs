@@ -82,26 +82,30 @@ namespace GoogleSheetsWrapper
                 UserEnteredValue = new ExtendedValue()
             };
 
+            var value = property.GetValue(record);
+
             if (attribute.FieldType == SheetFieldType.String)
             {
-                var stringValue = property.GetValue(record);
-
-                if (stringValue == null)
+                if (value == null)
                 {
                     cell.UserEnteredValue.StringValue = string.Empty;
                 }
-                else if (string.IsNullOrWhiteSpace(stringValue.ToString()))
+                else if (string.IsNullOrWhiteSpace(value.ToString()))
                 {
                     cell.UserEnteredValue.StringValue = string.Empty;
                 }
                 else
                 {
-                    cell.UserEnteredValue.StringValue = stringValue.ToString();
+                    cell.UserEnteredValue.StringValue = value.ToString();
                 }
             }
             else if (attribute.FieldType == SheetFieldType.Currency)
             {
-                cell.UserEnteredValue.NumberValue = double.Parse(property.GetValue(record).ToString());
+                if (value != null)
+                {
+                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString());
+                }
+
                 cell.UserEnteredFormat = new CellFormat()
                 {
                     NumberFormat = new NumberFormat()
@@ -110,18 +114,22 @@ namespace GoogleSheetsWrapper
                         Type = "CURRENCY"
                     }
                 };
+
             }
             else if (attribute.FieldType == SheetFieldType.PhoneNumber)
             {
-                double parsedNumber = double.Parse(property.GetValue(record).ToString());
+                if (value != null)
+                {
+                    double parsedNumber = double.Parse(value.ToString());
 
-                if (parsedNumber != 0)
-                {
-                    cell.UserEnteredValue.NumberValue = parsedNumber;
-                }
-                else
-                {
-                    cell.UserEnteredValue.NumberValue = null;
+                    if (parsedNumber != 0)
+                    {
+                        cell.UserEnteredValue.NumberValue = parsedNumber;
+                    }
+                    else
+                    {
+                        cell.UserEnteredValue.NumberValue = null;
+                    }
                 }
 
                 cell.UserEnteredFormat = new CellFormat()
@@ -135,7 +143,11 @@ namespace GoogleSheetsWrapper
             }
             else if (attribute.FieldType == SheetFieldType.DateTime)
             {
-                cell.UserEnteredValue.NumberValue = DateTimeUtils.ConvertToSerialNumber((DateTime)property.GetValue(record));
+                if (value != null)
+                {
+                    cell.UserEnteredValue.NumberValue = DateTimeUtils.ConvertToSerialNumber((DateTime)value);
+                }
+
                 cell.UserEnteredFormat = new CellFormat()
                 {
                     NumberFormat = new NumberFormat()
@@ -147,7 +159,11 @@ namespace GoogleSheetsWrapper
             }
             else if (attribute.FieldType == SheetFieldType.Number)
             {
-                cell.UserEnteredValue.NumberValue = double.Parse(property.GetValue(record).ToString());
+                if (value != null)
+                {
+                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString());
+                }
+
                 cell.UserEnteredFormat = new CellFormat()
                 {
                     NumberFormat = new NumberFormat()
