@@ -31,7 +31,7 @@ namespace GoogleSheetsWrapper
                 .ToList();
 
         /// <summary>
-        /// Row and column numbers are 1 based indexs
+        /// Row and column numbers are 1 based indexes
         /// </summary>
         /// <param name="tabName"></param>
         /// <param name="startColumn"></param>
@@ -75,7 +75,7 @@ namespace GoogleSheetsWrapper
             this.StartRow = startRow;
             this.EndRow = endRow;
             this.EndColumn = endColumn;
-            this.TabName = tabName == null ? string.Empty : tabName;
+            this.TabName = tabName ?? string.Empty;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// The resulting column id is on a 1 based index (ie A => 1)
+        /// The resulting column id is on a 1 based index (i.e. A => 1)
         /// </summary>
         /// <param name="letters"></param>
         /// <returns></returns>

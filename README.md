@@ -94,6 +94,10 @@ var sheetHelper = new SheetHelper<TestRecord>(
 
 sheetHelper.Init(settings.JsonCredential);
 
+// Get all rows from the sheet starting with the 1st row, between the 1st and 8th columns
+// Leaving the last row blank tells Google Sheets to return all rows from the Sheet
+var allRows = sheetHelper.GetRows("TabName", 1, 1, 8);
+
 // Create a Repository for the TestRecord class
 var repository = new TestRepository(sheetHelper);
 

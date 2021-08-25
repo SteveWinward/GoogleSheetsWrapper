@@ -77,8 +77,10 @@ namespace GoogleSheetsWrapper
 
         public IList<IList<object>> GetRows(SheetRange range)
         {
+            var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
+
             GetRequest request =
-                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, range.A1Notation);
+                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = GetRequest.ValueRenderOptionEnum.UNFORMATTEDVALUE;
             request.DateTimeRenderOption = GetRequest.DateTimeRenderOptionEnum.SERIALNUMBER;
@@ -89,8 +91,10 @@ namespace GoogleSheetsWrapper
 
         public IList<IList<object>> GetRowsFormatted(SheetRange range)
         {
+            var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
+
             GetRequest request =
-                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, range.A1Notation);
+                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = GetRequest.ValueRenderOptionEnum.FORMATTEDVALUE;
             request.DateTimeRenderOption = GetRequest.DateTimeRenderOptionEnum.FORMATTEDSTRING;
