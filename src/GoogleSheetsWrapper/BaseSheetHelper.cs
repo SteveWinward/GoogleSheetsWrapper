@@ -14,7 +14,7 @@ namespace GoogleSheetsWrapper
     {
         public string SpreadsheetID { get; set; }
 
-        public string TabName { get; set; }
+        public string TabName { get; private set; }
 
         public int? SheetID { get; set; }
 
@@ -78,6 +78,8 @@ namespace GoogleSheetsWrapper
 
                 this.SheetID = sheet.Properties.SheetId;
             }
+
+            this.TabName = newTabName;
         }
 
         public List<string> GetAllTabNames()
