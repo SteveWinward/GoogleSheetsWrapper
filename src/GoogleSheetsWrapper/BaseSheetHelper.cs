@@ -52,14 +52,19 @@ namespace GoogleSheetsWrapper
 
             this.Service = service;
 
+            this.UpdateTabName(this.TabName);
+        }
+
+        public void UpdateTabName(string newTabName)
+        {
             // Lookup the sheet id for the given tab name
-            if (!string.IsNullOrEmpty(this.TabName))
+            if (!string.IsNullOrEmpty(newTabName))
             {
                 var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
 
                 var result = spreadsheet.Execute();
 
-                var sheet = result.Sheets.Where(s => s.Properties.Title.Equals(this.TabName, StringComparison.CurrentCultureIgnoreCase)).First();
+                var sheet = result.Sheets.Where(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)).First();
 
                 this.SheetID = sheet.Properties.SheetId;
             }
@@ -73,6 +78,17 @@ namespace GoogleSheetsWrapper
 
                 this.SheetID = sheet.Properties.SheetId;
             }
+        }
+
+        public List<string> GetAllTabNames()
+        {
+            var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
+
+            var result = spreadsheet.Execute();
+
+            var tabs = result.Sheets.Select(s => s.Properties.Title).ToList();
+
+            return tabs;
         }
 
         public IList<IList<object>> GetRows(SheetRange range)
