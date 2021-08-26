@@ -12,6 +12,14 @@ using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource;
 
 namespace GoogleSheetsWrapper
 {
+    public class SheetHelper : BaseSheetHelper
+    {
+        public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
+            : base(spreadsheetID, serviceAccountEmail, tabName)
+        {
+        }
+    }
+
     public class SheetHelper<T> : BaseSheetHelper where T : BaseRecord
     {
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
