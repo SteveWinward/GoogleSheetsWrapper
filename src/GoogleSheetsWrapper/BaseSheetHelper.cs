@@ -57,27 +57,23 @@ namespace GoogleSheetsWrapper
 
         public void UpdateTabName(string newTabName)
         {
+            var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
+
+            var result = spreadsheet.Execute();
+
+            Sheet sheet;
+
             // Lookup the sheet id for the given tab name
             if (!string.IsNullOrEmpty(newTabName))
             {
-                var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
-
-                var result = spreadsheet.Execute();
-
-                var sheet = result.Sheets.Where(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)).First();
-
-                this.SheetID = sheet.Properties.SheetId;
+                sheet = result.Sheets.Where(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)).First();
             }
             else
             {
-                var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
-
-                var result = spreadsheet.Execute();
-
-                var sheet = result.Sheets.First();
-
-                this.SheetID = sheet.Properties.SheetId;
+                sheet = result.Sheets.First();
             }
+
+            this.SheetID = sheet.Properties.SheetId;
 
             this.TabName = newTabName;
         }

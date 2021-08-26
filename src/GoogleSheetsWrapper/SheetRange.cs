@@ -79,6 +79,39 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
+        /// Create a SheetRange from an A1 notation or an R1C1 notation
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        public SheetRange(string rangeValue)
+        {
+            var parser = new SheetRangeParser();
+            SheetRange range;
+
+            if (parser.IsValidR1C1Notation(rangeValue))
+            {
+                range = parser.ConvertFromR1C1Notation(rangeValue);
+            }
+            else if (parser.IsValidA1Notation(rangeValue))
+            {
+                range = parser.ConvertFromA1Notation(rangeValue);
+            }
+            else
+            {
+                throw new ArgumentException($"rangeValue: {rangeValue} is not a valid range!");
+            }
+
+            this.TabName = range.TabName;
+            this.StartRow = range.StartRow;
+            this.EndRow = range.EndRow;
+            this.StartColumn = range.StartColumn;
+            this.EndColumn = range.EndColumn;
+            this.A1Notation = range.A1Notation;
+            this.R1C1Notation = range.R1C1Notation;
+            this.CanSupportA1Notation = range.CanSupportA1Notation;
+            this.IsSingleCellRange = range.IsSingleCellRange;
+        }
+
+        /// <summary>
         /// columnId is a 1 based index
         /// </summary>
         /// <param name="columnID"></param>
