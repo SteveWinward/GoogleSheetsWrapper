@@ -14,7 +14,7 @@ env:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: 'src'
@@ -45,5 +45,5 @@ jobs:
       uses: rohith/publish-nuget@v2
       with:
         # Filepath of the project to be packaged, relative to root of repository
-        PROJECT_FILE_PATH: src\GoogleSheetsWrapper\GoogleSheetsWrapper.csproj
+        PROJECT_FILE_PATH: src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
