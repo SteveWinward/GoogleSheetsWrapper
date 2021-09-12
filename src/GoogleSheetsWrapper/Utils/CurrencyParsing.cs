@@ -11,7 +11,7 @@ namespace GoogleSheetsWrapper.Utils
         {
             return double.Parse(
                 amount,
-                NumberStyles.Currency | NumberStyles.AllowDecimalPoint);
+                NumberStyles.Currency | NumberStyles.AllowDecimalPoint, CultureInfo.CreateSpecificCulture("en-us"));
         }
 
         public static string ConvertToCurrencyString(double amount)
