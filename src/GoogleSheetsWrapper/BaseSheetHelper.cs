@@ -144,6 +144,34 @@ namespace GoogleSheetsWrapper
             return updateRequest.Execute();
         }
 
+        public BatchUpdateSpreadsheetResponse InsertBlankRow(int row)
+        {
+            var requests = new List<Request>();
+
+            var request = new Request()
+            {
+                InsertDimension = new InsertDimensionRequest()
+                {
+                    Range = new DimensionRange()
+                    {
+                        Dimension = "ROWS",
+                        StartIndex = row - 1,
+                        EndIndex = row,
+                        SheetId = this.SheetID,
+                    },
+                    InheritFromBefore = row > 0,
+                }
+            };
+
+            requests.Add(request);
+
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
+            bussr.Requests = requests;
+
+            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            return updateRequest.Execute();
+        }
+
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates)
         {
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
