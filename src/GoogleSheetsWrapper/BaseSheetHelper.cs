@@ -160,8 +160,10 @@ namespace GoogleSheetsWrapper
 
             requests.Add(request);
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
-            bussr.Requests = requests;
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            {
+                Requests = requests
+            };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
             return updateRequest.Execute();
@@ -204,8 +206,10 @@ namespace GoogleSheetsWrapper
 
             requests.Add(request);
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
-            bussr.Requests = requests;
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            {
+                Requests = requests
+            };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
             return updateRequest.Execute();
@@ -242,8 +246,10 @@ namespace GoogleSheetsWrapper
 
             requests.Add(request);
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
-            bussr.Requests = requests;
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            {
+                Requests = requests
+            };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
             return updateRequest.Execute();
@@ -292,8 +298,10 @@ namespace GoogleSheetsWrapper
 
             requests.Add(request);
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
-            bussr.Requests = requests;
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            {
+                Requests = requests
+            };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
             return updateRequest.Execute();
