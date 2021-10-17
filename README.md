@@ -18,7 +18,9 @@ There are also base classes, BaseRecord and BaseRepository to simplify transform
 
 A really simple console application using this library is included in this project below,
 
-[GoogleSheetsWrapper.SampleClient Project](GoogleSheetsWrapper.SampleClient)
+[GoogleSheetsWrapper.SampleClient Project](src/GoogleSheetsWrapper.SampleClient/Program.cs)
+
+To setup the sample application, you also need to configure [User Secrets in Visual Studio](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows) to run it locally.
 
 ## Extend BaseRecord and BaseRepository
 
