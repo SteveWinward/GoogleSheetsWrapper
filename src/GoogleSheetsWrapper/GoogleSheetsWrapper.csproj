@@ -8,7 +8,7 @@
     <PackageProjectUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</RepositoryUrl>
-    <Version>1.0.23</Version>
+    <Version>1.0.24</Version>
     <PackageTags>Google Sheets</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>A simple wrapper library that makes it easier to perform CRUD operations against Google Sheets spreadsheets.</Description>

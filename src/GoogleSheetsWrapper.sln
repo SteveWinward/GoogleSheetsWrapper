@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSheetsWrapper", "Goog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSheetsWrapper.Tests", "GoogleSheetsWrapper.Tests\GoogleSheetsWrapper.Tests.csproj", "{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSheetsWrapper.SampleClient", "GoogleSheetsWrapper.SampleClient\GoogleSheetsWrapper.SampleClient.csproj", "{821B9814-7752-4E00-B92C-EA28AAA21CF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FD854F9-0CD0-4882-91DF-43B1FAD7EC15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{821B9814-7752-4E00-B92C-EA28AAA21CF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{821B9814-7752-4E00-B92C-EA28AAA21CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{821B9814-7752-4E00-B92C-EA28AAA21CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{821B9814-7752-4E00-B92C-EA28AAA21CF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

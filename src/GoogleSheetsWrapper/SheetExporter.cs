@@ -10,16 +10,28 @@ using System.Text;
 
 namespace GoogleSheetsWrapper
 {
-    public class SheetExporter : BaseSheetHelper
+    public class SheetExporter
     {
+        private SheetHelper _sheetHelper;
+
         public SheetExporter(string spreadsheetID, string serviceAccountEmail, string tabName)
-            : base(spreadsheetID, serviceAccountEmail, tabName)
         {
+            this._sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
+        }
+
+        public SheetExporter(SheetHelper sheetHelper)
+        {
+            this._sheetHelper = sheetHelper;
+        }
+
+        public void Init(string jsonCredentials)
+        {
+            this._sheetHelper.Init(jsonCredentials);
         }
 
         public void ExportAsCsv(SheetRange range, Stream stream)
         {
-            var rows = this.GetRowsFormatted(range);
+            var rows = this._sheetHelper.GetRowsFormatted(range);
 
             using StreamWriter streamWriter = new StreamWriter(stream);
             using var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
@@ -36,7 +48,7 @@ namespace GoogleSheetsWrapper
 
         public void ExportAsExcel(SheetRange range, Stream stream)
         {
-            var rows = this.GetRowsFormatted(range);
+            var rows = this._sheetHelper.GetRowsFormatted(range);
 
             SpreadsheetDocument document = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook);
 
@@ -58,7 +70,7 @@ namespace GoogleSheetsWrapper
             {
                 Id = document.WorkbookPart.GetIdOfPart(worksheetPart),
                 SheetId = 1,
-                Name = string.IsNullOrEmpty(this.TabName) ? "Sheet1" : this.TabName
+                Name = string.IsNullOrEmpty(this._sheetHelper.TabName) ? "Sheet1" : this._sheetHelper.TabName
             };
             sheets.Append(sheet);
 

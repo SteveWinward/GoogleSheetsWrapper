@@ -136,6 +136,50 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
+        /// Deletes a specified column
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        public BatchUpdateSpreadsheetResponse DeleteColumn(int col)
+        {
+            var requests = new List<Request>();
+
+            var request = new Request()
+            {
+                DeleteDimension = new DeleteDimensionRequest()
+                {
+                    Range = new DimensionRange()
+                    {
+                        Dimension = "COLUMNS",
+                        StartIndex = col - 1,
+                        EndIndex = col,
+                        SheetId = this.SheetID,
+                    }
+                }
+            };
+
+            requests.Add(request);
+
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
+            bussr.Requests = requests;
+
+            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            return updateRequest.Execute();
+        }
+
+        /// <summary>
+        /// Deletes a specified column
+        /// </summary>
+        /// <param name="columnLetter"></param>
+        /// <returns></returns>
+        public BatchUpdateSpreadsheetResponse DeleteColumn(string columnLetter)
+        {
+            var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
+
+            return this.DeleteColumn(columnId);
+        }
+
+        /// <summary>
         /// Deletes a specified row
         /// </summary>
         /// <param name="row"></param>

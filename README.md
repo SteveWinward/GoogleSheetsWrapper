@@ -16,6 +16,10 @@ All operations above are encapsulated in the SheetHelper class.
 
 There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
 
+A really simple console application using this library is included in this project below,
+
+[GoogleSheetsWrapper.SampleClient Project](GoogleSheetsWrapper.SampleClient)
+
 ## Extend BaseRecord and BaseRepository
 
 Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
@@ -146,11 +150,11 @@ exporter.Init(settings.JsonCredential);
 
 var filepath = @"C:\Output\output.csv";
 
-using (var stream = new FileStream(filepath))
+using (var stream = new FileStream(filepath, FileMode.Create))
 {
     // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
     var range = new SheetRange("TAB_NAME", 1, 1, 8);
-    exporter.ExportAsCsv(range, writer);
+    exporter.ExportAsCsv(range, stream);
 }
 
 ```
@@ -167,11 +171,11 @@ exporter.Init(settings.JsonCredential);
 
 var filepath = @"C:\Output\output.xlsx";
 
-using (var stream = new FileStream(filepath))
+using (var stream = new FileStream(filepath, FileMode.Create))
 {
     // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
     var range = new SheetRange("TAB_NAME", 1, 1, 8);
-    exporter.ExportAsExcel(range, writer);
+    exporter.ExportAsExcel(range, stream);
 }
 
 ```
