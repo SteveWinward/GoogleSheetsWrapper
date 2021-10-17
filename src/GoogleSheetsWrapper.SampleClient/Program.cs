@@ -35,8 +35,6 @@ namespace GoogleSheetsWrapper.SampleClient
                 Console.Write("\n");
             }
 
-            sheetHelper.DeleteColumn("D");
-
             // export a csv file from the current spreadsheet and tab
             var exporter = new SheetExporter(sheetHelper);
 
