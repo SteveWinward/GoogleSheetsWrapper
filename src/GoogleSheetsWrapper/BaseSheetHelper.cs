@@ -55,6 +55,10 @@ namespace GoogleSheetsWrapper
             this.UpdateTabName(this.TabName);
         }
 
+        /// <summary>
+        /// Set the tab to the specified newTabName value
+        /// </summary>
+        /// <param name="newTabName"></param>
         public void UpdateTabName(string newTabName)
         {
             var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
@@ -78,6 +82,10 @@ namespace GoogleSheetsWrapper
             this.TabName = newTabName;
         }
 
+        /// <summary>
+        /// Returns a list of all tab names in the Google Spreadsheet
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetAllTabNames()
         {
             var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
@@ -89,6 +97,11 @@ namespace GoogleSheetsWrapper
             return tabs;
         }
 
+        /// <summary>
+        /// Return a collection of rows for a given SheetRange input
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns></returns>
         public IList<IList<object>> GetRows(SheetRange range)
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
@@ -103,6 +116,11 @@ namespace GoogleSheetsWrapper
             return response.Values;
         }
 
+        /// <summary>
+        /// Return a collection of rows formatted values for a given SheetRange input
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns></returns>
         public IList<IList<object>> GetRowsFormatted(SheetRange range)
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
@@ -117,6 +135,11 @@ namespace GoogleSheetsWrapper
             return response.Values;
         }
 
+        /// <summary>
+        /// Deletes a specified row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteRow(int row)
         {
             var requests = new List<Request>();
@@ -144,8 +167,68 @@ namespace GoogleSheetsWrapper
             return updateRequest.Execute();
         }
 
+        /// <summary>
+        /// Inserts a blank new column using the column index as the id (NOTE: 1 is the first index for the column based index)
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public BatchUpdateSpreadsheetResponse InsertBlankColumn(int column)
+        {
+            if (column < 1)
+            {
+                throw new ArgumentException("column index value must be 1 or greater");
+            }
+
+            var requests = new List<Request>();
+
+            var request = new Request()
+            {
+                InsertDimension = new InsertDimensionRequest()
+                {
+                    Range = new DimensionRange()
+                    {
+                        Dimension = "COLUMNS",
+                        StartIndex = column - 1,
+                        EndIndex = column,
+                        SheetId = this.SheetID,
+                    },
+                    InheritFromBefore = column > 0,
+                }
+            };
+
+            requests.Add(request);
+
+            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
+            bussr.Requests = requests;
+
+            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            return updateRequest.Execute();
+        }
+
+        /// <summary>
+        /// Inserts a blank new column using a letter notation (i.e. B2 as the column id)
+        /// </summary>
+        /// <param name="columnLetter"></param>
+        /// <returns></returns>
+        public BatchUpdateSpreadsheetResponse InsertBlankColumn(string columnLetter)
+        {
+            var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
+
+            return this.InsertBlankColumn(columnId);
+        }
+
+        /// <summary>
+        /// Inserts a new blank row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse InsertBlankRow(int row)
         {
+            if (row < 1)
+            {
+                throw new ArgumentException("row index value must be 1 or greater");
+            }
+
             var requests = new List<Request>();
 
             var request = new Request()
@@ -172,6 +255,13 @@ namespace GoogleSheetsWrapper
             return updateRequest.Execute();
         }
 
+        /// <summary>
+        /// Runs a collection of updates as a batch operation in a single call.
+        /// 
+        /// This is useful to avoid throttling limits with the Google Sheets API
+        /// </summary>
+        /// <param name="updates"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates)
         {
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
