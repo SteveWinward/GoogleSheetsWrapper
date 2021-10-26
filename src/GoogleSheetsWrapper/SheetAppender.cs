@@ -33,7 +33,7 @@ namespace GoogleSheetsWrapper
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                this.AppendCsv(stream, includeHeaders);
+                this.AppendCsv(stream, includeHeaders, batchWaitTime);
             }
         }
 
