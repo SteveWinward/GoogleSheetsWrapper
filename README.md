@@ -140,6 +140,29 @@ repository.AddRecord(new TestRecord()
 
 ```
 
+## Import a CSV to Google Sheets
+
+```csharp
+var appender = new SheetAppender(
+    settings.GoogleSpreadsheetId, 
+    settings.GoogleServiceAccountName, 
+    settings.GoogleMainSheetName);
+
+appender.Init(settings.JsonCredential);
+
+var filepath = @"C:\Input\input.csv";
+
+using (var stream = new FileStream(filepath, FileMode.Create))
+{
+    // Append the csv file to Google sheets, include the header row 
+    // and wait 1000 milliseconds between batch updates 
+    // Google Sheets API throttles requests per minute so you may need to play
+    // with this setting. 
+    appender.AppendCsv(stream, true, 1000);
+}
+
+```
+
 ## Export Google Sheet to CSV
 
 ```csharp
