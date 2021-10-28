@@ -175,6 +175,13 @@ var sheetHelper = new SheetHelper(
 
 sheetHelper.Init(settings.JsonCredential);
 
+// Get the total row count for the existing sheet
+var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 1));
+
+// Delete all of the rows
+sheetHelper.DeleteRows(1, rows.Count);
+
+// Create the SheetAppender class
 var appender = new SheetAppender(sheetHelper);
 
 var filepath = @"C:\Input\input.csv";
