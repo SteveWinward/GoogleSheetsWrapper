@@ -140,7 +140,7 @@ repository.AddRecord(new TestRecord()
 
 ```
 
-## Import a CSV to Google Sheets
+## Append a CSV to Google Sheets
 
 ```csharp
 var appender = new SheetAppender(
