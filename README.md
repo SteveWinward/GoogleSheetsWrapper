@@ -162,6 +162,7 @@ using (var stream = new FileStream(filepath, FileMode.Open))
 }
 
 ```
+## Import a CSV to Google Sheets and Purge Existing Rows
 
 If you wanted to delete the existing rows in your tab first, you can use
 ```SheetHelper``` methods to do that.  Below is a sample of that,
