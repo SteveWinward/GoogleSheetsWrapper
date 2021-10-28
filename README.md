@@ -152,7 +152,7 @@ appender.Init(settings.JsonCredential);
 
 var filepath = @"C:\Input\input.csv";
 
-using (var stream = new FileStream(filepath, FileMode.Create))
+using (var stream = new FileStream(filepath, FileMode.Open))
 {
     // Append the csv file to Google sheets, include the header row 
     // and wait 1000 milliseconds between batch updates 
