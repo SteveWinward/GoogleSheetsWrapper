@@ -185,7 +185,10 @@ using (var stream = new FileStream(filepath, FileMode.Open))
     // and wait 1000 milliseconds between batch updates 
     // Google Sheets API throttles requests per minute so you may need to play
     // with this setting. 
-    appender.AppendCsv(stream, true, 1000);
+    appender.AppendCsv(
+        stream, // The CSV FileStrem 
+        true, // true indicating to include the header row
+        1000); // 1000 milliseconds to wait every 100 rows that are batch sent to the Google Sheets API
 }
 
 ```
