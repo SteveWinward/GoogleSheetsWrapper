@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,10 @@ namespace GoogleSheetsWrapper
         public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000)
         {
             using StreamReader streamReader = new StreamReader(stream);
-            using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+            using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = includeHeaders
+            });
             {
                 var batchRowLimit = 100;
 
