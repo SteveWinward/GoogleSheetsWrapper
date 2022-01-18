@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// These fields MUST match header of sheet fields.
+    /// </summary>
     public class SheetFieldAttribute : Attribute
     {
         protected static Dictionary<SheetFieldType, string> DefaultFormatPatterns = new Dictionary<SheetFieldType, string>()
@@ -13,6 +15,8 @@ namespace GoogleSheetsWrapper
             { SheetFieldType.PhoneNumber, "(###)\" \"###\"-\"####" },
             { SheetFieldType.DateTime, "M/d/yyyy H:mm:ss" },
             { SheetFieldType.Currency, "\"$\"#,##0.00" },
+            { SheetFieldType.Boolean, "#" },
+            { SheetFieldType.Integer, "#" },
         };
 
         /// <summary>
@@ -61,6 +65,8 @@ namespace GoogleSheetsWrapper
         DateTime,
         Currency,
         PhoneNumber,
+        Boolean,
+        Integer,
         Number
     }
 }

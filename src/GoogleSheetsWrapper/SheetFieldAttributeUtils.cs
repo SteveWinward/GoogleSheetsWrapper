@@ -63,9 +63,21 @@ namespace GoogleSheetsWrapper
                         if (!string.IsNullOrWhiteSpace(stringValue))
                         {
                             var value = double.Parse(stringValue);
-
                             property.SetValue(record, value);
                         }
+                    }
+                    else if (attribute.FieldType == SheetFieldType.Integer)
+                    {
+                        if(!string.IsNullOrWhiteSpace(stringValue))
+                        {
+                            int value = int.Parse(stringValue);
+                            property.SetValue(record, value);
+                        }
+                    }
+                    else if (attribute.FieldType == SheetFieldType.Boolean)
+                    {
+                        bool boolValue = Convert.ToBoolean(stringValue);
+                        property.SetValue(record, boolValue);
                     }
                     else
                     {
@@ -172,6 +184,31 @@ namespace GoogleSheetsWrapper
                         Type = "NUMBER"
                     }
                 };
+            }
+            else if (attribute.FieldType == SheetFieldType.Integer)
+            {
+                if(value != null)
+                {
+                    cell.UserEnteredValue.NumberValue = (int)value;
+                }
+
+                cell.UserEnteredFormat = new CellFormat()
+                {
+                    NumberFormat = new NumberFormat()
+                    {
+                        Pattern = attribute.NumberFormatPattern,
+                        Type = "NUMBER"
+                    }
+                };
+            }
+            else if (attribute.FieldType == SheetFieldType.Boolean)
+            {
+                if(value != null)
+                {
+                    cell.UserEnteredValue.BoolValue = (bool)value;
+                }
+
+                cell.UserEnteredFormat = new CellFormat();
             }
             else
             {
