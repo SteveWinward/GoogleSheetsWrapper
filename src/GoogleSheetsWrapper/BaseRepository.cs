@@ -112,6 +112,13 @@ namespace GoogleSheetsWrapper
 
             return records;
         }
+        public BatchUpdateSpreadsheetResponse SaveFields(T record, Expression<Func<T, object>> property1,
+            Expression<Func<T, object>> property2)
+            => SaveFields(record, new[] { property1, property2 });
+
+        public BatchUpdateSpreadsheetResponse SaveFields(T record, Expression<Func<T, object>> property1,
+            Expression<Func<T, object>> property2, Expression<Func<T, object>> property3)
+            => SaveFields(record, new[] { property1, property2, property3 });
 
         /// <summary>
         /// Save multiple field values to the row
@@ -119,7 +126,7 @@ namespace GoogleSheetsWrapper
         /// <param name="record"></param>
         /// <param name="properties"></param>
         /// <returns></returns>
-        public BatchUpdateSpreadsheetResponse SaveFields(T record, List<Expression<Func<T, object>>> properties)
+        public BatchUpdateSpreadsheetResponse SaveFields(T record, IList<Expression<Func<T, object>>> properties)
         {
             var data = record.ConvertToCellData(this.SheetsHelper.TabName);
 
@@ -136,7 +143,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse SaveField(T record, Expression<Func<T, object>> expression)
         {
-            return this.SaveFields(record, new List<Expression<Func<T, object>>>() { expression });
+            return this.SaveFields(record, new Expression<Func<T, object>>[] { expression });
         }
 
         /// <summary>
@@ -203,7 +210,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         internal List<BatchUpdateRequestObject> FilterUpdates(
             List<BatchUpdateRequestObject> data,
-            List<Expression<Func<T, object>>> expressions)
+            IList<Expression<Func<T, object>>> expressions)
         {
             var result = new List<BatchUpdateRequestObject>();
 
