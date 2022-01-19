@@ -112,20 +112,26 @@ namespace GoogleSheetsWrapper
 
             return records;
         }
-        public BatchUpdateSpreadsheetResponse SaveFields(T record, Expression<Func<T, object>> property1,
-            Expression<Func<T, object>> property2)
-            => SaveFields(record, new[] { property1, property2 });
 
-        public BatchUpdateSpreadsheetResponse SaveFields(T record, Expression<Func<T, object>> property1,
-            Expression<Func<T, object>> property2, Expression<Func<T, object>> property3)
-            => SaveFields(record, new[] { property1, property2, property3 });
+        /// <summary>
+        /// Save a single field value to the row
+        /// </summary>
+        public BatchUpdateSpreadsheetResponse SaveField(T record, Expression<Func<T, object>> expression)
+        {
+            return this.SaveFields(record, new Expression<Func<T, object>>[] { expression } as IList<Expression<Func<T, object>>>);
+        }
+
+        /// <summary>
+        /// Save multiple field values to the row. Example: SaveFields(record, (r) => r.Property1, (r) => r.Property2);
+        /// </summary>
+        public BatchUpdateSpreadsheetResponse SaveFields(T record, params Expression<Func<T, object>>[] expressions)
+        {
+            return this.SaveFields(record, expressions as IList<Expression<Func<T, object>>>); //casts prevent stackoverflow to params
+        }
 
         /// <summary>
         /// Save multiple field values to the row
         /// </summary>
-        /// <param name="record"></param>
-        /// <param name="properties"></param>
-        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse SaveFields(T record, IList<Expression<Func<T, object>>> properties)
         {
             var data = record.ConvertToCellData(this.SheetsHelper.TabName);
@@ -133,17 +139,6 @@ namespace GoogleSheetsWrapper
             var updates = this.FilterUpdates(data, properties);
 
             return this.SheetsHelper.BatchUpdate(updates);
-        }
-
-        /// <summary>
-        /// Save a single field value to the row
-        /// </summary>
-        /// <param name="record"></param>
-        /// <param name="expression"></param>
-        /// <returns></returns>
-        public BatchUpdateSpreadsheetResponse SaveField(T record, Expression<Func<T, object>> expression)
-        {
-            return this.SaveFields(record, new Expression<Func<T, object>>[] { expression });
         }
 
         /// <summary>
@@ -209,7 +204,7 @@ namespace GoogleSheetsWrapper
         /// <param name="expressions"></param>
         /// <returns></returns>
         internal List<BatchUpdateRequestObject> FilterUpdates(
-            List<BatchUpdateRequestObject> data,
+            IList<BatchUpdateRequestObject> data,
             IList<Expression<Func<T, object>>> expressions)
         {
             var result = new List<BatchUpdateRequestObject>();
