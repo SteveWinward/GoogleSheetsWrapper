@@ -29,6 +29,11 @@ namespace GoogleSheetsWrapper
             this._sheetHelper.Init(jsonCredentials);
         }
 
+        /// <summary>
+        /// Exports the current Google Sheet tab to a CSV file
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="stream"></param>
         public void ExportAsCsv(SheetRange range, Stream stream)
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
@@ -46,6 +51,11 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// Exports the current Google Sheet tab to a CSV file
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="stream"></param>
         public void ExportAsExcel(SheetRange range, Stream stream)
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);

@@ -30,6 +30,12 @@ namespace GoogleSheetsWrapper
             this._sheetHelper.Init(jsonCredentials);
         }
 
+        /// <summary>
+        /// Appends a CSV file and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="includeHeaders"></param>
+        /// <param name="batchWaitTime"></param>
         public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000)
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
@@ -38,6 +44,12 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// Appends a CSV file and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="includeHeaders"></param>
+        /// <param name="batchWaitTime"></param>
         public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000)
         {
             using StreamReader streamReader = new StreamReader(stream);
@@ -136,6 +148,11 @@ namespace GoogleSheetsWrapper
                 .Execute();
         }
 
+        /// <summary>
+        /// Converst a string into its appropriate cell data object
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private CellData StringToCellData(object value)
         {
             var cell = new CellData

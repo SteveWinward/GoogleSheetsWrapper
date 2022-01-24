@@ -49,6 +49,12 @@ namespace GoogleSheetsWrapper
             return null;
         }
 
+        /// <summary>
+        /// Parses R1C1 notation into a SheetRange object
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public SheetRange ConvertFromR1C1Notation(string rangeValue)
         {
             if (!this.IsValidR1C1Notation(rangeValue))
@@ -90,6 +96,12 @@ namespace GoogleSheetsWrapper
             return new SheetRange(tabName, firstCol, firstRow, lastCol, lastRow);
         }
 
+        /// <summary>
+        /// Parses A1 notation into a SheetRange object
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public SheetRange ConvertFromA1Notation(string rangeValue)
         {
             if (!this.IsValidA1Notation(rangeValue))
