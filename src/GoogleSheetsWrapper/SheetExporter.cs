@@ -45,7 +45,7 @@ namespace GoogleSheetsWrapper
             };
 
             using StreamWriter streamWriter = new StreamWriter(stream);
-            using var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+            using var csv = new CsvWriter(streamWriter, config);
             foreach (var row in rows)
             {
                 foreach (var cell in row)
