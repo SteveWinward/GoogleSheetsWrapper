@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -34,9 +35,14 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <param name="stream"></param>
-        public void ExportAsCsv(SheetRange range, Stream stream)
+        public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+            };
 
             using StreamWriter streamWriter = new StreamWriter(stream);
             using var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
