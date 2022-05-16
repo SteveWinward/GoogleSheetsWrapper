@@ -8,7 +8,7 @@
     <PackageProjectUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</RepositoryUrl>
-    <Version>1.0.29</Version>
+    <Version>1.0.31</Version>
     <PackageTags>Google Sheets</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>A simple wrapper library that makes it easier to perform CRUD operations against Google Sheets spreadsheets.</Description>
@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.15.0" />
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.55.0.2371" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.56.0.2608" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -29,12 +30,22 @@ namespace GoogleSheetsWrapper
             this._sheetHelper.Init(jsonCredentials);
         }
 
-        public void ExportAsCsv(SheetRange range, Stream stream)
+        /// <summary>
+        /// Exports the current Google Sheet tab to a CSV file
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="stream"></param>
+        public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
 
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+            };
+
             using StreamWriter streamWriter = new StreamWriter(stream);
-            using var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+            using var csv = new CsvWriter(streamWriter, config);
             foreach (var row in rows)
             {
                 foreach (var cell in row)
@@ -46,6 +57,11 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// Exports the current Google Sheet tab to a CSV file
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="stream"></param>
         public void ExportAsExcel(SheetRange range, Stream stream)
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
