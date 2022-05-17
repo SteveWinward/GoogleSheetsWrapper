@@ -16,7 +16,7 @@ namespace GoogleSheetsWrapper
             { SheetFieldType.DateTime, "M/d/yyyy H:mm:ss" },
             { SheetFieldType.Currency, "\"$\"#,##0.00" },
             { SheetFieldType.Boolean, "#" },
-            { SheetFieldType.Integer, "#" },
+            { SheetFieldType.Integer, "0" },
         };
 
         /// <summary>
