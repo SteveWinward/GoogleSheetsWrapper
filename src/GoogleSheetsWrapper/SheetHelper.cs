@@ -400,7 +400,7 @@ namespace GoogleSheetsWrapper
             return this.AppendRows(new List<T>() { record });
         }
 
-        public BatchUpdateSpreadsheetResponse AppendRows(List<T> records)
+        public BatchUpdateSpreadsheetResponse AppendRows(IList<T> records)
         {
             var rows = new List<RowData>();
 

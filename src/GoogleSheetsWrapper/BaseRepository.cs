@@ -73,7 +73,7 @@ namespace GoogleSheetsWrapper
         /// Create a list of records to the end of the current sheets table
         /// </summary>
         /// <param name="records"></param>
-        public BatchUpdateSpreadsheetResponse AddRecords(List<T> records)
+        public BatchUpdateSpreadsheetResponse AddRecords(IList<T> records)
         {
             return this.SheetsHelper.AppendRows(records);
         }
