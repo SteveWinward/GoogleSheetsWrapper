@@ -143,8 +143,6 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteColumn(int col)
         {
-            var requests = new List<Request>();
-
             var request = new Request()
             {
                 DeleteDimension = new DeleteDimensionRequest()
@@ -159,11 +157,9 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            requests.Add(request);
-
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = requests
+                Requests = new [] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -189,8 +185,6 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteRow(int row)
         {
-            var requests = new List<Request>();
-
             var request = new Request()
             {
                 DeleteDimension = new DeleteDimensionRequest()
@@ -205,11 +199,9 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            requests.Add(request);
-
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = requests
+                Requests = new [] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -224,8 +216,6 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteRows(int startRow, int endRow)
         {
-            var requests = new List<Request>();
-
             var request = new Request()
             {
                 DeleteDimension = new DeleteDimensionRequest()
@@ -240,11 +230,9 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            requests.Add(request);
-
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = requests
+                Requests = new [] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -263,8 +251,6 @@ namespace GoogleSheetsWrapper
                 throw new ArgumentException("column index value must be 1 or greater");
             }
 
-            var requests = new List<Request>();
-
             var request = new Request()
             {
                 InsertDimension = new InsertDimensionRequest()
@@ -280,11 +266,9 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            requests.Add(request);
-
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = requests
+                    Requests = new [] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -315,8 +299,6 @@ namespace GoogleSheetsWrapper
                 throw new ArgumentException("row index value must be 1 or greater");
             }
 
-            var requests = new List<Request>();
-
             var request = new Request()
             {
                 InsertDimension = new InsertDimensionRequest()
@@ -332,11 +314,9 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            requests.Add(request);
-
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = requests
+                Requests = new [] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
