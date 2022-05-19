@@ -354,7 +354,7 @@ namespace GoogleSheetsWrapper
         {
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
 
-            var requests = new List<Request>();
+            var requests = new List<Request>(updates.Count);
 
             foreach (var update in updates)
             {
@@ -402,7 +402,7 @@ namespace GoogleSheetsWrapper
 
         public BatchUpdateSpreadsheetResponse AppendRows(IList<T> records)
         {
-            var rows = new List<RowData>();
+            var rows = new List<RowData>(records.Count);
 
             foreach (var record in records)
             {
