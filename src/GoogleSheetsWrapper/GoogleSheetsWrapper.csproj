@@ -20,8 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.2.1" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.15.0" />
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.56.0.2608" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2657" />
   </ItemGroup>
 
   <ItemGroup>
