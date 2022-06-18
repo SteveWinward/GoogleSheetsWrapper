@@ -14,7 +14,7 @@ The following Google Sheets API operations are supported:
 
 All operations above are encapsulated in the SheetHelper class. 
 
-There are also base classes, BaseRecord and BaseRepository to simplify transforming raw Google Sheets rows into .NET objects. 
+There are also base classes, ````BaseRecord```` and ````BaseRepository```` to simplify transforming raw Google Sheets rows into .NET objects. 
 
 A really simple console application using this library is included in this project below,
 
@@ -24,7 +24,7 @@ To setup the sample application, you also need to configure [User Secrets in Vis
 
 ## Extend BaseRecord and BaseRepository
 
-Extending the BaseRecord class you can decorate properties with the SheetFieldAttribute to describe the column header name, the column index and the field type (ie string, DateTime, etc)
+Extending the ````BaseRecord```` class you can decorate properties with the ````SheetFieldAttribute```` to describe the column header name, the column index and the field type (ie string, DateTime, etc)
 
 > The column index is 1 based and not 0 based. The first column 'A' is equivalent to the column ID of 1. 
 
@@ -70,7 +70,7 @@ public class TestRecord : BaseRecord
 }
 ```
 
-Extending the BaseRepository allows you to define your own access layer to the Google Sheets tab you want to work with. 
+Extending the ````BaseRepository```` allows you to define your own access layer to the Google Sheets tab you want to work with. 
 
 ```csharp
 public class TestRepository : BaseRepository<TestRecord>
@@ -82,7 +82,7 @@ public class TestRepository : BaseRepository<TestRecord>
 }
 ```
 
-## Core Operations  
+## Core Operations (Strongly Typed)
 
 Before you run the following code you will need to setup a Google Service Account and create a service account key.  You also need to decide how to store your environment variables and secrets (ie the Google service account key)
 
@@ -139,6 +139,36 @@ repository.AddRecord(new TestRecord()
 });
 
 ```
+## Weakly Typed Operations
+If you don't want to extend the ````BaseRecord```` class, you can use non typed operations with the ````SheetHelper```` class.  Below is an example of that,
+
+````csharp
+// Get the Google Spreadsheet Config Values
+var serviceAccount = config["GOOGLE_SERVICE_ACCOUNT"];
+var documentId = config["GOOGLE_SPREADSHEET_ID"];
+var jsonCredsPath = config["GOOGLE_JSON_CREDS_PATH"];
+
+// In this case the json creds file is stored locally, but you can store this however you want to (Azure Key Vault, HSM, etc)
+var jsonCredsContent = File.ReadAllText(jsonCredsPath);
+
+// Create a new SheetHelper class
+var sheetHelper = new SheetHelper(documentId, serviceAccount, "");
+sheetHelper.Init(jsonCredsContent);
+
+// Get all the rows for the first 2 columns in the spreadsheet
+var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 2));
+
+// Write all the values from the result set
+foreach (var row in rows)
+{
+    foreach (var col in row)
+    {
+        Console.Write($"{col}\t");
+    }
+    
+    Console.Write("\n");
+}
+````
 
 ## Append a CSV to Google Sheets
 
@@ -271,3 +301,7 @@ var sheetHelper = new SheetHelper<TestRecord>(
 
 sheetHelper.Init(settings.JsonCredential);
 ```
+
+Another good article on how to setup a Google Service Account can be found below on Robocorp's documentation site,
+
+https://robocorp.com/docs/development-guide/google-sheets/interacting-with-google-sheets#create-a-google-service-account
