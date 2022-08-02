@@ -71,7 +71,13 @@ namespace GoogleSheetsWrapper
             // Lookup the sheet id for the given tab name
             if (!string.IsNullOrEmpty(newTabName))
             {
-                sheet = result.Sheets.Where(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)).First();
+                if (!result.Sheets.Any(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    CreateNewTab(newTabName);
+                    result = spreadsheet.Execute();
+                }
+
+                sheet = result.Sheets.First(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase));
             }
             else
             {
@@ -159,7 +165,7 @@ namespace GoogleSheetsWrapper
 
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = new [] { request }
+                Requests = new[] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -201,7 +207,7 @@ namespace GoogleSheetsWrapper
 
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = new [] { request }
+                Requests = new[] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -232,7 +238,7 @@ namespace GoogleSheetsWrapper
 
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = new [] { request }
+                Requests = new[] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -268,7 +274,7 @@ namespace GoogleSheetsWrapper
 
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                    Requests = new [] { request }
+                Requests = new[] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -316,7 +322,7 @@ namespace GoogleSheetsWrapper
 
             BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
             {
-                Requests = new [] { request }
+                Requests = new[] { request }
             };
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
@@ -363,6 +369,35 @@ namespace GoogleSheetsWrapper
 
             var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
             return updateRequest.Execute();
+        }
+
+        /// <summary>
+        /// Create a blank new tab to the specified newTabName value
+        /// </summary>
+        /// <param name="newTabName"></param>
+        private BatchUpdateSpreadsheetResponse CreateNewTab(string newTabName)
+        {
+            var batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest
+            {
+                Requests = new List<Request>
+                {
+                    new Request
+                    {
+                        AddSheet = new AddSheetRequest
+                        {
+                            Properties = new SheetProperties
+                            {
+                                Title = newTabName,
+                                Index = 0
+                            }
+                        }
+                    }
+                }
+            };
+
+            var batchUpdateRequest = this.Service.Spreadsheets.BatchUpdate(batchUpdateSpreadsheetRequest, this.SpreadsheetID);
+
+            return batchUpdateRequest.Execute();
         }
     }
 
