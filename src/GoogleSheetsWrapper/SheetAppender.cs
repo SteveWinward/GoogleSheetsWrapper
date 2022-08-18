@@ -122,7 +122,17 @@ namespace GoogleSheetsWrapper
             }
         }
 
-        private void AppendRows(List<RowData> rows)
+        public void AppendRow(RowData row)
+        {
+            this.AppendRows(new List<RowData>() { row });
+        }
+
+        public void AppendRow(List<string> rowStringValues)
+        {
+            this.AppendRows(new List<List<string>>() { rowStringValues });
+        }
+
+        public void AppendRows(List<RowData> rows)
         {
             var appendRequest = new AppendCellsRequest
             {
@@ -148,8 +158,30 @@ namespace GoogleSheetsWrapper
                 .Execute();
         }
 
+        public void AppendRows(List<List<string>> stringRows)
+        {
+            var rows = new List<RowData>();
+
+            foreach(var stringRow in stringRows)
+            {
+                 var row = new RowData()
+                 {
+                    Values = new List<CellData>(),
+                 };
+
+                foreach(var stringValue in stringRow)
+                {
+                    row.Values.Add(this.StringToCellData(stringValue));
+                }
+
+                rows.Add(row);
+            }
+
+            this.AppendRows(rows);
+        }
+
         /// <summary>
-        /// Converst a string into its appropriate cell data object
+        /// Converts a string into its appropriate cell data object
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
