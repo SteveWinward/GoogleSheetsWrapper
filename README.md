@@ -155,10 +155,20 @@ var jsonCredsContent = File.ReadAllText(jsonCredsPath);
 var sheetHelper = new SheetHelper(documentId, serviceAccount, "");
 sheetHelper.Init(jsonCredsContent);
 
+// Append new rows to the spreadsheet
+var appender = new SheetAppender(sheetHelper);
+
+// Appends weakly typed rows to the spreadsheeet
+appender.AppendRows(new List<List<string>>()
+{
+    new List<string>(){"7/1/2022", "abc"},
+    new List<string>(){"8/1/2022", "def"}
+});
+
 // Get all the rows for the first 2 columns in the spreadsheet
 var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 2));
 
-// Write all the values from the result set
+// Print out all the values from the result set
 foreach (var row in rows)
 {
     foreach (var col in row)

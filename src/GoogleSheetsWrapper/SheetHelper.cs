@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource;
+using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetRequest;
 
 namespace GoogleSheetsWrapper
 {
@@ -109,15 +110,17 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public IList<IList<object>> GetRows(SheetRange range)
+        public IList<IList<object>> GetRows(SheetRange range,
+            ValueRenderOptionEnum valueRenderOption = ValueRenderOptionEnum.UNFORMATTEDVALUE,
+            DateTimeRenderOptionEnum dateTimeRenderOption = DateTimeRenderOptionEnum.SERIALNUMBER)
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
             GetRequest request =
                     this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
 
-            request.ValueRenderOption = GetRequest.ValueRenderOptionEnum.UNFORMATTEDVALUE;
-            request.DateTimeRenderOption = GetRequest.DateTimeRenderOptionEnum.SERIALNUMBER;
+            request.ValueRenderOption = valueRenderOption;
+            request.DateTimeRenderOption = dateTimeRenderOption;
 
             ValueRange response = request.Execute();
             return response.Values;

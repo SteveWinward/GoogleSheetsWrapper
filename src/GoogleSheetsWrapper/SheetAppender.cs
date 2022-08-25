@@ -122,16 +122,28 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// Append a single row to the spreadsheet
+        /// </summary>
+        /// <param name="row"></param>
         public void AppendRow(RowData row)
         {
             this.AppendRows(new List<RowData>() { row });
         }
 
+        /// <summary>
+        /// Append a single weakly typed row of string data to the spreadsheet
+        /// </summary>
+        /// <param name="rowStringValues"></param>
         public void AppendRow(List<string> rowStringValues)
         {
             this.AppendRows(new List<List<string>>() { rowStringValues });
         }
 
+        /// <summary>
+        /// Append multiple rows of data to the spreadsheet
+        /// </summary>
+        /// <param name="rows"></param>
         public void AppendRows(List<RowData> rows)
         {
             var appendRequest = new AppendCellsRequest
@@ -158,18 +170,22 @@ namespace GoogleSheetsWrapper
                 .Execute();
         }
 
+        /// <summary>
+        /// Append multilpe weakly typed string data rows to the spreadsheet
+        /// </summary>
+        /// <param name="stringRows"></param>
         public void AppendRows(List<List<string>> stringRows)
         {
             var rows = new List<RowData>();
 
-            foreach(var stringRow in stringRows)
+            foreach (var stringRow in stringRows)
             {
-                 var row = new RowData()
-                 {
+                var row = new RowData()
+                {
                     Values = new List<CellData>(),
-                 };
+                };
 
-                foreach(var stringValue in stringRow)
+                foreach (var stringValue in stringRow)
                 {
                     row.Values.Add(this.StringToCellData(stringValue));
                 }

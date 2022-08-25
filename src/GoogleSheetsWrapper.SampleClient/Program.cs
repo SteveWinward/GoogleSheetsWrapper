@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetRequest;
 
 namespace GoogleSheetsWrapper.SampleClient
 {
@@ -23,7 +25,9 @@ namespace GoogleSheetsWrapper.SampleClient
             sheetHelper.Init(jsonCredsContent);
 
             // Get all the rows for the first 2 columns in the spreadsheet
-            var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 2));
+            var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 2),
+                ValueRenderOptionEnum.FORMATTEDVALUE,
+                DateTimeRenderOptionEnum.FORMATTEDSTRING);
 
             // Write all the values from the result set
             foreach (var row in rows)
@@ -35,15 +39,28 @@ namespace GoogleSheetsWrapper.SampleClient
                 Console.Write("\n");
             }
 
-            // export a csv file from the current spreadsheet and tab
-            var exporter = new SheetExporter(sheetHelper);
+            var appender = new SheetAppender(sheetHelper);
 
-            var filepath = @"output.csv";
-
-            using (var stream = new FileStream(filepath, FileMode.Create))
+            // Appends weakly typed rows to the spreadsheeet
+            appender.AppendRows(new List<List<string>>()
             {
-                var range = new SheetRange("", 1, 1, 2);
-                exporter.ExportAsCsv(range, stream);
+                new List<string>(){"7/1/2022", "abc"},
+                new List<string>(){"8/1/2022", "def"}
+            });
+
+            // Get all the rows for the first 2 columns in the spreadsheet
+            var rows2 = sheetHelper.GetRows(new SheetRange("", 1, 1, 2),
+                ValueRenderOptionEnum.FORMATTEDVALUE,
+                DateTimeRenderOptionEnum.FORMATTEDSTRING);
+
+            // Write all the values from the result set
+            foreach (var row in rows2)
+            {
+                foreach (var col in row)
+                {
+                    Console.Write($"{col}\t");
+                }
+                Console.Write("\n");
             }
         }
 
