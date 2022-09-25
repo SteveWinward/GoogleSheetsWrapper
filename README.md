@@ -148,7 +148,8 @@ var serviceAccount = config["GOOGLE_SERVICE_ACCOUNT"];
 var documentId = config["GOOGLE_SPREADSHEET_ID"];
 var jsonCredsPath = config["GOOGLE_JSON_CREDS_PATH"];
 
-// In this case the json creds file is stored locally, but you can store this however you want to (Azure Key Vault, HSM, etc)
+// In this case the json creds file is stored locally, 
+// but you can store this however you want to (Azure Key Vault, HSM, etc)
 var jsonCredsContent = File.ReadAllText(jsonCredsPath);
 
 // Create a new SheetHelper class
