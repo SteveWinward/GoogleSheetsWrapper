@@ -146,6 +146,21 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
+        /// Clears values from a spreadsheet (NOTE: All other properties of the cell (such as formatting, data validation, etc..) are kept.)
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        public ClearValuesResponse ClearRange(SheetRange range)
+        {
+            var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
+            
+            var requestBody = new ClearValuesRequest();
+
+            var clearRequest = this.Service.Spreadsheets.Values.Clear(requestBody, this.SpreadsheetID, rangeValue);
+            return clearRequest.Execute();
+        }
+
+        /// <summary>
         /// Deletes a specified column
         /// </summary>
         /// <param name="col"></param>
