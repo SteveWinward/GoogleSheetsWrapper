@@ -181,6 +181,77 @@ foreach (var row in rows)
 }
 ````
 
+## Batch Updates
+Google Sheets API has a method to perform batch updates.  The purpose is to enable you to update mulitple values in a single operation and also avoid hitting the API throttling limits.  ````GoogleSheetsWrapper```` lets you use this API.  One important thing to understand is you need to specify which properties you want updated with the field mask paramater.  A few examples are below,
+
+### Update UserEnteredValue and UserEnteredFormat
+
+````csharp
+var updates = new List<BatchUpdateRequestObject>();
+updates.Add(new BatchUpdateRequestObject()
+{
+    Range = new SheetRange("A8:B8"),
+    Data = new CellData()
+    {
+        UserEnteredValue = new ExtendedValue()
+        {
+            StringValue = "Hello World"
+        },
+        UserEnteredFormat = new CellFormat()
+        {
+            BackgroundColor = new Color()
+            {
+                Blue = 0,
+                Green = 1,
+                Red = 0,
+            }
+        }
+    }
+});
+
+// Note the field mask is for both the UserEnteredValue and the UserEnteredFormat below,
+sheetHelper.BatchUpdate(updates, "userEnteredValue, userEnteredFormat");
+````
+
+### Update only UserEnteredValue
+The ````GoogleSheetsWrapper```` library defaults to only updating the UserEnteredValue.  This is to allow you to keep your existing cell formating in place.  However, we give you the option like above to override that behavior.
+
+````csharp
+var updates = new List<BatchUpdateRequestObject>();
+updates.Add(new BatchUpdateRequestObject()
+{
+    Range = new SheetRange("A8:B8"),
+    Data = new CellData()
+    {
+        UserEnteredValue = new ExtendedValue()
+        {
+            StringValue = "Hello World"
+        }
+    }
+});
+
+// Note the field mask parameter not being specified here defaults to => "userEnteredValue"
+sheetHelper.BatchUpdate(updates);
+````
+### All Batch Operation Field Mask Options
+
+Full list of the different fields you can specify in the field mask property are below.  To combine any of these you want to use a comma separated string.
+
+| C# Property Name | Google Sheets API Property Name |
+| ---------------- | ------------------------------- |
+| ````DataSourceFormula```` | ````dataSourceFormula```` |
+| ````DataSourceTable```` | ````dataSourceTable```` |
+| ````DataValidation```` | ````dataValidation```` |
+| ````EffectiveFormat```` | ````effectiveFormat```` |
+| ````EffectiveValue```` | ````effectiveValue```` |
+| ````FormattedValue```` | ````formattedValue```` |
+| ````Hyperlink```` | ````hyperlink```` |
+| ````Note```` | ````note```` |
+| ````PivotTable```` | ````pivotTable```` |
+| ````TextFormatRuns```` | ````textFormatRuns```` |
+| ````UserEnteredFormat```` | ````userEnteredFormat```` |
+| ````UserEnteredValue```` | ````userEnteredValue```` |
+
 ## Append a CSV to Google Sheets
 
 ```csharp
