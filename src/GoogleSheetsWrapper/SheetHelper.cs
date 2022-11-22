@@ -372,8 +372,8 @@ namespace GoogleSheetsWrapper
                             SheetId = this.SheetID,
                             StartColumnIndex = update.Range.StartColumn - 1,
                             StartRowIndex = update.Range.StartRow - 1,
-                            EndColumnIndex = update.Range.StartColumn,
-                            EndRowIndex = update.Range.StartRow,
+                            EndColumnIndex = update.Range.EndColumn,
+                            EndRowIndex = update.Range.EndRow,
                         },
                         Cell = update.Data,
                         Fields = "*"
