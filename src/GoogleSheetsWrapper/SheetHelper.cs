@@ -366,19 +366,32 @@ namespace GoogleSheetsWrapper
 
             foreach (var update in updates)
             {
+                var gridRange = new GridRange()
+                {
+                    SheetId = this.SheetID,
+                    StartColumnIndex = update.Range.StartColumn - 1,
+                    StartRowIndex = update.Range.StartRow - 1,
+                };
+
+                // If this is a single cell we use the start column and start row to determine the end range
+                if (update.Range.IsSingleCellRange)
+                {
+                    gridRange.EndColumnIndex = update.Range.StartColumn;
+                    gridRange.EndRowIndex = update.Range.StartRow;
+                }
+                // if this is a range, we can use the actual end column and end row information for the end range
+                else
+                {
+                    gridRange.EndColumnIndex = update.Range.EndColumn;
+                    gridRange.EndRowIndex = update.Range.EndRow;
+                }
+
                 //create the update request for cells from the first row
                 var updateCellsRequest = new Request()
                 {
                     RepeatCell = new RepeatCellRequest()
                     {
-                        Range = new GridRange()
-                        {
-                            SheetId = this.SheetID,
-                            StartColumnIndex = update.Range.StartColumn - 1,
-                            StartRowIndex = update.Range.StartRow - 1,
-                            EndColumnIndex = update.Range.EndColumn,
-                            EndRowIndex = update.Range.EndRow,
-                        },
+                        Range = gridRange,
                         Cell = update.Data,
                         Fields = fieldMask
                     }
