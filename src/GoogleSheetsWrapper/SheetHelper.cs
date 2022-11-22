@@ -353,7 +353,10 @@ namespace GoogleSheetsWrapper
         /// This is useful to avoid throttling limits with the Google Sheets API
         /// </summary>
         /// <param name="updates"></param>
-        /// <param name="fieldMask">Allows you to specify what fields you want to update in the BatchUpdate call, defaults to userEnteredValue to keep existing cell styles, use "*" to update all properties here</param>
+        /// <param name="fieldMask">Allows you to specify what fields you want to update in the BatchUpdate call, 
+        /// defaults to userEnteredValue to keep existing cell styles, use "*" to update all properties here.
+        /// Other valid field mask values are: dataSourceFormula, dataSourceTable, dataValidation, effectiveFormat, effectiveValue, formattedValue, hyperlink, note, pivotTable, textFormatRuns, userEnteredFormat, userEnteredValue
+        /// </param>
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates, string fieldMask = "userEnteredValue")
         {
