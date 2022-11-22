@@ -376,7 +376,7 @@ namespace GoogleSheetsWrapper
                             EndRowIndex = update.Range.EndRow,
                         },
                         Cell = update.Data,
-                        Fields = "*"
+                        Fields = "userEnteredValue"
                     }
                 };
 
