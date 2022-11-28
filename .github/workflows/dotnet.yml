@@ -49,3 +49,4 @@ jobs:
         # Filepath of the project to be packaged, relative to root of repository
         PROJECT_FILE_PATH: src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        INCLUDE_SYMBOLS: true
