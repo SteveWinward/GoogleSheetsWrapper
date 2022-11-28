@@ -8,7 +8,7 @@
     <PackageProjectUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/SteveWinward/GoogleSheetsWrapper</RepositoryUrl>
-    <Version>1.0.48</Version>
+    <Version>1.0.49</Version>
     <PackageTags>Google Sheets</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>A simple wrapper library that makes it easier to perform CRUD operations against Google Sheets spreadsheets.</Description>
@@ -16,7 +16,16 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>    
+    
+    <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
