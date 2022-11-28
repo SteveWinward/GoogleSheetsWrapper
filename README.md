@@ -233,6 +233,27 @@ updates.Add(new BatchUpdateRequestObject()
 // Note the field mask parameter not being specified here defaults to => "userEnteredValue"
 sheetHelper.BatchUpdate(updates);
 ````
+### Update all Cell Properties
+The Google Sheets API lets you use the ````*```` wildcard to specify all properties to be updated.  Note when you do this, if any values are null / empty, this will clear out those settings when you save them!  Example below,
+
+````csharp
+var updates = new List<BatchUpdateRequestObject>();
+updates.Add(new BatchUpdateRequestObject()
+{
+    Range = new SheetRange("A8:B8"),
+    Data = new CellData()
+    {
+        UserEnteredValue = new ExtendedValue()
+        {
+            StringValue = "Hello World"
+        }
+    }
+});
+
+// Note setting the field mask to "*" tells the API to save all property values, even if they are null / blank
+sheetHelper.BatchUpdate(updates, "*");
+````
+
 ### All Batch Operation Field Mask Options
 
 Full list of the different fields you can specify in the field mask property are below.  To combine any of these you want to use a comma separated string.
