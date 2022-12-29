@@ -33,7 +33,8 @@ namespace GoogleSheetsWrapper
             this.ServiceAccountEmail = serviceAccountEmail;
             this.TabName = tabName;
         }
-        public void Init(string jsonCredentials)
+        public void Init(string jsonCredentials) => Init(jsonCredentials, default);
+        public void Init(string jsonCredentials, Google.Apis.Http.IHttpClientFactory httpClientFactory)
         {
             var credential = (ServiceAccountCredential)
                    GoogleCredential.FromJson(jsonCredentials).UnderlyingCredential;
@@ -43,13 +44,15 @@ namespace GoogleSheetsWrapper
             {
                 User = this.ServiceAccountEmail,
                 Key = credential.Key,
-                Scopes = Scopes
+                Scopes = Scopes,
+                HttpClientFactory = httpClientFactory,
             };
             credential = new ServiceAccountCredential(initializer);
 
             var service = new SheetsService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
+                HttpClientFactory = httpClientFactory,
             });
 
             this.Service = service;
