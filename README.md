@@ -1,14 +1,13 @@
 # GoogleSheetsWrapper
-## Nuget Details
-[![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/) 
 
-[![Nuget Downloads](https://img.shields.io/nuget/dt/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/) 
+## Badge Statuses
 
-## License Details
-[![GitHub](https://img.shields.io/github/license/SteveWinward/GoogleSheetsWrapper)](LICENSE) 
-
-## Build Status
-![build status](https://github.com/SteveWinward/GoogleSheetsWrapper/actions/workflows/dotnet.yml/badge.svg)
+| Badge Name | Badge Status |
+| ---------- | :------------: |
+| Current Nuget Version | [![Nuget](https://img.shields.io/nuget/v/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/) |
+| Total Nuget Downloads | [![Nuget Downloads](https://img.shields.io/nuget/dt/GoogleSheetsWrapper)](https://www.nuget.org/packages/GoogleSheetsWrapper/) |
+| Open Source License Details | [![GitHub](https://img.shields.io/github/license/SteveWinward/GoogleSheetsWrapper)](LICENSE) |
+| Latest Build Status | ![build status](https://github.com/SteveWinward/GoogleSheetsWrapper/actions/workflows/dotnet.yml/badge.svg) |
 
 ## Google Sheets API .NET Wrapper Library
 
