@@ -38,6 +38,8 @@ namespace GoogleSheetsWrapper
 
         /// <summary>
         /// Optional property to override the default format pattern for any of the SheetFieldTypes
+        /// 
+        /// Google Docs details on pattern values: https://developers.google.com/sheets/api/guides/formats
         /// </summary>
         public string NumberFormatPattern
         {
