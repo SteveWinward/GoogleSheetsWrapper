@@ -1,4 +1,4 @@
-﻿using Google.Apis.Sheets.v4.Data;
+using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -204,7 +204,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public void WriteHeaders()
         {
-            if (!this.HasHeaderRow)
+            if (this.HasHeaderRow)
             {
                 throw new ArgumentException("HasHeaderRow must be false to call this method");
             }
