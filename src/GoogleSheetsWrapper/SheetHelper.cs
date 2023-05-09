@@ -236,7 +236,7 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="startRow"></param>
         /// <param name="endRow"></param>
@@ -289,7 +289,7 @@ namespace GoogleSheetsWrapper
                         EndIndex = column,
                         SheetId = this.SheetID,
                     },
-                    InheritFromBefore = column > 0,
+                    InheritFromBefore = column > 1,
                 }
             };
 
@@ -337,7 +337,7 @@ namespace GoogleSheetsWrapper
                         EndIndex = row,
                         SheetId = this.SheetID,
                     },
-                    InheritFromBefore = row > 0,
+                    InheritFromBefore = row > 1,
                 }
             };
 
@@ -352,11 +352,11 @@ namespace GoogleSheetsWrapper
 
         /// <summary>
         /// Runs a collection of updates as a batch operation in a single call.
-        /// 
+        ///
         /// This is useful to avoid throttling limits with the Google Sheets API
         /// </summary>
         /// <param name="updates"></param>
-        /// <param name="fieldMask">Allows you to specify what fields you want to update in the BatchUpdate call, 
+        /// <param name="fieldMask">Allows you to specify what fields you want to update in the BatchUpdate call,
         /// defaults to userEnteredValue to keep existing cell styles, use "*" to update all properties here.
         /// Other valid field mask values are: dataSourceFormula, dataSourceTable, dataValidation, effectiveFormat, effectiveValue, formattedValue, hyperlink, note, pivotTable, textFormatRuns, userEnteredFormat, userEnteredValue
         /// </param>
@@ -440,7 +440,7 @@ namespace GoogleSheetsWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class SheetHelper<T> : SheetHelper where T : BaseRecord
