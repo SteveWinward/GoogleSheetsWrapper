@@ -113,7 +113,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public IList<IList<object>> GetRows(SheetRange range,
+        public IList<IList<object>>? GetRows(SheetRange range,
             ValueRenderOptionEnum valueRenderOption = ValueRenderOptionEnum.UNFORMATTEDVALUE,
             DateTimeRenderOptionEnum dateTimeRenderOption = DateTimeRenderOptionEnum.SERIALNUMBER)
         {
@@ -134,7 +134,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public IList<IList<object>> GetRowsFormatted(SheetRange range)
+        public IList<IList<object>>? GetRowsFormatted(SheetRange range)
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
