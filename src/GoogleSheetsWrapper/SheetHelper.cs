@@ -108,6 +108,8 @@ namespace GoogleSheetsWrapper
             return tabs;
         }
 
+        #nullable enable
+
         /// <summary>
         /// Return a collection of rows for a given SheetRange input
         /// </summary>
@@ -129,6 +131,10 @@ namespace GoogleSheetsWrapper
             return response.Values;
         }
 
+        #nullable disable
+
+        #nullable enable
+        
         /// <summary>
         /// Return a collection of rows formatted values for a given SheetRange input
         /// </summary>
@@ -147,6 +153,8 @@ namespace GoogleSheetsWrapper
             ValueRange response = request.Execute();
             return response.Values;
         }
+
+        #nullable disable
 
         /// <summary>
         /// Clears values from a spreadsheet (NOTE: All other properties of the cell (such as formatting, data validation, etc..) are kept.)
