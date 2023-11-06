@@ -105,7 +105,7 @@ namespace GoogleSheetsWrapper
 
             workbookpart.Workbook.Save();
 
-            document.Close();
+            document.Dispose();
         }
 
         private Cell CreateCell(string text)
