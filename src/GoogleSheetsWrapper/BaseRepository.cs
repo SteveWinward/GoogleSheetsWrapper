@@ -223,7 +223,7 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Filters the BatchUpdateRequest to only the actual fields specified in the list
         /// </summary>
         /// <param name="data"></param>
         /// <param name="expressions"></param>
