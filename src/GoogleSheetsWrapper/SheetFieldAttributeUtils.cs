@@ -68,7 +68,7 @@ namespace GoogleSheetsWrapper
                     }
                     else if (attribute.FieldType == SheetFieldType.Integer)
                     {
-                        if(!string.IsNullOrWhiteSpace(stringValue))
+                        if (!string.IsNullOrWhiteSpace(stringValue))
                         {
                             int value = int.Parse(stringValue);
                             property.SetValue(record, value);
@@ -187,7 +187,7 @@ namespace GoogleSheetsWrapper
             }
             else if (attribute.FieldType == SheetFieldType.Integer)
             {
-                if(value != null)
+                if (value != null)
                 {
                     cell.UserEnteredValue.NumberValue = (int)value;
                 }
@@ -203,7 +203,7 @@ namespace GoogleSheetsWrapper
             }
             else if (attribute.FieldType == SheetFieldType.Boolean)
             {
-                if(value != null)
+                if (value != null)
                 {
                     cell.UserEnteredValue.BoolValue = (bool)value;
                 }
