@@ -47,7 +47,7 @@ namespace GoogleSheetsWrapper
                     Data = SheetFieldAttributeUtils.GetCellDataForSheetField(this, attribute.Key, attribute.Value),
                     FieldAttribute = attribute.Key,
                 });
-            } 
+            }
 
             return results;
         }
