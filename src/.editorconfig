@@ -12,6 +12,15 @@ trim_trailing_whitespace = false
 insert_final_newline = false
 
 ###############################
+# Build Warning Configuration #
+###############################
+
+# Style Formatting Build Enforcement
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0055.severity = warning
+
+
+###############################
 # .NET Coding Conventions     #
 ###############################
 [*.{cs,vb}]
@@ -89,8 +98,6 @@ csharp_style_inlined_variable_declaration = true:suggestion
 ###############################
 # C# Formatting Rules         #
 ###############################
-# Build Warning Config
-dotnet_diagnostic.IDE0055.severity = warning
 
 # New line preferences
 csharp_new_line_before_open_brace = all
