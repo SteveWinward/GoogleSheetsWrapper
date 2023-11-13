@@ -1,5 +1,3 @@
-﻿using GoogleSheetsWrapper.Utils;
-using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -7,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using Google.Apis.Sheets.v4.Data;
+using GoogleSheetsWrapper.Utils;
 
 namespace GoogleSheetsWrapper
 {

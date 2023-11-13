@@ -1,7 +1,7 @@
-﻿using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Google.Apis.Sheets.v4.Data;
 
 namespace GoogleSheetsWrapper
 {

@@ -1,6 +1,3 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Google.Apis.Sheets.v4.Data;
 
 namespace GoogleSheetsWrapper
 {
