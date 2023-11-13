@@ -14,6 +14,7 @@
     <Description>A simple wrapper library that makes it easier to perform CRUD operations against Google Sheets spreadsheets.</Description>
     <Deterministic>true</Deterministic>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

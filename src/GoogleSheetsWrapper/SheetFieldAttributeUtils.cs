@@ -1,17 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using Google.Apis.Sheets.v4.Data;
 using GoogleSheetsWrapper.Utils;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// Helper class for working with SheetFieldAttribute attributes via reflection
+    /// </summary>
     public class SheetFieldAttributeUtils
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="row"></param>
+        /// <param name="minColumnId"></param>
+        /// <exception cref="ArgumentException"></exception>
         public static void PopulateRecord<T>(T record, IList<object> row, int minColumnId = 1) where T : BaseRecord
         {
             var properties = record.GetType().GetProperties();
@@ -70,13 +78,13 @@ namespace GoogleSheetsWrapper
                     {
                         if (!string.IsNullOrWhiteSpace(stringValue))
                         {
-                            int value = int.Parse(stringValue);
+                            var value = int.Parse(stringValue);
                             property.SetValue(record, value);
                         }
                     }
                     else if (attribute.FieldType == SheetFieldType.Boolean)
                     {
-                        bool boolValue = Convert.ToBoolean(stringValue);
+                        var boolValue = Convert.ToBoolean(stringValue);
                         property.SetValue(record, boolValue);
                     }
                     else
@@ -87,6 +95,15 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// Converts the objects values to CellData object for Google Sheets API
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="attribute"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static CellData GetCellDataForSheetField<T>(T record, SheetFieldAttribute attribute, PropertyInfo property)
         {
             var cell = new CellData
@@ -98,6 +115,8 @@ namespace GoogleSheetsWrapper
 
             if (attribute.FieldType == SheetFieldType.String)
             {
+#pragma warning disable IDE0045 // IF statement can be simplified
+
                 if (value == null)
                 {
                     cell.UserEnteredValue.StringValue = string.Empty;
@@ -110,6 +129,9 @@ namespace GoogleSheetsWrapper
                 {
                     cell.UserEnteredValue.StringValue = value.ToString();
                 }
+
+#pragma warning restore IDE0045 // IF statement can be simplified
+
             }
             else if (attribute.FieldType == SheetFieldType.Currency)
             {
@@ -132,7 +154,9 @@ namespace GoogleSheetsWrapper
             {
                 if (value != null)
                 {
-                    double parsedNumber = double.Parse(value.ToString());
+                    var parsedNumber = double.Parse(value.ToString());
+
+#pragma warning disable IDE0045 // IF statement can be simplified
 
                     if (parsedNumber != 0)
                     {
@@ -142,6 +166,9 @@ namespace GoogleSheetsWrapper
                     {
                         cell.UserEnteredValue.NumberValue = null;
                     }
+
+#pragma warning restore IDE0045 // IF statement can be simplified
+
                 }
 
                 cell.UserEnteredFormat = new CellFormat()
@@ -218,6 +245,12 @@ namespace GoogleSheetsWrapper
             return cell;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         public static int GetColumnId<T>(Expression<Func<T, object>> expression) where T : BaseRecord
         {
             var attribute = GetSheetFieldAttribute(expression);
@@ -225,11 +258,21 @@ namespace GoogleSheetsWrapper
             return attribute.ColumnID;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static SortedDictionary<SheetFieldAttribute, PropertyInfo> GetAllSheetFieldAttributes<T>()
         {
             return GetAllSheetFieldAttributes(typeof(T));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static SortedDictionary<SheetFieldAttribute, PropertyInfo> GetAllSheetFieldAttributes(Type type)
         {
             var result = new SortedDictionary<SheetFieldAttribute, PropertyInfo>(new SheetFieldAttributeComparer());
@@ -249,10 +292,19 @@ namespace GoogleSheetsWrapper
             return result;
         }
 
+        /// <summary>
+        /// Get the associated SheetFieldAttribute based on the member field
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static SheetFieldAttribute GetSheetFieldAttribute<T>
             (Expression<Func<T, object>> expression)
         {
             MemberExpression memberExpression;
+
+#pragma warning disable IDE0045 // IF statement can be simplified
 
             if (expression.Body is MemberExpression)
             {
@@ -266,6 +318,8 @@ namespace GoogleSheetsWrapper
             {
                 throw new ArgumentException();
             }
+
+#pragma warning restore IDE0045 // IF statement can be simplified
 
             var propertyInfo = (PropertyInfo)memberExpression.Member;
             return propertyInfo.GetCustomAttribute<SheetFieldAttribute>();

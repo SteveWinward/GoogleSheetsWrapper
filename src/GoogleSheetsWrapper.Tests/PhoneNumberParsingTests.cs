@@ -19,7 +19,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void RemoveInternationalCode_Removes_US_Code()
+        public void RemoveInternationalCodeRemovesUSCode()
         {
             var result = PhoneNumberParsing.RemoveUSInterationalPhoneCode("+17031112222");
 
@@ -27,7 +27,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void RemoveInternationalCode_Removes_US_Code_And_Special_Characters()
+        public void RemoveInternationalCodeRemovesUSCodeAndSpecialCharacters()
         {
             var result = PhoneNumberParsing.RemoveUSInterationalPhoneCode("+1(703)111-2222");
 

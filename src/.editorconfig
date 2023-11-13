@@ -15,10 +15,12 @@ insert_final_newline = false
 # Build Warning Configuration #
 ###############################
 
-# Style Formatting Build Enforcement
 [*.{cs,vb}]
-dotnet_diagnostic.IDE0055.severity = warning
+# enforcing sytle formatting standards
+dotnet_analyzer_diagnostic.category-Style.severity = warning
 
+# enforcing coding standards
+dotnet_analyzer_diagnostic.category-Naming.severity = warning
 
 ###############################
 # .NET Coding Conventions     #

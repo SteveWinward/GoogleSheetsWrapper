@@ -17,7 +17,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void VerifySchemaMatches()
         {
-            List<object> sampleHeader = new List<object>()
+            var sampleHeader = new List<object>()
             {
                 "Name",
                 "Number",
@@ -37,7 +37,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void VerifySchemaDoesNotMatch()
         {
-            List<object> sampleHeader = new List<object>()
+            var sampleHeader = new List<object>()
             {
                 "Name",
                 "Price Amount"
@@ -52,9 +52,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation()
+        public void TestRecordCreation()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "+1(703)-999-2222",
@@ -75,9 +75,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation_Column_Offset()
+        public void TestRecordCreationColumnOffset()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "+1(703)-999-2222",
@@ -102,9 +102,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation_Empty_Phone_Number()
+        public void TestRecordCreationEmptyPhoneNumber()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "",
@@ -119,9 +119,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation_Empty_Currency()
+        public void TestRecordCreationEmptyCurrency()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "+1(703)-999-2222",
@@ -136,9 +136,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation_Empty_DateTime()
+        public void TestRecordCreationEmptyDateTime()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "+1(703)-999-2222",
@@ -153,9 +153,9 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void Test_Record_Creation_Empty_DateTime_Non_Nullable()
+        public void TestRecordCreationEmptyDateTimeNonNullable()
         {
-            List<object> row = new List<object>()
+            var row = new List<object>()
             {
                 "Steve",
                 "+1(703)-999-2222",

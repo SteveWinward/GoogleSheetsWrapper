@@ -1,12 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// SheetRangeParse utility class dealing with sheet range text representations
+    /// </summary>
     public class SheetRangeParser
     {
+        /// <summary>
+        /// Is the string range value valid A1 notation?
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        /// <returns></returns>
         public bool IsValidA1Notation(string rangeValue)
         {
             // https://developers.google.com/sheets/api/guides/concepts
@@ -17,6 +23,11 @@ namespace GoogleSheetsWrapper
                 RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Is the range value text valid R1CI notation?
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        /// <returns></returns>
         public bool IsValidR1C1Notation(string rangeValue)
         {
             // https://developers.google.com/sheets/api/guides/concepts
@@ -27,6 +38,11 @@ namespace GoogleSheetsWrapper
                 RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Does the range value text have a tab name included?
+        /// </summary>
+        /// <param name="rangeValue"></param>
+        /// <returns></returns>
         public bool HasTabName(string rangeValue)
         {
             return Regex.IsMatch(rangeValue, "[A-Z]+!", RegexOptions.IgnoreCase);
@@ -69,7 +85,7 @@ namespace GoogleSheetsWrapper
             var rows = Regex.Matches(rangeWithoutTabName, "R[0-9]+", RegexOptions.IgnoreCase);
             var cols = Regex.Matches(rangeWithoutTabName, "C[0-9]+", RegexOptions.IgnoreCase);
 
-            int firstRow = int.Parse(rows[0].Value.ToUpper().Replace("R", ""));
+            var firstRow = int.Parse(rows[0].Value.ToUpper().Replace("R", ""));
             int? lastRow;
 
             if (rows.Count > 1)
@@ -81,7 +97,7 @@ namespace GoogleSheetsWrapper
                 lastRow = null;
             }
 
-            int firstCol = int.Parse(cols[0].Value.ToUpper().Replace("C", ""));
+            var firstCol = int.Parse(cols[0].Value.ToUpper().Replace("C", ""));
             int? lastCol;
 
             if (cols.Count > 1)

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using DocumentFormat.OpenXml;
@@ -11,20 +8,37 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// Helper class to export data from Google Sheets
+    /// </summary>
     public class SheetExporter
     {
-        private SheetHelper _sheetHelper;
+        private readonly SheetHelper _sheetHelper;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="serviceAccountEmail"></param>
+        /// <param name="tabName"></param>
         public SheetExporter(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             this._sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="sheetHelper"></param>
         public SheetExporter(SheetHelper sheetHelper)
         {
             this._sheetHelper = sheetHelper;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsonCredentials"></param>
         public void Init(string jsonCredentials)
         {
             this._sheetHelper.Init(jsonCredentials);
@@ -35,6 +49,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <param name="stream"></param>
+        /// <param name="delimiter"></param>
         public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
@@ -44,7 +59,7 @@ namespace GoogleSheetsWrapper
                 Delimiter = delimiter,
             };
 
-            using StreamWriter streamWriter = new StreamWriter(stream);
+            using var streamWriter = new StreamWriter(stream);
             using var csv = new CsvWriter(streamWriter, config);
             foreach (var row in rows)
             {
@@ -66,23 +81,23 @@ namespace GoogleSheetsWrapper
         {
             var rows = this._sheetHelper.GetRowsFormatted(range);
 
-            SpreadsheetDocument document = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook);
+            var document = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook);
 
             // Add a WorkbookPart to the document.
-            WorkbookPart workbookpart = document.AddWorkbookPart();
+            var workbookpart = document.AddWorkbookPart();
             workbookpart.Workbook = new Workbook();
 
             // Add a WorksheetPart to the WorkbookPart.
-            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+            var worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
             var sheetData = new SheetData();
             worksheetPart.Worksheet = new Worksheet(sheetData);
 
             // Add Sheets to the Workbook.
-            Sheets sheets = document.WorkbookPart.Workbook.
+            var sheets = document.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
 
             // Append a new worksheet and associate it with the workbook.
-            Sheet sheet = new Sheet()
+            var sheet = new Sheet()
             {
                 Id = document.WorkbookPart.GetIdOfPart(worksheetPart),
                 SheetId = 1,
@@ -96,11 +111,11 @@ namespace GoogleSheetsWrapper
 
                 foreach (var value in row)
                 {
-                    Cell cell = this.CreateCell(value?.ToString());
-                    newRow.AppendChild(cell);
+                    var cell = this.CreateCell(value?.ToString());
+                    _ = newRow.AppendChild(cell);
                 }
 
-                sheetData.AppendChild(newRow);
+                _ = sheetData.AppendChild(newRow);
             }
 
             workbookpart.Workbook.Save();
@@ -110,7 +125,7 @@ namespace GoogleSheetsWrapper
 
         private Cell CreateCell(string text)
         {
-            Cell cell = new Cell
+            var cell = new Cell
             {
                 DataType = ResolveCellDataTypeOnValue(text),
                 CellValue = new CellValue(text)
@@ -121,16 +136,18 @@ namespace GoogleSheetsWrapper
 
         private EnumValue<CellValues> ResolveCellDataTypeOnValue(string text)
         {
-            int intVal;
-            double doubleVal;
-            if (int.TryParse(text, out intVal) || double.TryParse(text, out doubleVal))
+#pragma warning disable IDE0046 // IF statement can be simplified
+
+            if (int.TryParse(text, out _) || double.TryParse(text, out _))
             {
-                return CellValues.Number;
+                return (EnumValue<CellValues>)CellValues.Number;
             }
             else
             {
-                return CellValues.String;
+                return (EnumValue<CellValues>)CellValues.String;
             }
+
+#pragma warning restore IDE0046 // IF statement can be simplified
         }
     }
 }

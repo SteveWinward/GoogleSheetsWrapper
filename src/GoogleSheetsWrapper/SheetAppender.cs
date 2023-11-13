@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -11,20 +9,37 @@ using Google.Apis.Sheets.v4.Data;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// Helper class for appender data to Google Sheets tab
+    /// </summary>
     public class SheetAppender
     {
-        private SheetHelper _sheetHelper;
+        private readonly SheetHelper _sheetHelper;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="serviceAccountEmail"></param>
+        /// <param name="tabName"></param>
         public SheetAppender(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             this._sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="sheetHelper"></param>
         public SheetAppender(SheetHelper sheetHelper)
         {
             this._sheetHelper = sheetHelper;
         }
 
+        /// <summary>
+        /// Initializes the SheetAppender object with authentication to Google Sheets API
+        /// </summary>
+        /// <param name="jsonCredentials"></param>
         public void Init(string jsonCredentials)
         {
             this._sheetHelper.Init(jsonCredentials);
@@ -38,10 +53,14 @@ namespace GoogleSheetsWrapper
         /// <param name="batchWaitTime"></param>
         public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000)
         {
+#pragma warning disable IDE0063 // Using statement can be simplified
+
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
                 this.AppendCsv(stream, includeHeaders, batchWaitTime);
             }
+
+#pragma warning restore IDE0063 // Using statement can be simplified
         }
 
         /// <summary>
@@ -52,7 +71,7 @@ namespace GoogleSheetsWrapper
         /// <param name="batchWaitTime"></param>
         public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000)
         {
-            using StreamReader streamReader = new StreamReader(stream);
+            using var streamReader = new StreamReader(stream);
             using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = includeHeaders
@@ -153,19 +172,19 @@ namespace GoogleSheetsWrapper
                 Rows = rows
             };
 
-            Request request = new Request
+            var request = new Request
             {
                 AppendCells = appendRequest
             };
 
             // Wrap it into batch update request.
-            BatchUpdateSpreadsheetRequest batchRequst = new BatchUpdateSpreadsheetRequest
+            var batchRequst = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
 
             // Finally update the sheet.
-            this._sheetHelper.Service.Spreadsheets
+            _ = this._sheetHelper.Service.Spreadsheets
                 .BatchUpdate(batchRequst, this._sheetHelper.SpreadsheetID)
                 .Execute();
         }

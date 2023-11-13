@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -13,27 +10,68 @@ using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetReques
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// Helper class for working with Google Sheets tabs
+    /// </summary>
     public class SheetHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string SpreadsheetID { get; set; }
 
+        /// <summary>
+        /// The tab name of the Google Sheets document
+        /// </summary>
         public string TabName { get; private set; }
 
+        /// <summary>
+        /// The Sheet ID for the Google Sheets document
+        /// </summary>
         public int? SheetID { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string ServiceAccountEmail { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string[] Scopes { get; set; } = { SheetsService.Scope.Spreadsheets };
 
+        /// <summary>
+        /// 
+        /// </summary>
         public SheetsService Service { get; private set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="serviceAccountEmail"></param>
+        /// <param name="tabName"></param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             this.SpreadsheetID = spreadsheetID;
             this.ServiceAccountEmail = serviceAccountEmail;
             this.TabName = tabName;
         }
-        public void Init(string jsonCredentials) => Init(jsonCredentials, default);
+
+        /// <summary>
+        /// Initializes the SheetHelper object
+        /// </summary>
+        /// <param name="jsonCredentials"></param>
+        public void Init(string jsonCredentials)
+        {
+            Init(jsonCredentials, default);
+        }
+
+        /// <summary>
+        /// Initializes the SheetHelper object with authentication
+        /// </summary>
+        /// <param name="jsonCredentials"></param>
+        /// <param name="httpClientFactory"></param>
         public void Init(string jsonCredentials, Google.Apis.Http.IHttpClientFactory httpClientFactory)
         {
             var credential = (ServiceAccountCredential)
@@ -77,7 +115,7 @@ namespace GoogleSheetsWrapper
             {
                 if (!result.Sheets.Any(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)))
                 {
-                    CreateNewTab(newTabName);
+                    _ = CreateNewTab(newTabName);
                     result = spreadsheet.Execute();
                 }
 
@@ -114,6 +152,8 @@ namespace GoogleSheetsWrapper
         /// Return a collection of rows for a given SheetRange input
         /// </summary>
         /// <param name="range"></param>
+        /// <param name="valueRenderOption"></param>
+        /// <param name="dateTimeRenderOption"></param>
         /// <returns></returns>
         public IList<IList<object>>? GetRows(SheetRange range,
             ValueRenderOptionEnum valueRenderOption = ValueRenderOptionEnum.UNFORMATTEDVALUE,
@@ -121,13 +161,13 @@ namespace GoogleSheetsWrapper
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
-            GetRequest request =
+            var request =
                     this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = valueRenderOption;
             request.DateTimeRenderOption = dateTimeRenderOption;
 
-            ValueRange response = request.Execute();
+            var response = request.Execute();
             return response.Values;
         }
 
@@ -140,13 +180,13 @@ namespace GoogleSheetsWrapper
         {
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
-            GetRequest request =
+            var request =
                     this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = GetRequest.ValueRenderOptionEnum.FORMATTEDVALUE;
             request.DateTimeRenderOption = GetRequest.DateTimeRenderOptionEnum.FORMATTEDSTRING;
 
-            ValueRange response = request.Execute();
+            var response = request.Execute();
             return response.Values;
         }
 
@@ -188,7 +228,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            var bussr = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
@@ -230,7 +270,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            var bussr = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
@@ -261,7 +301,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            var bussr = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
@@ -297,7 +337,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            var bussr = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
@@ -345,7 +385,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest
+            var bussr = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };
@@ -367,7 +407,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates, string fieldMask = "userEnteredValue")
         {
-            BatchUpdateSpreadsheetRequest bussr = new BatchUpdateSpreadsheetRequest();
+            var bussr = new BatchUpdateSpreadsheetRequest();
 
             var requests = new List<Request>(updates.Count);
 
@@ -444,19 +484,35 @@ namespace GoogleSheetsWrapper
     }
 
     /// <summary>
-    ///
+    /// SheetHelper strongly typed class
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class SheetHelper<T> : SheetHelper where T : BaseRecord
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="serviceAccountEmail"></param>
+        /// <param name="tabName"></param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
             : base(spreadsheetID, serviceAccountEmail, tabName) { }
 
+        /// <summary>
+        /// Adds a record to the next row in the Google Sheet tab
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse AppendRow(T record)
         {
             return this.AppendRows(new T[] { record });
         }
 
+        /// <summary>
+        /// Adds mulitlpe rows to the next row in the Google Sheets tab
+        /// </summary>
+        /// <param name="records"></param>
+        /// <returns></returns>
         public BatchUpdateSpreadsheetResponse AppendRows(IList<T> records)
         {
             var rows = new List<RowData>(records.Count);
@@ -478,13 +534,13 @@ namespace GoogleSheetsWrapper
                 Rows = rows
             };
 
-            Request request = new Request
+            var request = new Request
             {
                 AppendCells = appendRequest
             };
 
             // Wrap it into batch update request.
-            BatchUpdateSpreadsheetRequest batchRequst = new BatchUpdateSpreadsheetRequest
+            var batchRequst = new BatchUpdateSpreadsheetRequest
             {
                 Requests = new[] { request }
             };

@@ -77,13 +77,13 @@ namespace GoogleSheetsWrapper.SampleClient
 
             var builder = new ConfigurationBuilder();
             // tell the builder to look for the appsettings.json file
-            builder
+            _ = builder
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             //only add secrets in development
             if (isDevelopment)
             {
-                builder.AddUserSecrets<Program>();
+                _ = builder.AddUserSecrets<Program>();
             }
 
             return builder.Build();

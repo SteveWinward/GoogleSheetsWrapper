@@ -1,28 +1,57 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// SheetRange object representing a Google Sheet range representation
+    /// </summary>
     public class SheetRange : IEquatable<SheetRange>
     {
+        /// <summary>
+        /// Is this A1 notation?
+        /// </summary>
         public string A1Notation { get; private set; }
 
+        /// <summary>
+        /// Is this R1C1 notation?
+        /// </summary>
         public string R1C1Notation { get; private set; }
 
+        /// <summary>
+        /// Can this range support A1 notation?
+        /// </summary>
         public bool CanSupportA1Notation { get; private set; }
 
+        /// <summary>
+        /// Is this a single cell?
+        /// </summary>
         public bool IsSingleCellRange { get; private set; }
 
+        /// <summary>
+        /// StartColumn value (1 based index)
+        /// </summary>
         public int StartColumn { get; set; }
 
+        /// <summary>
+        /// StartRow value (1 based index)
+        /// </summary>
         public int StartRow { get; set; }
 
+        /// <summary>
+        /// EndColumn value (1 based index)
+        /// </summary>
         public int? EndColumn { get; set; }
 
+        /// <summary>
+        /// EndRow value (1 based index)
+        /// </summary>
         public int? EndRow { get; set; }
 
+        /// <summary>
+        /// Tab name in Google Sheets
+        /// </summary>
         public string TabName { get; set; }
 
         private static readonly List<string> aToZ
@@ -87,6 +116,8 @@ namespace GoogleSheetsWrapper
             var parser = new SheetRangeParser();
             SheetRange range;
 
+#pragma warning disable IDE0045 // IF statement can be simplified
+
             if (parser.IsValidR1C1Notation(rangeValue))
             {
                 range = parser.ConvertFromR1C1Notation(rangeValue);
@@ -99,6 +130,8 @@ namespace GoogleSheetsWrapper
             {
                 throw new ArgumentException($"rangeValue: {rangeValue} is not a valid range!");
             }
+
+#pragma warning restore IDE0045 // IF statement can be simplified
 
             this.TabName = range.TabName;
             this.StartRow = range.StartRow;
@@ -124,7 +157,7 @@ namespace GoogleSheetsWrapper
 
             while (block >= 0)
             {
-                columnLettersNotation += aToZ[(block % 26)];
+                columnLettersNotation += aToZ[block % 26];
 
                 block = (block / 26) - 1;
             }
@@ -141,11 +174,11 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public static int GetColumnIDFromLetters(string letters)
         {
-            int result = 0;
+            var result = 0;
 
             letters = letters.ToUpper();
 
-            for (int i = 0; i < letters.Count(); i++)
+            for (var i = 0; i < letters.Count(); i++)
             {
                 var currentLetter = letters[i];
                 var currentLetterNumber = (int)currentLetter;
@@ -157,11 +190,21 @@ namespace GoogleSheetsWrapper
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int GetHashCode(SheetRange obj)
         {
             return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(SheetRange other)
         {
             return
@@ -176,11 +219,20 @@ namespace GoogleSheetsWrapper
                 this.TabName == other.TabName;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public override bool Equals(object other)
         {
             return this.Equals((SheetRange)other);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return this.GetHashCode(this);

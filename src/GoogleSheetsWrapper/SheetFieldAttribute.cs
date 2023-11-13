@@ -8,6 +8,9 @@ namespace GoogleSheetsWrapper
     /// </summary>
     public class SheetFieldAttribute : Attribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
         protected static Dictionary<SheetFieldType, string> DefaultFormatPatterns = new Dictionary<SheetFieldType, string>()
         {
             { SheetFieldType.String, "" },
@@ -43,32 +46,10 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public string NumberFormatPattern
         {
-            get
-            {
-                if (_numberFormatPattern == null)
-                {
-                    return DefaultFormatPatterns[this.FieldType];
-                }
+            get => _numberFormatPattern ?? DefaultFormatPatterns[this.FieldType];
 
-                return _numberFormatPattern;
-            }
-
-            set
-            {
-                _numberFormatPattern = value;
-            }
+            set => _numberFormatPattern = value;
         }
 
-    }
-
-    public enum SheetFieldType
-    {
-        String,
-        DateTime,
-        Currency,
-        PhoneNumber,
-        Boolean,
-        Integer,
-        Number
     }
 }

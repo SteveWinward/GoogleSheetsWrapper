@@ -2,23 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Google.Apis.Sheets.v4.Data;
 
 namespace GoogleSheetsWrapper
 {
+    /// <summary>
+    /// BaseRepository abstract base class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseRepository<T> where T : BaseRecord
     {
+        /// <summary>
+        /// SheetHelper class associated with the BaseRepository
+        /// </summary>
         protected SheetHelper<T> SheetHelper { get; set; }
 
+        /// <summary>
+        /// The SheetRange object representing the data range in the Google Sheets tab (does not include the headers if there are headers)
+        /// </summary>
         public SheetRange SheetDataRange { get; private set; }
 
+        /// <summary>
+        /// The SheetRange object representing the header range in the Google Sheets tab
+        /// </summary>
         public SheetRange SheetHeaderRange { get; private set; }
 
+        /// <summary>
+        /// Does the tab have headers?
+        /// </summary>
         public bool HasHeaderRow { get; private set; }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public BaseRepository() { }
 
+        /// <summary>
+        /// BaseRepository constructor
+        /// </summary>
+        /// <param name="sheetHelper">SheetHelper object</param>
+        /// <param name="hasHeaderRow">Does the tab have headers?</param>
         public BaseRepository(SheetHelper<T> sheetHelper, bool hasHeaderRow = true)
         {
             this.SheetHelper = sheetHelper;
@@ -28,6 +51,14 @@ namespace GoogleSheetsWrapper
             this.InitSheetRanges();
         }
 
+        /// <summary>
+        /// BaseRepository constructor
+        /// </summary>
+        /// <param name="spreadsheetID">The Google Sheets spreadsheet ID</param>
+        /// <param name="serviceAccountEmail">The Google Sheets service account email</param>
+        /// <param name="tabName">The Google Sheets tab name</param>
+        /// <param name="jsonCredentials">The Google Sheets JSON credentials</param>
+        /// <param name="hasHeaderRow">Does the tab have headers?</param>
         public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials, bool hasHeaderRow = true)
         {
             this.SheetHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
@@ -84,7 +115,7 @@ namespace GoogleSheetsWrapper
         /// <param name="record"></param>
         public void DeleteRecord(T record)
         {
-            this.SheetHelper.DeleteRow(record.RowId);
+            _ = this.SheetHelper.DeleteRow(record.RowId);
         }
 
         /// <summary>
@@ -97,7 +128,7 @@ namespace GoogleSheetsWrapper
 
             var records = new List<T>(result.Count);
 
-            for (int r = 0; r < result.Count; r++)
+            for (var r = 0; r < result.Count; r++)
             {
                 var currentRecord = result[r];
 
@@ -181,7 +212,7 @@ namespace GoogleSheetsWrapper
             {
                 var attribute = kvp.Key;
 
-                if (row.Count < (attribute.ColumnID))
+                if (row.Count < attribute.ColumnID)
                 {
                     result.IsValid = false;
                     result.ErrorMessage += $"'{attribute.DisplayName}' column id: {attribute.ColumnID} is greater than the defined column count: {row.Count}. ";
@@ -237,7 +268,7 @@ namespace GoogleSheetsWrapper
             foreach (var exp in expressions)
             {
                 var columnID = SheetFieldAttributeUtils.GetColumnId(exp);
-                result.Add(data.Where(b => b.FieldAttribute.ColumnID == columnID).First());
+                result.Add(data.First(b => b.FieldAttribute.ColumnID == columnID));
             }
 
             return result;

@@ -1,4 +1,3 @@
-using GoogleSheetsWrapper;
 using NUnit.Framework;
 
 namespace GoogleSheetsWrapper.Tests
@@ -12,7 +11,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_GetTabName_HappyPath()
+        public void SheetRangeParserGetTabNameHappyPath()
         {
             var parser = new SheetRangeParser();
 
@@ -22,7 +21,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidR1C1Notation_HappyPath_With_Tab()
+        public void SheetRangeParserIsValidR1C1NotationHappyPathWithTab()
         {
             var parser = new SheetRangeParser();
 
@@ -32,7 +31,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidR1C1Notation_HappyPath_Without_Tab()
+        public void SheetRangeParserIsValidR1C1NotationHappyPathWithoutTab()
         {
             var parser = new SheetRangeParser();
 
@@ -42,7 +41,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidR1C1Notation_HappyPath_SingleCell_Without_Tab()
+        public void SheetRangeParserIsValidR1C1NotationHappyPathSingleCellWithoutTab()
         {
             var parser = new SheetRangeParser();
 
@@ -52,7 +51,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidR1C1Notation_Fails_With_A1Notation()
+        public void SheetRangeParserIsValidR1C1NotationFailsWithA1Notation()
         {
             var parser = new SheetRangeParser();
 
@@ -62,7 +61,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidA1Notation_HappyPath_With_Tab()
+        public void SheetRangeParserIsValidA1NotationHappyPathWithTab()
         {
             var parser = new SheetRangeParser();
 
@@ -72,7 +71,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidA1Notation_HappyPath_With_Tab_Without_Last_Row()
+        public void SheetRangeParserIsValidA1NotationHappyPathWithTabWithoutLastRow()
         {
             var parser = new SheetRangeParser();
 
@@ -82,7 +81,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRangeParser_IsValidA1Notation_HappyPath_Without_Tab()
+        public void SheetRangeParserIsValidA1NotationHappyPathWithoutTab()
         {
             var parser = new SheetRangeParser();
 

@@ -1,4 +1,3 @@
-using GoogleSheetsWrapper;
 using NUnit.Framework;
 
 namespace GoogleSheetsWrapper.Tests
@@ -13,7 +12,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_GetLettersFromColumnID_Tests()
+        public void SheetRangeGetLettersFromColumnIDTests()
         {
             this.AssertLettersFromColumnID(1, "A");
             this.AssertLettersFromColumnID(26, "Z");
@@ -23,7 +22,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_GetColumnIDFromLetters_Tests()
+        public void SheetRangeGetColumnIDFromLettersTests()
         {
             this.AssertColumnIDFromLetters("A", 1);
             this.AssertColumnIDFromLetters("Z", 26);
@@ -33,7 +32,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_NoTabName_A1Notation_Formatted_Correctly()
+        public void SheetRangeNoTabNameA1NotationFormattedCorrectly()
         {
             var range = new SheetRange("", 3, 1, 5, 6);
 
@@ -50,7 +49,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_With_TabName_A1Notation_Formatted_Correctly()
+        public void SheetRangeWithTabNameA1NotationFormattedCorrectly()
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
@@ -62,7 +61,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_NoTabName_SingleCell_A1Notation_Is_Null()
+        public void SheetRangeNoTabNameSingleCellA1NotationIsNull()
         {
             var range = new SheetRange("", 3, 1);
 
@@ -76,7 +75,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_NoTabName_R1C1_Formatted_Correctly()
+        public void SheetRangeNoTabNameR1C1FormattedCorrectly()
         {
             var range = new SheetRange("", 3, 1, 5, 5);
 
@@ -88,7 +87,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_With_TabName_R1C1_Formatted_Correctly()
+        public void SheetRangeWithTabNameR1C1FormattedCorrectly()
         {
             var range = new SheetRange("MyCustomTab", 3, 1, 5, 5);
 
@@ -100,7 +99,7 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
-        public void SheetRange_NoTabName_SingleCell_R1C1_Formatted_Correctly()
+        public void SheetRangeNoTabNameSingleCellR1C1FormattedCorrectly()
         {
             var range = new SheetRange("", 3, 1);
 
