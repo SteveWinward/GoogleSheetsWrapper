@@ -6,12 +6,10 @@ namespace GoogleSheetsWrapper
     /// <summary>
     /// These fields MUST match header of sheet fields.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class SheetFieldAttribute : Attribute
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        protected static Dictionary<SheetFieldType, string> DefaultFormatPatterns = new Dictionary<SheetFieldType, string>()
+        private static readonly Dictionary<SheetFieldType, string> dictionary = new Dictionary<SheetFieldType, string>()
         {
             { SheetFieldType.String, "" },
             { SheetFieldType.Number, "#,##0.00" },
@@ -21,6 +19,11 @@ namespace GoogleSheetsWrapper
             { SheetFieldType.Boolean, "#" },
             { SheetFieldType.Integer, "0" },
         };
+
+        /// <summary>
+        /// Returns a Dictionary collection of the default format patterns
+        /// </summary>
+        protected static Dictionary<SheetFieldType, string> DefaultFormatPatterns { get; set; } = dictionary;
 
         /// <summary>
         /// The display name of the column header in Google Sheets
@@ -46,10 +49,9 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public string NumberFormatPattern
         {
-            get => _numberFormatPattern ?? DefaultFormatPatterns[this.FieldType];
+            get => _numberFormatPattern ?? DefaultFormatPatterns[FieldType];
 
             set => _numberFormatPattern = value;
         }
-
     }
 }

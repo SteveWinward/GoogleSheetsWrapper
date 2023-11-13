@@ -44,11 +44,11 @@ namespace GoogleSheetsWrapper
         /// <param name="hasHeaderRow">Does the tab have headers?</param>
         public BaseRepository(SheetHelper<T> sheetHelper, bool hasHeaderRow = true)
         {
-            this.SheetHelper = sheetHelper;
+            SheetHelper = sheetHelper;
 
-            this.HasHeaderRow = hasHeaderRow;
+            HasHeaderRow = hasHeaderRow;
 
-            this.InitSheetRanges();
+            InitSheetRanges();
         }
 
         /// <summary>
@@ -61,13 +61,13 @@ namespace GoogleSheetsWrapper
         /// <param name="hasHeaderRow">Does the tab have headers?</param>
         public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials, bool hasHeaderRow = true)
         {
-            this.SheetHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
+            SheetHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
 
-            this.SheetHelper.Init(jsonCredentials);
+            SheetHelper.Init(jsonCredentials);
 
-            this.HasHeaderRow = hasHeaderRow;
+            HasHeaderRow = hasHeaderRow;
 
-            this.InitSheetRanges();
+            InitSheetRanges();
         }
 
         /// <summary>
@@ -80,14 +80,14 @@ namespace GoogleSheetsWrapper
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
             var minColumnId = attributes.Min(a => a.Key.ColumnID);
 
-            if (this.HasHeaderRow)
+            if (HasHeaderRow)
             {
-                this.SheetHeaderRange = new SheetRange(this.SheetHelper.TabName, minColumnId, 1, maxColumnId, 1);
-                this.SheetDataRange = new SheetRange(this.SheetHelper.TabName, minColumnId, 2, maxColumnId);
+                SheetHeaderRange = new SheetRange(SheetHelper.TabName, minColumnId, 1, maxColumnId, 1);
+                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, 2, maxColumnId);
             }
             else
             {
-                this.SheetDataRange = new SheetRange(this.SheetHelper.TabName, minColumnId, 1, maxColumnId);
+                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, 1, maxColumnId);
             }
         }
 
@@ -97,7 +97,7 @@ namespace GoogleSheetsWrapper
         /// <param name="record"></param>
         public BatchUpdateSpreadsheetResponse AddRecord(T record)
         {
-            return this.SheetHelper.AppendRow(record);
+            return SheetHelper.AppendRow(record);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace GoogleSheetsWrapper
         /// <param name="records"></param>
         public BatchUpdateSpreadsheetResponse AddRecords(IList<T> records)
         {
-            return this.SheetHelper.AppendRows(records);
+            return SheetHelper.AppendRows(records);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace GoogleSheetsWrapper
         /// <param name="record"></param>
         public void DeleteRecord(T record)
         {
-            _ = this.SheetHelper.DeleteRow(record.RowId);
+            _ = SheetHelper.DeleteRow(record.RowId);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public List<T> GetAllRecords()
         {
-            var result = this.SheetHelper.GetRows(SheetDataRange);
+            var result = SheetHelper.GetRows(SheetDataRange);
 
             var records = new List<T>(result.Count);
 
@@ -135,8 +135,8 @@ namespace GoogleSheetsWrapper
                 var record = (T)Activator.CreateInstance(
                     typeof(T),
                     currentRecord,
-                    r + this.SheetDataRange.StartRow,
-                    this.SheetDataRange.StartColumn);
+                    r + SheetDataRange.StartRow,
+                    SheetDataRange.StartColumn);
 
                 records.Add(record);
             }
@@ -149,7 +149,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public BatchUpdateSpreadsheetResponse SaveField(T record, Expression<Func<T, object>> expression)
         {
-            return this.SaveFields(record, new Expression<Func<T, object>>[] { expression } as IList<Expression<Func<T, object>>>);
+            return SaveFields(record, new Expression<Func<T, object>>[] { expression } as IList<Expression<Func<T, object>>>);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public BatchUpdateSpreadsheetResponse SaveFields(T record, params Expression<Func<T, object>>[] expressions)
         {
-            return this.SaveFields(record, expressions as IList<Expression<Func<T, object>>>); //casts prevent stackoverflow to params
+            return SaveFields(record, expressions as IList<Expression<Func<T, object>>>); //casts prevent stackoverflow to params
         }
 
         /// <summary>
@@ -165,11 +165,11 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public BatchUpdateSpreadsheetResponse SaveFields(T record, IList<Expression<Func<T, object>>> properties)
         {
-            var data = record.ConvertToCellData(this.SheetHelper.TabName);
+            var data = record.ConvertToCellData(SheetHelper.TabName);
 
-            var updates = this.FilterUpdates(data, properties);
+            var updates = BaseRepository<T>.FilterUpdates(data, properties);
 
-            return this.SheetHelper.BatchUpdate(updates);
+            return SheetHelper.BatchUpdate(updates);
         }
 
         /// <summary>
@@ -178,14 +178,14 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public SchemaValidationResult ValidateSchema()
         {
-            if (!this.HasHeaderRow)
+            if (!HasHeaderRow)
             {
                 throw new ArgumentException("ValidateSchema cannot be called when the HasHeaderRow property is set to false");
             }
 
-            var headers = this.SheetHelper.GetRows(SheetHeaderRange);
+            var headers = SheetHelper.GetRows(SheetHeaderRange);
 
-            return this.ValidateSchema(headers[0]);
+            return ValidateSchema(headers[0]);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public SchemaValidationResult ValidateSchema(IList<object> row)
         {
-            if (!this.HasHeaderRow)
+            if (!HasHeaderRow)
             {
                 throw new ArgumentException("ValidateSchema cannot be called when the HasHeaderRow property is set to false");
             }
@@ -235,7 +235,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public void WriteHeaders()
         {
-            if (this.HasHeaderRow)
+            if (HasHeaderRow)
             {
                 throw new ArgumentException("HasHeaderRow must be false to call this method");
             }
@@ -248,7 +248,7 @@ namespace GoogleSheetsWrapper
                 fieldNames.Add(kvp.Key.DisplayName);
             }
 
-            var appender = new SheetAppender(this.SheetHelper);
+            var appender = new SheetAppender(SheetHelper);
 
             appender.AppendRow(fieldNames);
         }
@@ -259,7 +259,7 @@ namespace GoogleSheetsWrapper
         /// <param name="data"></param>
         /// <param name="expressions"></param>
         /// <returns></returns>
-        internal List<BatchUpdateRequestObject> FilterUpdates(
+        internal static List<BatchUpdateRequestObject> FilterUpdates(
             IList<BatchUpdateRequestObject> data,
             IList<Expression<Func<T, object>>> expressions)
         {

@@ -53,9 +53,9 @@ namespace GoogleSheetsWrapper
         /// <param name="tabName"></param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
-            this.SpreadsheetID = spreadsheetID;
-            this.ServiceAccountEmail = serviceAccountEmail;
-            this.TabName = tabName;
+            SpreadsheetID = spreadsheetID;
+            ServiceAccountEmail = serviceAccountEmail;
+            TabName = tabName;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace GoogleSheetsWrapper
             // Authenticate as service account to the Sheets API
             var initializer = new ServiceAccountCredential.Initializer(credential.Id)
             {
-                User = this.ServiceAccountEmail,
+                User = ServiceAccountEmail,
                 Key = credential.Key,
                 Scopes = Scopes,
                 HttpClientFactory = httpClientFactory,
@@ -93,9 +93,9 @@ namespace GoogleSheetsWrapper
                 HttpClientFactory = httpClientFactory,
             });
 
-            this.Service = service;
+            Service = service;
 
-            this.UpdateTabName(this.TabName);
+            UpdateTabName(TabName);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace GoogleSheetsWrapper
         /// <param name="newTabName"></param>
         public void UpdateTabName(string newTabName)
         {
-            var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
+            var spreadsheet = Service.Spreadsheets.Get(SpreadsheetID);
 
             var result = spreadsheet.Execute();
 
@@ -113,22 +113,22 @@ namespace GoogleSheetsWrapper
             // Lookup the sheet id for the given tab name
             if (!string.IsNullOrEmpty(newTabName))
             {
-                if (!result.Sheets.Any(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase)))
+                if (!result.Sheets.Any(s => s.Properties.Title.Equals(newTabName, StringComparison.OrdinalIgnoreCase)))
                 {
                     _ = CreateNewTab(newTabName);
                     result = spreadsheet.Execute();
                 }
 
-                sheet = result.Sheets.First(s => s.Properties.Title.Equals(newTabName, StringComparison.CurrentCultureIgnoreCase));
+                sheet = result.Sheets.First(s => s.Properties.Title.Equals(newTabName, StringComparison.OrdinalIgnoreCase));
             }
             else
             {
                 sheet = result.Sheets.First();
             }
 
-            this.SheetID = sheet.Properties.SheetId;
+            SheetID = sheet.Properties.SheetId;
 
-            this.TabName = newTabName;
+            TabName = newTabName;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public List<string> GetAllTabNames()
         {
-            var spreadsheet = this.Service.Spreadsheets.Get(this.SpreadsheetID);
+            var spreadsheet = Service.Spreadsheets.Get(SpreadsheetID);
 
             var result = spreadsheet.Execute();
 
@@ -162,7 +162,7 @@ namespace GoogleSheetsWrapper
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
             var request =
-                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
+                    Service.Spreadsheets.Values.Get(SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = valueRenderOption;
             request.DateTimeRenderOption = dateTimeRenderOption;
@@ -181,7 +181,7 @@ namespace GoogleSheetsWrapper
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
             var request =
-                    this.Service.Spreadsheets.Values.Get(this.SpreadsheetID, rangeValue);
+                    Service.Spreadsheets.Values.Get(SpreadsheetID, rangeValue);
 
             request.ValueRenderOption = GetRequest.ValueRenderOptionEnum.FORMATTEDVALUE;
             request.DateTimeRenderOption = GetRequest.DateTimeRenderOptionEnum.FORMATTEDSTRING;
@@ -203,7 +203,7 @@ namespace GoogleSheetsWrapper
 
             var requestBody = new ClearValuesRequest();
 
-            var clearRequest = this.Service.Spreadsheets.Values.Clear(requestBody, this.SpreadsheetID, rangeValue);
+            var clearRequest = Service.Spreadsheets.Values.Clear(requestBody, SpreadsheetID, rangeValue);
             return clearRequest.Execute();
         }
 
@@ -223,7 +223,7 @@ namespace GoogleSheetsWrapper
                         Dimension = "COLUMNS",
                         StartIndex = col - 1,
                         EndIndex = col,
-                        SheetId = this.SheetID,
+                        SheetId = SheetID,
                     }
                 }
             };
@@ -233,7 +233,7 @@ namespace GoogleSheetsWrapper
                 Requests = new[] { request }
             };
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -246,7 +246,7 @@ namespace GoogleSheetsWrapper
         {
             var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
 
-            return this.DeleteColumn(columnId);
+            return DeleteColumn(columnId);
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace GoogleSheetsWrapper
                         Dimension = "ROWS",
                         StartIndex = row - 1,
                         EndIndex = row,
-                        SheetId = this.SheetID,
+                        SheetId = SheetID,
                     }
                 }
             };
@@ -275,7 +275,7 @@ namespace GoogleSheetsWrapper
                 Requests = new[] { request }
             };
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -296,7 +296,7 @@ namespace GoogleSheetsWrapper
                         Dimension = "ROWS",
                         StartIndex = startRow - 1,
                         EndIndex = endRow,
-                        SheetId = this.SheetID,
+                        SheetId = SheetID,
                     }
                 }
             };
@@ -306,7 +306,7 @@ namespace GoogleSheetsWrapper
                 Requests = new[] { request }
             };
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -331,7 +331,7 @@ namespace GoogleSheetsWrapper
                         Dimension = "COLUMNS",
                         StartIndex = column - 1,
                         EndIndex = column,
-                        SheetId = this.SheetID,
+                        SheetId = SheetID,
                     },
                     InheritFromBefore = column > 1,
                 }
@@ -342,7 +342,7 @@ namespace GoogleSheetsWrapper
                 Requests = new[] { request }
             };
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -355,7 +355,7 @@ namespace GoogleSheetsWrapper
         {
             var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
 
-            return this.InsertBlankColumn(columnId);
+            return InsertBlankColumn(columnId);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace GoogleSheetsWrapper
                         Dimension = "ROWS",
                         StartIndex = row - 1,
                         EndIndex = row,
-                        SheetId = this.SheetID,
+                        SheetId = SheetID,
                     },
                     InheritFromBefore = row > 1,
                 }
@@ -390,7 +390,7 @@ namespace GoogleSheetsWrapper
                 Requests = new[] { request }
             };
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -415,7 +415,7 @@ namespace GoogleSheetsWrapper
             {
                 var gridRange = new GridRange()
                 {
-                    SheetId = this.SheetID,
+                    SheetId = SheetID,
                     StartColumnIndex = update.Range.StartColumn - 1,
                     StartRowIndex = update.Range.StartRow - 1,
                 };
@@ -449,7 +449,7 @@ namespace GoogleSheetsWrapper
 
             bussr.Requests = requests;
 
-            var updateRequest = this.Service.Spreadsheets.BatchUpdate(bussr, this.SpreadsheetID);
+            var updateRequest = Service.Spreadsheets.BatchUpdate(bussr, SpreadsheetID);
             return updateRequest.Execute();
         }
 
@@ -477,7 +477,7 @@ namespace GoogleSheetsWrapper
                 }
             };
 
-            var batchUpdateRequest = this.Service.Spreadsheets.BatchUpdate(batchUpdateSpreadsheetRequest, this.SpreadsheetID);
+            var batchUpdateRequest = Service.Spreadsheets.BatchUpdate(batchUpdateSpreadsheetRequest, SpreadsheetID);
 
             return batchUpdateRequest.Execute();
         }
@@ -505,7 +505,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse AppendRow(T record)
         {
-            return this.AppendRows(new T[] { record });
+            return AppendRows(new T[] { record });
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace GoogleSheetsWrapper
             {
                 var row = new RowData
                 {
-                    Values = record.ConvertToCellData(this.TabName).Select(b => b.Data).ToList(),
+                    Values = record.ConvertToCellData(TabName).Select(b => b.Data).ToList(),
                 };
 
                 rows.Add(row);
@@ -530,7 +530,7 @@ namespace GoogleSheetsWrapper
             var appendRequest = new AppendCellsRequest
             {
                 Fields = "*",
-                SheetId = this.SheetID,
+                SheetId = SheetID,
                 Rows = rows
             };
 
@@ -546,8 +546,8 @@ namespace GoogleSheetsWrapper
             };
 
             // Finally update the sheet.
-            return this.Service.Spreadsheets
-                .BatchUpdate(batchRequst, this.SpreadsheetID)
+            return Service.Spreadsheets
+                .BatchUpdate(batchRequst, SpreadsheetID)
                 .Execute();
         }
     }

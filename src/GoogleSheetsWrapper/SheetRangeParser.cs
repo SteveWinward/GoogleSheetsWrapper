@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GoogleSheetsWrapper
@@ -13,7 +14,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="rangeValue"></param>
         /// <returns></returns>
-        public bool IsValidA1Notation(string rangeValue)
+        public static bool IsValidA1Notation(string rangeValue)
         {
             // https://developers.google.com/sheets/api/guides/concepts
 
@@ -28,7 +29,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="rangeValue"></param>
         /// <returns></returns>
-        public bool IsValidR1C1Notation(string rangeValue)
+        public static bool IsValidR1C1Notation(string rangeValue)
         {
             // https://developers.google.com/sheets/api/guides/concepts
 
@@ -43,7 +44,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="rangeValue"></param>
         /// <returns></returns>
-        public bool HasTabName(string rangeValue)
+        public static bool HasTabName(string rangeValue)
         {
             return Regex.IsMatch(rangeValue, "[A-Z]+!", RegexOptions.IgnoreCase);
         }
@@ -53,9 +54,9 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="rangeValue"></param>
         /// <returns></returns>
-        public string GetTabName(string rangeValue)
+        public static string GetTabName(string rangeValue)
         {
-            if (this.HasTabName(rangeValue))
+            if (HasTabName(rangeValue))
             {
                 var firstMatch = Regex.Match(rangeValue, "[A-Z]+!", RegexOptions.IgnoreCase);
 
@@ -71,38 +72,38 @@ namespace GoogleSheetsWrapper
         /// <param name="rangeValue"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public SheetRange ConvertFromR1C1Notation(string rangeValue)
+        public static SheetRange ConvertFromR1C1Notation(string rangeValue)
         {
-            if (!this.IsValidR1C1Notation(rangeValue))
+            if (!IsValidR1C1Notation(rangeValue))
             {
                 throw new ArgumentException($"The range value: {rangeValue} is not a proper R1C1 Notation.");
             }
 
-            var tabName = this.GetTabName(rangeValue);
+            var tabName = GetTabName(rangeValue);
 
             var rangeWithoutTabName = rangeValue.Replace(tabName?.ToString() + "!", "");
 
             var rows = Regex.Matches(rangeWithoutTabName, "R[0-9]+", RegexOptions.IgnoreCase);
             var cols = Regex.Matches(rangeWithoutTabName, "C[0-9]+", RegexOptions.IgnoreCase);
 
-            var firstRow = int.Parse(rows[0].Value.ToUpper().Replace("R", ""));
+            var firstRow = int.Parse(rows[0].Value.ToUpper(CultureInfo.CurrentCulture).Replace("R", ""), CultureInfo.CurrentCulture);
             int? lastRow;
 
             if (rows.Count > 1)
             {
-                lastRow = int.Parse(rows[1].Value.ToUpper().Replace("R", ""));
+                lastRow = int.Parse(rows[1].Value.ToUpper(CultureInfo.CurrentCulture).Replace("R", ""), CultureInfo.CurrentCulture);
             }
             else
             {
                 lastRow = null;
             }
 
-            var firstCol = int.Parse(cols[0].Value.ToUpper().Replace("C", ""));
+            var firstCol = int.Parse(cols[0].Value.ToUpper(CultureInfo.CurrentCulture).Replace("C", ""), CultureInfo.CurrentCulture);
             int? lastCol;
 
             if (cols.Count > 1)
             {
-                lastCol = int.Parse(cols[1].Value.ToUpper().Replace("C", ""));
+                lastCol = int.Parse(cols[1].Value.ToUpper(CultureInfo.CurrentCulture).Replace("C", ""), CultureInfo.CurrentCulture);
             }
             else
             {
@@ -118,14 +119,14 @@ namespace GoogleSheetsWrapper
         /// <param name="rangeValue"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public SheetRange ConvertFromA1Notation(string rangeValue)
+        public static SheetRange ConvertFromA1Notation(string rangeValue)
         {
-            if (!this.IsValidA1Notation(rangeValue))
+            if (!IsValidA1Notation(rangeValue))
             {
                 throw new ArgumentException($"The range value: {rangeValue} is not a proper A1 Notation.");
             }
 
-            var tabName = this.GetTabName(rangeValue);
+            var tabName = GetTabName(rangeValue);
 
             var rangeWithoutTabName = rangeValue.Replace(tabName?.ToString() + "!", "");
 
@@ -136,13 +137,13 @@ namespace GoogleSheetsWrapper
             var firstColumn = SheetRange.GetColumnIDFromLetters(columns[0].Value);
             var lastColumn = SheetRange.GetColumnIDFromLetters(columns[1].Value);
 
-            var firstRow = int.Parse(rows[0].Value);
+            var firstRow = int.Parse(rows[0].Value, CultureInfo.CurrentCulture);
 
             int? lastRow;
 
             if (rows.Count > 1)
             {
-                lastRow = int.Parse(rows[1].Value);
+                lastRow = int.Parse(rows[1].Value, CultureInfo.CurrentCulture);
             }
             else
             {

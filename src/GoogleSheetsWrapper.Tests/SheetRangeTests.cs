@@ -4,8 +4,6 @@ namespace GoogleSheetsWrapper.Tests
 {
     public class SheetRangeTests
     {
-        public SheetRangeParser Parser { get; set; } = new SheetRangeParser();
-
         [SetUp]
         public void Setup()
         {
@@ -14,21 +12,21 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeGetLettersFromColumnIDTests()
         {
-            this.AssertLettersFromColumnID(1, "A");
-            this.AssertLettersFromColumnID(26, "Z");
-            this.AssertLettersFromColumnID(27, "AA");
-            this.AssertLettersFromColumnID(54, "BB");
-            this.AssertLettersFromColumnID(752, "ABX");
+            AssertLettersFromColumnID(1, "A");
+            AssertLettersFromColumnID(26, "Z");
+            AssertLettersFromColumnID(27, "AA");
+            AssertLettersFromColumnID(54, "BB");
+            AssertLettersFromColumnID(752, "ABX");
         }
 
         [Test]
         public void SheetRangeGetColumnIDFromLettersTests()
         {
-            this.AssertColumnIDFromLetters("A", 1);
-            this.AssertColumnIDFromLetters("Z", 26);
-            this.AssertColumnIDFromLetters("AA", 27);
-            this.AssertColumnIDFromLetters("BB", 54);
-            this.AssertColumnIDFromLetters("ABX", 752);
+            AssertColumnIDFromLetters("A", 1);
+            AssertColumnIDFromLetters("Z", 26);
+            AssertColumnIDFromLetters("AA", 27);
+            AssertColumnIDFromLetters("BB", 54);
+            AssertColumnIDFromLetters("ABX", 752);
         }
 
         [Test]
@@ -43,7 +41,7 @@ namespace GoogleSheetsWrapper.Tests
             Assert.AreEqual(5, range.EndColumn);
             Assert.AreEqual(6, range.EndRow);
 
-            var newRange = this.Parser.ConvertFromA1Notation("C1:E6");
+            var newRange = SheetRangeParser.ConvertFromA1Notation("C1:E6");
 
             Assert.IsTrue(range.Equals(newRange));
         }
@@ -55,7 +53,7 @@ namespace GoogleSheetsWrapper.Tests
 
             Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
 
-            var newRange = this.Parser.ConvertFromA1Notation("MyCustomTabName!C1:E6");
+            var newRange = SheetRangeParser.ConvertFromA1Notation("MyCustomTabName!C1:E6");
 
             Assert.IsTrue(range.Equals(newRange));
         }
@@ -69,7 +67,7 @@ namespace GoogleSheetsWrapper.Tests
             Assert.IsTrue(range.IsSingleCellRange);
             Assert.AreEqual("R1C3", range.R1C1Notation);
 
-            var newRange = this.Parser.ConvertFromR1C1Notation("R1C3");
+            var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3");
 
             Assert.IsTrue(range.Equals(newRange));
         }
@@ -81,7 +79,7 @@ namespace GoogleSheetsWrapper.Tests
 
             Assert.AreEqual("R1C3:R5C5", range.R1C1Notation);
 
-            var newRange = this.Parser.ConvertFromR1C1Notation("R1C3:R5C5");
+            var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3:R5C5");
 
             Assert.IsTrue(range.Equals(newRange));
         }
@@ -93,7 +91,7 @@ namespace GoogleSheetsWrapper.Tests
 
             Assert.AreEqual("MyCustomTab!R1C3:R5C5", range.R1C1Notation);
 
-            var newRange = this.Parser.ConvertFromR1C1Notation("MyCustomTab!R1C3:R5C5");
+            var newRange = SheetRangeParser.ConvertFromR1C1Notation("MyCustomTab!R1C3:R5C5");
 
             Assert.IsTrue(range.Equals(newRange));
         }
@@ -107,25 +105,23 @@ namespace GoogleSheetsWrapper.Tests
 
             Assert.AreEqual("R1C3", range.R1C1Notation);
 
-            var newRange = this.Parser.ConvertFromR1C1Notation("R1C3");
+            var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3");
 
             Assert.IsTrue(range.Equals(newRange));
         }
 
-        private void AssertLettersFromColumnID(int columnID, string expectedLetters)
+        private static void AssertLettersFromColumnID(int columnID, string expectedLetters)
         {
             var result = SheetRange.GetLettersFromColumnID(columnID);
 
             Assert.AreEqual(expectedLetters, result);
         }
 
-        private void AssertColumnIDFromLetters(string letters, int expectedColumnID)
+        private static void AssertColumnIDFromLetters(string letters, int expectedColumnID)
         {
             var result = SheetRange.GetColumnIDFromLetters(letters);
 
             Assert.AreEqual(expectedColumnID, result);
         }
-
-
     }
 }

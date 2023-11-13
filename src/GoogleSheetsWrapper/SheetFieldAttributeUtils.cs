@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using Google.Apis.Sheets.v4.Data;
@@ -50,7 +51,7 @@ namespace GoogleSheetsWrapper
 
                         if (!string.IsNullOrWhiteSpace(value))
                         {
-                            property.SetValue(record, long.Parse(value));
+                            property.SetValue(record, long.Parse(value, CultureInfo.CurrentCulture));
                         }
                     }
                     else if (attribute.FieldType == SheetFieldType.DateTime)
@@ -59,7 +60,7 @@ namespace GoogleSheetsWrapper
 
                         if (!string.IsNullOrWhiteSpace(stringValue))
                         {
-                            var serialNumber = double.Parse(stringValue);
+                            var serialNumber = double.Parse(stringValue, CultureInfo.CurrentCulture);
 
                             dt = DateTimeUtils.ConvertFromSerialNumber(serialNumber);
 
@@ -70,7 +71,7 @@ namespace GoogleSheetsWrapper
                     {
                         if (!string.IsNullOrWhiteSpace(stringValue))
                         {
-                            var value = double.Parse(stringValue);
+                            var value = double.Parse(stringValue, CultureInfo.CurrentCulture);
                             property.SetValue(record, value);
                         }
                     }
@@ -78,13 +79,13 @@ namespace GoogleSheetsWrapper
                     {
                         if (!string.IsNullOrWhiteSpace(stringValue))
                         {
-                            var value = int.Parse(stringValue);
+                            var value = int.Parse(stringValue, CultureInfo.CurrentCulture);
                             property.SetValue(record, value);
                         }
                     }
                     else if (attribute.FieldType == SheetFieldType.Boolean)
                     {
-                        var boolValue = Convert.ToBoolean(stringValue);
+                        var boolValue = Convert.ToBoolean(stringValue, CultureInfo.CurrentCulture);
                         property.SetValue(record, boolValue);
                     }
                     else
@@ -133,7 +134,7 @@ namespace GoogleSheetsWrapper
             {
                 if (value != null)
                 {
-                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString());
+                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString(), CultureInfo.CurrentCulture);
                 }
 
                 cell.UserEnteredFormat = new CellFormat()
@@ -150,7 +151,7 @@ namespace GoogleSheetsWrapper
             {
                 if (value != null)
                 {
-                    var parsedNumber = double.Parse(value.ToString());
+                    var parsedNumber = double.Parse(value.ToString(), CultureInfo.CurrentCulture);
 
                     if (parsedNumber != 0)
                     {
@@ -191,7 +192,7 @@ namespace GoogleSheetsWrapper
             {
                 if (value != null)
                 {
-                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString());
+                    cell.UserEnteredValue.NumberValue = double.Parse(value.ToString(), CultureInfo.CurrentCulture);
                 }
 
                 cell.UserEnteredFormat = new CellFormat()
@@ -295,9 +296,9 @@ namespace GoogleSheetsWrapper
         {
             MemberExpression memberExpression;
 
-            if (expression.Body is MemberExpression)
+            if (expression.Body is MemberExpression thisExpression)
             {
-                memberExpression = (MemberExpression)expression.Body;
+                memberExpression = thisExpression;
             }
             else if (expression.Body is UnaryExpression unaryExpression)
             {
@@ -305,7 +306,7 @@ namespace GoogleSheetsWrapper
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"Could not determine the correct MemberExpression type for: {expression.Name}");
             }
 
             var propertyInfo = (PropertyInfo)memberExpression.Member;

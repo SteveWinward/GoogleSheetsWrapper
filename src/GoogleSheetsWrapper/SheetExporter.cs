@@ -23,7 +23,7 @@ namespace GoogleSheetsWrapper
         /// <param name="tabName"></param>
         public SheetExporter(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
-            this._sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
+            _sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace GoogleSheetsWrapper
         /// <param name="sheetHelper"></param>
         public SheetExporter(SheetHelper sheetHelper)
         {
-            this._sheetHelper = sheetHelper;
+            _sheetHelper = sheetHelper;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace GoogleSheetsWrapper
         /// <param name="jsonCredentials"></param>
         public void Init(string jsonCredentials)
         {
-            this._sheetHelper.Init(jsonCredentials);
+            _sheetHelper.Init(jsonCredentials);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace GoogleSheetsWrapper
         /// <param name="delimiter"></param>
         public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
-            var rows = this._sheetHelper.GetRowsFormatted(range);
+            var rows = _sheetHelper.GetRowsFormatted(range);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -79,7 +79,7 @@ namespace GoogleSheetsWrapper
         /// <param name="stream"></param>
         public void ExportAsExcel(SheetRange range, Stream stream)
         {
-            var rows = this._sheetHelper.GetRowsFormatted(range);
+            var rows = _sheetHelper.GetRowsFormatted(range);
 
             var document = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook);
 
@@ -101,7 +101,7 @@ namespace GoogleSheetsWrapper
             {
                 Id = document.WorkbookPart.GetIdOfPart(worksheetPart),
                 SheetId = 1,
-                Name = string.IsNullOrEmpty(this._sheetHelper.TabName) ? "Sheet1" : this._sheetHelper.TabName
+                Name = string.IsNullOrEmpty(_sheetHelper.TabName) ? "Sheet1" : _sheetHelper.TabName
             };
             sheets.Append(sheet);
 
@@ -111,7 +111,7 @@ namespace GoogleSheetsWrapper
 
                 foreach (var value in row)
                 {
-                    var cell = this.CreateCell(value?.ToString());
+                    var cell = CreateCell(value?.ToString());
                     _ = newRow.AppendChild(cell);
                 }
 
@@ -123,7 +123,7 @@ namespace GoogleSheetsWrapper
             document.Dispose();
         }
 
-        private Cell CreateCell(string text)
+        private static Cell CreateCell(string text)
         {
             var cell = new Cell
             {
@@ -134,7 +134,7 @@ namespace GoogleSheetsWrapper
             return cell;
         }
 
-        private EnumValue<CellValues> ResolveCellDataTypeOnValue(string text)
+        private static EnumValue<CellValues> ResolveCellDataTypeOnValue(string text)
         {
             if (int.TryParse(text, out _) || double.TryParse(text, out _))
             {

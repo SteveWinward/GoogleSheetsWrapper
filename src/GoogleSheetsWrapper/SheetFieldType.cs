@@ -1,5 +1,8 @@
 namespace GoogleSheetsWrapper
 {
+
+#pragma warning disable CA1720 // String / Integer contains type name
+
     /// <summary>
     /// SheetFieldType enum class
     /// </summary>
@@ -34,4 +37,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         Number
     }
+
+#pragma warning restore CA1720 // String / Integer contains type name
+
 }

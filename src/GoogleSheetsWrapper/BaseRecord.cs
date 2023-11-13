@@ -25,7 +25,7 @@ namespace GoogleSheetsWrapper
         /// <param name="minColumnId"></param>
         public BaseRecord(IList<object> row, int rowId, int minColumnId = 1)
         {
-            this.RowId = rowId;
+            RowId = rowId;
             SheetFieldAttributeUtils.PopulateRecord(this, row, minColumnId);
         }
 
@@ -38,11 +38,11 @@ namespace GoogleSheetsWrapper
         {
             var results = new List<BatchUpdateRequestObject>();
 
-            var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes(this.GetType());
+            var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes(GetType());
 
             foreach (var attribute in attributes)
             {
-                var sheetRange = new SheetRange(tabName, attribute.Key.ColumnID, this.RowId);
+                var sheetRange = new SheetRange(tabName, attribute.Key.ColumnID, RowId);
 
                 results.Add(new BatchUpdateRequestObject()
                 {

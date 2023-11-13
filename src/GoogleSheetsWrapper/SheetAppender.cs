@@ -24,7 +24,7 @@ namespace GoogleSheetsWrapper
         /// <param name="tabName"></param>
         public SheetAppender(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
-            this._sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
+            _sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace GoogleSheetsWrapper
         /// <param name="sheetHelper"></param>
         public SheetAppender(SheetHelper sheetHelper)
         {
-            this._sheetHelper = sheetHelper;
+            _sheetHelper = sheetHelper;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace GoogleSheetsWrapper
         /// <param name="jsonCredentials"></param>
         public void Init(string jsonCredentials)
         {
-            this._sheetHelper.Init(jsonCredentials);
+            _sheetHelper.Init(jsonCredentials);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace GoogleSheetsWrapper
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                this.AppendCsv(stream, includeHeaders, batchWaitTime);
+                AppendCsv(stream, includeHeaders, batchWaitTime);
             }
         }
 
@@ -97,7 +97,7 @@ namespace GoogleSheetsWrapper
 
                     foreach (var header in headers)
                     {
-                        row.Values.Add(this.StringToCellData(header));
+                        row.Values.Add(StringToCellData(header));
                     }
 
                     rowData.Add(row);
@@ -114,14 +114,14 @@ namespace GoogleSheetsWrapper
 
                     foreach (var property in record.Keys)
                     {
-                        row.Values.Add(this.StringToCellData(record[property]));
+                        row.Values.Add(StringToCellData(record[property]));
                     }
 
                     rowData.Add(row);
 
                     if (currentBatchCount >= batchRowLimit)
                     {
-                        this.AppendRows(rowData);
+                        AppendRows(rowData);
 
                         rowData = new List<RowData>();
                         currentBatchCount = 0;
@@ -132,7 +132,7 @@ namespace GoogleSheetsWrapper
 
                 if (rowData.Count > 0)
                 {
-                    this.AppendRows(rowData);
+                    AppendRows(rowData);
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace GoogleSheetsWrapper
         /// <param name="row"></param>
         public void AppendRow(RowData row)
         {
-            this.AppendRows(new List<RowData>() { row });
+            AppendRows(new List<RowData>() { row });
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace GoogleSheetsWrapper
         /// <param name="rowStringValues"></param>
         public void AppendRow(List<string> rowStringValues)
         {
-            this.AppendRows(new List<List<string>>() { rowStringValues });
+            AppendRows(new List<List<string>>() { rowStringValues });
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace GoogleSheetsWrapper
             var appendRequest = new AppendCellsRequest
             {
                 Fields = "*",
-                SheetId = this._sheetHelper.SheetID,
+                SheetId = _sheetHelper.SheetID,
                 Rows = rows
             };
 
@@ -180,8 +180,8 @@ namespace GoogleSheetsWrapper
             };
 
             // Finally update the sheet.
-            _ = this._sheetHelper.Service.Spreadsheets
-                .BatchUpdate(batchRequst, this._sheetHelper.SpreadsheetID)
+            _ = _sheetHelper.Service.Spreadsheets
+                .BatchUpdate(batchRequst, _sheetHelper.SpreadsheetID)
                 .Execute();
         }
 
@@ -202,13 +202,13 @@ namespace GoogleSheetsWrapper
 
                 foreach (var stringValue in stringRow)
                 {
-                    row.Values.Add(this.StringToCellData(stringValue));
+                    row.Values.Add(StringToCellData(stringValue));
                 }
 
                 rows.Add(row);
             }
 
-            this.AppendRows(rows);
+            AppendRows(rows);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private CellData StringToCellData(object value)
+        private static CellData StringToCellData(object value)
         {
             var cell = new CellData
             {

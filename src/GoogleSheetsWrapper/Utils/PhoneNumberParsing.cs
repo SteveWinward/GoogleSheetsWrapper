@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GoogleSheetsWrapper.Utils
@@ -36,7 +37,7 @@ namespace GoogleSheetsWrapper.Utils
         {
             var numberAsString = RemoveExtraCharactersFromPhoneNumber(number.Replace("+1", ""));
 
-            return long.Parse(numberAsString);
+            return long.Parse(numberAsString, CultureInfo.CurrentCulture);
         }
     }
 }

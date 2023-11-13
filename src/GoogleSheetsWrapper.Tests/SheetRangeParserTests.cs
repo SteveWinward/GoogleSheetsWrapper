@@ -13,9 +13,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserGetTabNameHappyPath()
         {
-            var parser = new SheetRangeParser();
-
-            var tabName = parser.GetTabName("MySheet!A1:D4");
+            var tabName = SheetRangeParser.GetTabName("MySheet!A1:D4");
 
             Assert.AreEqual("MySheet", tabName);
         }
@@ -23,9 +21,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidR1C1NotationHappyPathWithTab()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidR1C1Notation("MySheet!R1C1:R2C2");
+            var result = SheetRangeParser.IsValidR1C1Notation("MySheet!R1C1:R2C2");
 
             Assert.IsTrue(result);
         }
@@ -33,9 +29,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidR1C1NotationHappyPathWithoutTab()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidR1C1Notation("R1C1:R2C2");
+            var result = SheetRangeParser.IsValidR1C1Notation("R1C1:R2C2");
 
             Assert.IsTrue(result);
         }
@@ -43,9 +37,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidR1C1NotationHappyPathSingleCellWithoutTab()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidR1C1Notation("R1C1");
+            var result = SheetRangeParser.IsValidR1C1Notation("R1C1");
 
             Assert.IsTrue(result);
         }
@@ -53,9 +45,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidR1C1NotationFailsWithA1Notation()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidR1C1Notation("A1:D4");
+            var result = SheetRangeParser.IsValidR1C1Notation("A1:D4");
 
             Assert.IsFalse(result);
         }
@@ -63,9 +53,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidA1NotationHappyPathWithTab()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidA1Notation("MySheet!A1:D4");
+            var result = SheetRangeParser.IsValidA1Notation("MySheet!A1:D4");
 
             Assert.IsTrue(result);
         }
@@ -73,9 +61,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidA1NotationHappyPathWithTabWithoutLastRow()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidA1Notation("MySheet!A1:D");
+            var result = SheetRangeParser.IsValidA1Notation("MySheet!A1:D");
 
             Assert.IsTrue(result);
         }
@@ -83,9 +69,7 @@ namespace GoogleSheetsWrapper.Tests
         [Test]
         public void SheetRangeParserIsValidA1NotationHappyPathWithoutTab()
         {
-            var parser = new SheetRangeParser();
-
-            var result = parser.IsValidA1Notation("A1:D4");
+            var result = SheetRangeParser.IsValidA1Notation("A1:D4");
 
             Assert.IsTrue(result);
         }

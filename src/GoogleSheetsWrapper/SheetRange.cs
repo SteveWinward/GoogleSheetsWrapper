@@ -71,40 +71,40 @@ namespace GoogleSheetsWrapper
         {
             if (endRow.HasValue && endColumn.HasValue)
             {
-                this.R1C1Notation = $"R{startRow}C{startColumn}:R{endRow}C{endColumn}";
+                R1C1Notation = $"R{startRow}C{startColumn}:R{endRow}C{endColumn}";
             }
             else
             {
-                this.R1C1Notation = $"R{startRow}C{startColumn}";
-                this.IsSingleCellRange = true;
+                R1C1Notation = $"R{startRow}C{startColumn}";
+                IsSingleCellRange = true;
             }
 
             if (!string.IsNullOrEmpty(tabName))
             {
-                this.R1C1Notation = $"{tabName}!{this.R1C1Notation}";
+                R1C1Notation = $"{tabName}!{R1C1Notation}";
             }
 
             if (endColumn.HasValue)
             {
-                this.CanSupportA1Notation = true;
-                this.IsSingleCellRange = !endRow.HasValue;
+                CanSupportA1Notation = true;
+                IsSingleCellRange = !endRow.HasValue;
 
                 var startLetters = GetLettersFromColumnID(startColumn);
                 var endLetters = GetLettersFromColumnID(endColumn.Value);
 
-                this.A1Notation = $"{startLetters}{startRow}:{endLetters}{endRow}";
+                A1Notation = $"{startLetters}{startRow}:{endLetters}{endRow}";
 
                 if (!string.IsNullOrEmpty(tabName))
                 {
-                    this.A1Notation = $"{tabName}!{this.A1Notation}";
+                    A1Notation = $"{tabName}!{A1Notation}";
                 }
             }
 
-            this.StartColumn = startColumn;
-            this.StartRow = startRow;
-            this.EndRow = endRow;
-            this.EndColumn = endColumn;
-            this.TabName = tabName ?? string.Empty;
+            StartColumn = startColumn;
+            StartRow = startRow;
+            EndRow = endRow;
+            EndColumn = endColumn;
+            TabName = tabName ?? string.Empty;
         }
 
         /// <summary>
@@ -113,31 +113,30 @@ namespace GoogleSheetsWrapper
         /// <param name="rangeValue"></param>
         public SheetRange(string rangeValue)
         {
-            var parser = new SheetRangeParser();
             SheetRange range;
 
-            if (parser.IsValidR1C1Notation(rangeValue))
+            if (SheetRangeParser.IsValidR1C1Notation(rangeValue))
             {
-                range = parser.ConvertFromR1C1Notation(rangeValue);
+                range = SheetRangeParser.ConvertFromR1C1Notation(rangeValue);
             }
-            else if (parser.IsValidA1Notation(rangeValue))
+            else if (SheetRangeParser.IsValidA1Notation(rangeValue))
             {
-                range = parser.ConvertFromA1Notation(rangeValue);
+                range = SheetRangeParser.ConvertFromA1Notation(rangeValue);
             }
             else
             {
                 throw new ArgumentException($"rangeValue: {rangeValue} is not a valid range!");
             }
 
-            this.TabName = range.TabName;
-            this.StartRow = range.StartRow;
-            this.EndRow = range.EndRow;
-            this.StartColumn = range.StartColumn;
-            this.EndColumn = range.EndColumn;
-            this.A1Notation = range.A1Notation;
-            this.R1C1Notation = range.R1C1Notation;
-            this.CanSupportA1Notation = range.CanSupportA1Notation;
-            this.IsSingleCellRange = range.IsSingleCellRange;
+            TabName = range.TabName;
+            StartRow = range.StartRow;
+            EndRow = range.EndRow;
+            StartColumn = range.StartColumn;
+            EndColumn = range.EndColumn;
+            A1Notation = range.A1Notation;
+            R1C1Notation = range.R1C1Notation;
+            CanSupportA1Notation = range.CanSupportA1Notation;
+            IsSingleCellRange = range.IsSingleCellRange;
         }
 
         /// <summary>
@@ -172,9 +171,9 @@ namespace GoogleSheetsWrapper
         {
             var result = 0;
 
-            letters = letters.ToUpper();
+            letters = letters.ToUpper(System.Globalization.CultureInfo.CurrentCulture);
 
-            for (var i = 0; i < letters.Count(); i++)
+            for (var i = 0; i < letters.Length; i++)
             {
                 var currentLetter = letters[i];
                 var currentLetterNumber = (int)currentLetter;
@@ -191,7 +190,7 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public int GetHashCode(SheetRange obj)
+        public static int GetHashCode(SheetRange obj)
         {
             return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
         }
@@ -204,25 +203,25 @@ namespace GoogleSheetsWrapper
         public bool Equals(SheetRange other)
         {
             return
-                this.A1Notation == other.A1Notation &&
-                this.CanSupportA1Notation == other.CanSupportA1Notation &&
-                this.EndColumn == other.EndColumn &&
-                this.EndRow == other.EndRow &&
-                this.IsSingleCellRange == other.IsSingleCellRange &&
-                this.R1C1Notation == other.R1C1Notation &&
-                this.StartColumn == other.StartColumn &&
-                this.StartRow == other.StartRow &&
-                this.TabName == other.TabName;
+                A1Notation == other.A1Notation &&
+                CanSupportA1Notation == other.CanSupportA1Notation &&
+                EndColumn == other.EndColumn &&
+                EndRow == other.EndRow &&
+                IsSingleCellRange == other.IsSingleCellRange &&
+                R1C1Notation == other.R1C1Notation &&
+                StartColumn == other.StartColumn &&
+                StartRow == other.StartRow &&
+                TabName == other.TabName;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            return this.Equals((SheetRange)other);
+            return Equals((SheetRange)obj);
         }
 
         /// <summary>
@@ -231,7 +230,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.GetHashCode(this);
+            return GetHashCode(this);
         }
     }
 }
