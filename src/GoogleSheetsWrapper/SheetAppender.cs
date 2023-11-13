@@ -53,14 +53,10 @@ namespace GoogleSheetsWrapper
         /// <param name="batchWaitTime"></param>
         public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000)
         {
-#pragma warning disable IDE0063 // Using statement can be simplified
-
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
                 this.AppendCsv(stream, includeHeaders, batchWaitTime);
             }
-
-#pragma warning restore IDE0063 // Using statement can be simplified
         }
 
         /// <summary>

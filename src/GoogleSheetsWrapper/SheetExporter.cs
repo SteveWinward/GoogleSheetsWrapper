@@ -136,8 +136,6 @@ namespace GoogleSheetsWrapper
 
         private EnumValue<CellValues> ResolveCellDataTypeOnValue(string text)
         {
-#pragma warning disable IDE0046 // IF statement can be simplified
-
             if (int.TryParse(text, out _) || double.TryParse(text, out _))
             {
                 return (EnumValue<CellValues>)CellValues.Number;
@@ -146,8 +144,6 @@ namespace GoogleSheetsWrapper
             {
                 return (EnumValue<CellValues>)CellValues.String;
             }
-
-#pragma warning restore IDE0046 // IF statement can be simplified
         }
     }
 }

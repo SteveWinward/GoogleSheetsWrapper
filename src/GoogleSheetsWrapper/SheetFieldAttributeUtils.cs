@@ -115,8 +115,6 @@ namespace GoogleSheetsWrapper
 
             if (attribute.FieldType == SheetFieldType.String)
             {
-#pragma warning disable IDE0045 // IF statement can be simplified
-
                 if (value == null)
                 {
                     cell.UserEnteredValue.StringValue = string.Empty;
@@ -129,8 +127,6 @@ namespace GoogleSheetsWrapper
                 {
                     cell.UserEnteredValue.StringValue = value.ToString();
                 }
-
-#pragma warning restore IDE0045 // IF statement can be simplified
 
             }
             else if (attribute.FieldType == SheetFieldType.Currency)
@@ -156,8 +152,6 @@ namespace GoogleSheetsWrapper
                 {
                     var parsedNumber = double.Parse(value.ToString());
 
-#pragma warning disable IDE0045 // IF statement can be simplified
-
                     if (parsedNumber != 0)
                     {
                         cell.UserEnteredValue.NumberValue = parsedNumber;
@@ -166,9 +160,6 @@ namespace GoogleSheetsWrapper
                     {
                         cell.UserEnteredValue.NumberValue = null;
                     }
-
-#pragma warning restore IDE0045 // IF statement can be simplified
-
                 }
 
                 cell.UserEnteredFormat = new CellFormat()
@@ -304,8 +295,6 @@ namespace GoogleSheetsWrapper
         {
             MemberExpression memberExpression;
 
-#pragma warning disable IDE0045 // IF statement can be simplified
-
             if (expression.Body is MemberExpression)
             {
                 memberExpression = (MemberExpression)expression.Body;
@@ -318,8 +307,6 @@ namespace GoogleSheetsWrapper
             {
                 throw new ArgumentException();
             }
-
-#pragma warning restore IDE0045 // IF statement can be simplified
 
             var propertyInfo = (PropertyInfo)memberExpression.Member;
             return propertyInfo.GetCustomAttribute<SheetFieldAttribute>();

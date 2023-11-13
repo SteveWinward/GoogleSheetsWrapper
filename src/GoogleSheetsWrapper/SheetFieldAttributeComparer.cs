@@ -16,8 +16,6 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public int Compare([AllowNull] SheetFieldAttribute x, [AllowNull] SheetFieldAttribute y)
         {
-#pragma warning disable IDE0046 // IF statement can be simplified
-
             if ((x != null) && (y != null))
             {
                 return x.ColumnID.CompareTo(y.ColumnID);
@@ -26,8 +24,6 @@ namespace GoogleSheetsWrapper
             {
                 return 0;
             }
-
-#pragma warning restore IDE0046 // IF statement can be simplified
         }
     }
 }

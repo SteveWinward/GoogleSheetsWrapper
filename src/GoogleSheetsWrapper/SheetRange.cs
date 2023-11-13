@@ -116,8 +116,6 @@ namespace GoogleSheetsWrapper
             var parser = new SheetRangeParser();
             SheetRange range;
 
-#pragma warning disable IDE0045 // IF statement can be simplified
-
             if (parser.IsValidR1C1Notation(rangeValue))
             {
                 range = parser.ConvertFromR1C1Notation(rangeValue);
@@ -130,8 +128,6 @@ namespace GoogleSheetsWrapper
             {
                 throw new ArgumentException($"rangeValue: {rangeValue} is not a valid range!");
             }
-
-#pragma warning restore IDE0045 // IF statement can be simplified
 
             this.TabName = range.TabName;
             this.StartRow = range.StartRow;
