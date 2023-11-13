@@ -21,6 +21,7 @@ dotnet_analyzer_diagnostic.category-Style.severity = warning
 
 # enforcing coding standards
 dotnet_analyzer_diagnostic.category-Naming.severity = warning
+dotnet_diagnostic.IDE0045.severity = none
 
 ###############################
 # .NET Coding Conventions     #
