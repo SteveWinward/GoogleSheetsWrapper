@@ -32,7 +32,7 @@ jobs:
       
       # build the source
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
       
       # Run the unit tests
     - name: Test
