@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 env:
   DOTNET_VERSION: '6.0.x'
 
@@ -37,7 +40,7 @@ jobs:
 
       # Package the Nuget file locally
     - name: Pack
-      run: dotnet pack /src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj --no-build --configuration Release /p:ContinuousIntegrationBuild=true
+      run: dotnet pack /src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj --configuration Release
       
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
