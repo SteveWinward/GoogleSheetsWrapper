@@ -36,7 +36,7 @@ jobs:
       
       # Run the unit tests
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --configuration Release
 
       # Package the Nuget file locally
     - name: Pack
