@@ -37,7 +37,7 @@ jobs:
 
       # Package the Nuget file locally
     - name: Pack
-      run: dotnet pack --no-build --configuration Release /p:ContinuousIntegrationBuild=true /src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj
+      run: dotnet pack /src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj --no-build --configuration Release /p:ContinuousIntegrationBuild=true
       
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
