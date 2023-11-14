@@ -32,22 +32,12 @@ jobs:
       
       # build the source
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
       
       # Run the unit tests
     - name: Test
-      run: dotnet test --no-build --verbosity normal
-
-      # Package the Nuget file locally
-    - name: Pack
-      run: dotnet pack /src/GoogleSheetsWrapper/GoogleSheetsWrapper.csproj --configuration Release
+      run: dotnet test --no-build --verbosity normal --configuration Release
       
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
-      
-      # Publish the Nuget file to Github
-    - name: PushGithub
-      run: dotnet nuget push **/*.nupkg --no-symbols --skip-duplicate
-      env:
-        NUGET_AUTH_TOKEN: ${{ github.token }}
