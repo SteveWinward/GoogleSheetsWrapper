@@ -29,30 +29,117 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public bool IsSingleCellRange { get; private set; }
 
+        private int _startColumn;
+
         /// <summary>
         /// StartColumn value (1 based index)
         /// </summary>
-        public int StartColumn { get; set; }
+        public int StartColumn
+        {
+            get => _startColumn;
+            set
+            {
+                if (value != _startColumn)
+                {
+                    _startColumn = value;
+
+                    if (IsInitialized)
+                    {
+                        CalculateNotationProperties();
+                    }
+                }
+            }
+        }
+
+        private int _startRow;
 
         /// <summary>
         /// StartRow value (1 based index)
         /// </summary>
-        public int StartRow { get; set; }
+        public int StartRow
+        {
+            get => _startRow;
+            set
+            {
+                if (value != _startRow)
+                {
+                    _startRow = value;
+
+                    if (IsInitialized)
+                    {
+                        CalculateNotationProperties();
+                    }
+                }
+            }
+        }
+
+        private int? _endColumn;
 
         /// <summary>
         /// EndColumn value (1 based index)
         /// </summary>
-        public int? EndColumn { get; set; }
+        public int? EndColumn
+        {
+            get => _endColumn;
+            set
+            {
+                if (value != _endColumn)
+                {
+                    _endColumn = value;
+
+                    if (IsInitialized)
+                    {
+                        CalculateNotationProperties();
+                    }
+                }
+            }
+        }
+
+        private int? _endRow;
 
         /// <summary>
         /// EndRow value (1 based index)
         /// </summary>
-        public int? EndRow { get; set; }
+        public int? EndRow
+        {
+            get => _endRow;
+            set
+            {
+                if (value != _endRow)
+                {
+                    _endRow = value;
+
+                    if (IsInitialized)
+                    {
+                        CalculateNotationProperties();
+                    }
+                }
+            }
+        }
+
+        private string _tabName;
 
         /// <summary>
         /// Tab name in Google Sheets
         /// </summary>
-        public string TabName { get; set; }
+        public string TabName
+        {
+            get => _tabName;
+            set
+            {
+                if (value != _tabName)
+                {
+                    _tabName = value;
+
+                    if (IsInitialized)
+                    {
+                        CalculateNotationProperties();
+                    }
+                }
+            }
+        }
+
+        private readonly bool IsInitialized;
 
         private static readonly List<string> aToZ
             = Enumerable.Range('A', 26)
@@ -69,42 +156,15 @@ namespace GoogleSheetsWrapper
         /// <param name="endRow"></param>
         public SheetRange(string tabName, int startColumn, int startRow, int? endColumn = null, int? endRow = null)
         {
-            if (endRow.HasValue && endColumn.HasValue)
-            {
-                R1C1Notation = $"R{startRow}C{startColumn}:R{endRow}C{endColumn}";
-            }
-            else
-            {
-                R1C1Notation = $"R{startRow}C{startColumn}";
-                IsSingleCellRange = true;
-            }
-
-            if (!string.IsNullOrEmpty(tabName))
-            {
-                R1C1Notation = $"{tabName}!{R1C1Notation}";
-            }
-
-            if (endColumn.HasValue)
-            {
-                CanSupportA1Notation = true;
-                IsSingleCellRange = !endRow.HasValue;
-
-                var startLetters = GetLettersFromColumnID(startColumn);
-                var endLetters = GetLettersFromColumnID(endColumn.Value);
-
-                A1Notation = $"{startLetters}{startRow}:{endLetters}{endRow}";
-
-                if (!string.IsNullOrEmpty(tabName))
-                {
-                    A1Notation = $"{tabName}!{A1Notation}";
-                }
-            }
-
             StartColumn = startColumn;
             StartRow = startRow;
             EndRow = endRow;
             EndColumn = endColumn;
             TabName = tabName ?? string.Empty;
+
+            CalculateNotationProperties();
+
+            IsInitialized = true;
         }
 
         /// <summary>
@@ -137,6 +197,8 @@ namespace GoogleSheetsWrapper
             R1C1Notation = range.R1C1Notation;
             CanSupportA1Notation = range.CanSupportA1Notation;
             IsSingleCellRange = range.IsSingleCellRange;
+
+            IsInitialized = true;
         }
 
         /// <summary>
@@ -231,6 +293,43 @@ namespace GoogleSheetsWrapper
         public override int GetHashCode()
         {
             return GetHashCode(this);
+        }
+
+        /// <summary>
+        /// Calculates the R1C1 Notation and A1 Notation values for this instance
+        /// </summary>
+        private void CalculateNotationProperties()
+        {
+            if (EndRow.HasValue && EndColumn.HasValue)
+            {
+                R1C1Notation = $"R{StartRow}C{StartColumn}:R{EndRow}C{EndColumn}";
+            }
+            else
+            {
+                R1C1Notation = $"R{StartRow}C{StartColumn}";
+                IsSingleCellRange = true;
+            }
+
+            if (!string.IsNullOrEmpty(TabName))
+            {
+                R1C1Notation = $"{TabName}!{R1C1Notation}";
+            }
+
+            if (EndColumn.HasValue)
+            {
+                CanSupportA1Notation = true;
+                IsSingleCellRange = !EndRow.HasValue;
+
+                var startLetters = GetLettersFromColumnID(StartColumn);
+                var endLetters = GetLettersFromColumnID(EndColumn.Value);
+
+                A1Notation = $"{startLetters}{StartRow}:{endLetters}{EndRow}";
+
+                if (!string.IsNullOrEmpty(TabName))
+                {
+                    A1Notation = $"{TabName}!{A1Notation}";
+                }
+            }
         }
     }
 }
