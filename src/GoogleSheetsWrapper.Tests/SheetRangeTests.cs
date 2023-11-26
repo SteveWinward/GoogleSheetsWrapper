@@ -59,6 +59,62 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
+        public void SheetRangeWithTabNameNotationIncrememtStartColumnIsCorrect()
+        {
+            var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
+
+            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R6C5", range.R1C1Notation);
+
+            range.StartColumn = 4;
+
+            Assert.AreEqual("MyCustomTabName!D1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C4:R6C5", range.R1C1Notation);
+        }
+
+        [Test]
+        public void SheetRangeWithTabNameNotationIncrememtStartRowIsCorrect()
+        {
+            var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
+
+            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R6C5", range.R1C1Notation);
+
+            range.StartRow = 2;
+
+            Assert.AreEqual("MyCustomTabName!C2:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R2C3:R6C5", range.R1C1Notation);
+        }
+
+        [Test]
+        public void SheetRangeWithTabNameNotationIncrememtEndColumnIsCorrect()
+        {
+            var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
+
+            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R6C5", range.R1C1Notation);
+
+            range.EndColumn = 6;
+
+            Assert.AreEqual("MyCustomTabName!C1:F6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R6C6", range.R1C1Notation);
+        }
+
+        [Test]
+        public void SheetRangeWithTabNameNotationIncrememtEndRowIsCorrect()
+        {
+            var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
+
+            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R6C5", range.R1C1Notation);
+
+            range.EndRow = 7;
+
+            Assert.AreEqual("MyCustomTabName!C1:E7", range.A1Notation);
+            Assert.AreEqual("MyCustomTab!R1C3:R7C5", range.R1C1Notation);
+        }
+
+        [Test]
         public void SheetRangeNoTabNameSingleCellA1NotationIsNull()
         {
             var range = new SheetRange("", 3, 1);
