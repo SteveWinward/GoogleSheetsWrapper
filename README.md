@@ -222,7 +222,7 @@ sheetHelper.BatchUpdate(updates, "userEnteredValue, userEnteredFormat");
 ````
 
 ### Update only UserEnteredValue
-The ````GoogleSheetsWrapper```` library defaults to only updating the UserEnteredValue.  This is to allow you to keep your existing cell formating in place.  However, we give you the option like above to override that behavior.
+The ````GoogleSheetsWrapper```` library defaults to only updating the ````UserEnteredValue````.  This is to allow you to keep your existing cell formating in place.  However, we give you the option like above to override that behavior.
 
 ````csharp
 var updates = new List<BatchUpdateRequestObject>();
