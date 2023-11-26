@@ -115,6 +115,20 @@ namespace GoogleSheetsWrapper.Tests
         }
 
         [Test]
+        public void SheetRangeWithTabNameNotationChangeTabNameIsCorrect()
+        {
+            var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
+
+            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+
+            range.TabName = "NewTabName";
+
+            Assert.AreEqual("NewTabName!C1:E6", range.A1Notation);
+            Assert.AreEqual("NewTabName!R1C3:R6C5", range.R1C1Notation);
+        }
+
+        [Test]
         public void SheetRangeNoTabNameSingleCellA1NotationIsNull()
         {
             var range = new SheetRange("", 3, 1);
