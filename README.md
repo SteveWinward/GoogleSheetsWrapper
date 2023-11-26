@@ -32,7 +32,7 @@ To setup the sample application, you also need to configure [User Secrets in Vis
 
 ## Extend BaseRecord and BaseRepository
 
-Extending the ````BaseRecord```` class you can decorate properties with the ````SheetFieldAttribute```` to describe the column header name, the column index and the field type (ie string, DateTime, etc)
+Extending the ````BaseRecord```` class you can decorate properties with the ````SheetFieldAttribute```` to describe the column header name, the column index and the field type (ie ````string````, ````DateTime````, etc)
 
 > The column index is 1 based and not 0 based. The first column 'A' is equivalent to the column ID of 1. 
 
