@@ -398,7 +398,7 @@ You need to setup a Google API Service Account before you can use this library.
 
 3. Use the service account identity that is created and add that email address to grant it permissions to the Google Sheets Spreadsheet you want to interact with.
 
-4. Configure your code with the following parameters to initialize a SheetHelper object
+4. Configure your code with the following parameters to initialize a ````SheetHelper```` object
 
 ```csharp
 // You need to implement your own configuration management solution here!
