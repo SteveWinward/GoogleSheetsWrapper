@@ -37,18 +37,7 @@ namespace GoogleSheetsWrapper
         public int StartColumn
         {
             get => _startColumn;
-            set
-            {
-                if (value != _startColumn)
-                {
-                    _startColumn = value;
-
-                    if (IsInitialized)
-                    {
-                        CalculateNotationProperties();
-                    }
-                }
-            }
+            set => UpdateFieldAndNotiationProperties(ref _startColumn, value);
         }
 
         private int _startRow;
