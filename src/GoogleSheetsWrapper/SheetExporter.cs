@@ -93,8 +93,7 @@ namespace GoogleSheetsWrapper
             worksheetPart.Worksheet = new Worksheet(sheetData);
 
             // Add Sheets to the Workbook.
-            var sheets = document.WorkbookPart.Workbook.
-                AppendChild(new Sheets());
+            var sheets = document.WorkbookPart.Workbook.AppendChild(new Sheets());
 
             // Append a new worksheet and associate it with the workbook.
             var sheet = new Sheet()

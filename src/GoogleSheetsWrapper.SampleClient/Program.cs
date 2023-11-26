@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetRequest;
 
 namespace GoogleSheetsWrapper.SampleClient
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var config = BuildConfig();
 
@@ -45,8 +44,8 @@ namespace GoogleSheetsWrapper.SampleClient
             // Appends weakly typed rows to the spreadsheeet
             appender.AppendRows(new List<List<string>>()
             {
-                new List<string>(){"7/1/2022", "abc"},
-                new List<string>(){"8/1/2022", "def"}
+                new(){"7/1/2022", "abc"},
+                new(){"8/1/2022", "def"}
             });
 
             // Get all the rows for the first 2 columns in the spreadsheet
@@ -74,7 +73,7 @@ namespace GoogleSheetsWrapper.SampleClient
             var devEnvironmentVariable = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
 
             var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) ||
-                                devEnvironmentVariable.ToLower(CultureInfo.CurrentCulture) == "development";
+                                devEnvironmentVariable.Equals("development", StringComparison.OrdinalIgnoreCase);
 
             var builder = new ConfigurationBuilder();
             // tell the builder to look for the appsettings.json file
