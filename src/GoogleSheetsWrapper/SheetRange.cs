@@ -59,18 +59,7 @@ namespace GoogleSheetsWrapper
         public int StartRow
         {
             get => _startRow;
-            set
-            {
-                if (value != _startRow)
-                {
-                    _startRow = value;
-
-                    if (IsInitialized)
-                    {
-                        CalculateNotationProperties();
-                    }
-                }
-            }
+            set => UpdateFieldAndNotiationProperties(ref _startRow, value);
         }
 
         private int? _endColumn;
@@ -81,18 +70,7 @@ namespace GoogleSheetsWrapper
         public int? EndColumn
         {
             get => _endColumn;
-            set
-            {
-                if (value != _endColumn)
-                {
-                    _endColumn = value;
-
-                    if (IsInitialized)
-                    {
-                        CalculateNotationProperties();
-                    }
-                }
-            }
+            set => UpdateFieldAndNotiationProperties(ref _endColumn, value);
         }
 
         private int? _endRow;
@@ -103,18 +81,7 @@ namespace GoogleSheetsWrapper
         public int? EndRow
         {
             get => _endRow;
-            set
-            {
-                if (value != _endRow)
-                {
-                    _endRow = value;
-
-                    if (IsInitialized)
-                    {
-                        CalculateNotationProperties();
-                    }
-                }
-            }
+            set => UpdateFieldAndNotiationProperties(ref _endRow, value);
         }
 
         private string _tabName;
@@ -125,18 +92,7 @@ namespace GoogleSheetsWrapper
         public string TabName
         {
             get => _tabName;
-            set
-            {
-                if (value != _tabName)
-                {
-                    _tabName = value;
-
-                    if (IsInitialized)
-                    {
-                        CalculateNotationProperties();
-                    }
-                }
-            }
+            set => UpdateFieldAndNotiationProperties(ref _tabName, value);
         }
 
         private readonly bool IsInitialized;
@@ -328,6 +284,25 @@ namespace GoogleSheetsWrapper
                 if (!string.IsNullOrEmpty(TabName))
                 {
                     A1Notation = $"{TabName}!{A1Notation}";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates a property if the new value is differnt.  Also calls the CalculateNotationPropertie method if needed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="currentValue"></param>
+        /// <param name="newValue"></param>
+        private void UpdateFieldAndNotiationProperties<T>(ref T currentValue, T newValue)
+        {
+            if (!EqualityComparer<T>.Default.Equals(currentValue, newValue))
+            {
+                currentValue = newValue;
+
+                if (IsInitialized)
+                {
+                    CalculateNotationProperties();
                 }
             }
         }
