@@ -13,7 +13,7 @@ namespace GoogleSheetsWrapper
         public int RowId { get; set; }
 
         /// <summary>
-        /// Default constructor for BaseRecord
+        /// Default constructor for <see cref="BaseRecord"/>
         /// </summary>
         public BaseRecord() { }
 

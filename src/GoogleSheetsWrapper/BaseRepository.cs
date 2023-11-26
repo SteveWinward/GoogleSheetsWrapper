@@ -167,7 +167,7 @@ namespace GoogleSheetsWrapper
         {
             var data = record.ConvertToCellData(SheetHelper.TabName);
 
-            var updates = BaseRepository<T>.FilterUpdates(data, properties);
+            var updates = FilterUpdates(data, properties);
 
             return SheetHelper.BatchUpdate(updates);
         }

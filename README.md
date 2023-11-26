@@ -20,7 +20,7 @@ The following Google Sheets API operations are supported:
 * Deleting rows
 * Updating specific cells
 
-All operations above are encapsulated in the SheetHelper class. 
+All operations above are encapsulated in the ````SheetHelper```` class. 
 
 There are also base classes, ````BaseRecord```` and ````BaseRepository```` to simplify transforming raw Google Sheets rows into .NET objects. 
 

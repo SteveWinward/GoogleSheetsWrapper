@@ -16,13 +16,15 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public int Compare([AllowNull] SheetFieldAttribute x, [AllowNull] SheetFieldAttribute y)
         {
-            if ((x != null) && (y != null))
-            {
-                return x.ColumnID.CompareTo(y.ColumnID);
-            }
-            else
+            // If either of the objects are null, return 0
+            if (x == null || y == null)
             {
                 return 0;
+            }
+            // Otherwise, return the actual CompareTo value
+            else
+            {
+                return x.ColumnID.CompareTo(y.ColumnID);
             }
         }
     }

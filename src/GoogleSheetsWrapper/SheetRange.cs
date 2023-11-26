@@ -84,8 +84,15 @@ namespace GoogleSheetsWrapper
             set => UpdateFieldAndNotiationProperties(ref _tabName, value);
         }
 
+        /// <summary>
+        /// Internal property to indicate the object has been initialized and the constructor method
+        /// has completed.
+        /// </summary>
         private readonly bool IsInitialized;
 
+        /// <summary>
+        /// Helper list of all letters A through Z
+        /// </summary>
         private static readonly List<string> aToZ
             = Enumerable.Range('A', 26)
                 .Select(x => (char)x + "")
@@ -193,54 +200,6 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static int GetHashCode(SheetRange obj)
-        {
-            return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(SheetRange other)
-        {
-            return
-                A1Notation == other.A1Notation &&
-                CanSupportA1Notation == other.CanSupportA1Notation &&
-                EndColumn == other.EndColumn &&
-                EndRow == other.EndRow &&
-                IsSingleCellRange == other.IsSingleCellRange &&
-                R1C1Notation == other.R1C1Notation &&
-                StartColumn == other.StartColumn &&
-                StartRow == other.StartRow &&
-                TabName == other.TabName;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((SheetRange)obj);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return GetHashCode(this);
-        }
-
-        /// <summary>
         /// Calculates the R1C1 Notation and A1 Notation values for this instance
         /// </summary>
         private void CalculateNotationProperties()
@@ -295,5 +254,57 @@ namespace GoogleSheetsWrapper
                 }
             }
         }
+
+        #region IEquatable Interface Implementation
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static int GetHashCode(SheetRange obj)
+        {
+            return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SheetRange other)
+        {
+            return
+                A1Notation == other.A1Notation &&
+                CanSupportA1Notation == other.CanSupportA1Notation &&
+                EndColumn == other.EndColumn &&
+                EndRow == other.EndRow &&
+                IsSingleCellRange == other.IsSingleCellRange &&
+                R1C1Notation == other.R1C1Notation &&
+                StartColumn == other.StartColumn &&
+                StartRow == other.StartRow &&
+                TabName == other.TabName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((SheetRange)obj);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return GetHashCode(this);
+        }
+
+        #endregion
     }
 }

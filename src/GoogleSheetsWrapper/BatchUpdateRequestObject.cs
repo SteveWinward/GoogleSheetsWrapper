@@ -18,7 +18,7 @@ namespace GoogleSheetsWrapper
         public CellData Data { get; set; }
 
         /// <summary>
-        /// The SheetFieldAttribute
+        /// The <see cref="SheetFieldAttribute"/> value
         /// </summary>
         public SheetFieldAttribute FieldAttribute { get; set; }
     }
