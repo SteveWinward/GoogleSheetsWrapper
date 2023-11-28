@@ -85,12 +85,6 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// Internal property to indicate the object has been initialized and the constructor method
-        /// has completed.
-        /// </summary>
-        private readonly bool IsInitialized;
-
-        /// <summary>
         /// Helper list of all letters A through Z
         /// </summary>
         private static readonly List<string> aToZ
@@ -108,15 +102,13 @@ namespace GoogleSheetsWrapper
         /// <param name="endRow"></param>
         public SheetRange(string tabName, int startColumn, int startRow, int? endColumn = null, int? endRow = null)
         {
-            StartColumn = startColumn;
-            StartRow = startRow;
-            EndRow = endRow;
-            EndColumn = endColumn;
-            TabName = tabName ?? string.Empty;
+            _startColumn = startColumn;
+            _startRow = startRow;
+            _endRow = endRow;
+            _endColumn = endColumn;
+            _tabName = tabName ?? string.Empty;
 
             CalculateNotationProperties();
-
-            IsInitialized = true;
         }
 
         /// <summary>
@@ -140,17 +132,15 @@ namespace GoogleSheetsWrapper
                 throw new ArgumentException($"rangeValue: {rangeValue} is not a valid range!");
             }
 
-            TabName = range.TabName;
-            StartRow = range.StartRow;
-            EndRow = range.EndRow;
-            StartColumn = range.StartColumn;
-            EndColumn = range.EndColumn;
+            _tabName = range.TabName;
+            _startRow = range.StartRow;
+            _endRow = range.EndRow;
+            _startColumn = range.StartColumn;
+            _endColumn = range.EndColumn;
             A1Notation = range.A1Notation;
             R1C1Notation = range.R1C1Notation;
             CanSupportA1Notation = range.CanSupportA1Notation;
             IsSingleCellRange = range.IsSingleCellRange;
-
-            IsInitialized = true;
         }
 
         /// <summary>
@@ -248,10 +238,7 @@ namespace GoogleSheetsWrapper
             {
                 currentValue = newValue;
 
-                if (IsInitialized)
-                {
-                    CalculateNotationProperties();
-                }
+                CalculateNotationProperties();
             }
         }
 
@@ -264,7 +251,12 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public static int GetHashCode(SheetRange obj)
         {
-            return HashCode.Combine(obj.StartRow, obj.StartColumn, obj.EndColumn, obj.EndRow, obj.TabName);
+            return HashCode.Combine(
+                obj.StartRow,
+                obj.StartColumn,
+                obj.EndColumn,
+                obj.EndRow,
+                obj.TabName);
         }
 
         /// <summary>
