@@ -15,7 +15,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = CurrencyParsing.ParseCurrencyString("$100.00");
 
-            Assert.AreEqual(100, result);
+            Assert.That(result, Is.EqualTo(100));
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = CurrencyParsing.ParseCurrencyString("100.00");
 
-            Assert.AreEqual(100, result);
+            Assert.That(result, Is.EqualTo(100));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = CurrencyParsing.ParseCurrencyString("$  100.00");
 
-            Assert.AreEqual(100, result);
+            Assert.That(result, Is.EqualTo(100));
         }
     }
 }

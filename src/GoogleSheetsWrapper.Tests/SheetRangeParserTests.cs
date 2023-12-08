@@ -15,7 +15,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var tabName = SheetRangeParser.GetTabName("MySheet!A1:D4");
 
-            Assert.AreEqual("MySheet", tabName);
+            Assert.That(tabName, Is.EqualTo("MySheet"));
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidR1C1Notation("MySheet!R1C1:R2C2");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidR1C1Notation("R1C1:R2C2");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidR1C1Notation("R1C1");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidR1C1Notation("A1:D4");
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidA1Notation("MySheet!A1:D4");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidA1Notation("MySheet!A1:D");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace GoogleSheetsWrapper.Tests
         {
             var result = SheetRangeParser.IsValidA1Notation("A1:D4");
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
     }
 }

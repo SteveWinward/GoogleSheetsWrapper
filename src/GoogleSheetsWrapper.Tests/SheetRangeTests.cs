@@ -34,16 +34,16 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("", 3, 1, 5, 6);
 
-            Assert.AreEqual("C1:E6", range.A1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("C1:E6"));
 
-            Assert.AreEqual(3, range.StartColumn);
-            Assert.AreEqual(1, range.StartRow);
-            Assert.AreEqual(5, range.EndColumn);
-            Assert.AreEqual(6, range.EndRow);
+            Assert.That(range.StartColumn, Is.EqualTo(3));
+            Assert.That(range.StartRow, Is.EqualTo(1));
+            Assert.That(range.EndColumn, Is.EqualTo(5));
+            Assert.That(range.EndRow, Is.EqualTo(6));
 
             var newRange = SheetRangeParser.ConvertFromA1Notation("C1:E6");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         [Test]
@@ -51,11 +51,11 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
 
             var newRange = SheetRangeParser.ConvertFromA1Notation("MyCustomTabName!C1:E6");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         [Test]
@@ -63,13 +63,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C5"));
 
             range.StartColumn = 4;
 
-            Assert.AreEqual("MyCustomTabName!D1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C4:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!D1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C4:R6C5"));
         }
 
         [Test]
@@ -77,13 +77,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C5"));
 
             range.StartRow = 2;
 
-            Assert.AreEqual("MyCustomTabName!C2:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R2C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C2:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R2C3:R6C5"));
         }
 
         [Test]
@@ -91,13 +91,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C5"));
 
             range.EndColumn = 6;
 
-            Assert.AreEqual("MyCustomTabName!C1:F6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C6", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:F6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C6"));
         }
 
         [Test]
@@ -105,13 +105,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C5"));
 
             range.EndRow = 7;
 
-            Assert.AreEqual("MyCustomTabName!C1:E7", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R7C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E7"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R7C5"));
         }
 
         [Test]
@@ -119,13 +119,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTabName", 3, 1, 5, 6);
 
-            Assert.AreEqual("MyCustomTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("MyCustomTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("MyCustomTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTabName!R1C3:R6C5"));
 
             range.TabName = "NewTabName";
 
-            Assert.AreEqual("NewTabName!C1:E6", range.A1Notation);
-            Assert.AreEqual("NewTabName!R1C3:R6C5", range.R1C1Notation);
+            Assert.That(range.A1Notation, Is.EqualTo("NewTabName!C1:E6"));
+            Assert.That(range.R1C1Notation, Is.EqualTo("NewTabName!R1C3:R6C5"));
         }
 
         [Test]
@@ -133,13 +133,13 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("", 3, 1);
 
-            Assert.IsFalse(range.CanSupportA1Notation);
-            Assert.IsTrue(range.IsSingleCellRange);
-            Assert.AreEqual("R1C3", range.R1C1Notation);
+            Assert.That(range.CanSupportA1Notation, Is.False);
+            Assert.That(range.IsSingleCellRange, Is.True);
+            Assert.That(range.R1C1Notation, Is.EqualTo("R1C3"));
 
             var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         [Test]
@@ -147,11 +147,11 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("", 3, 1, 5, 5);
 
-            Assert.AreEqual("R1C3:R5C5", range.R1C1Notation);
+            Assert.That(range.R1C1Notation, Is.EqualTo("R1C3:R5C5"));
 
             var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3:R5C5");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         [Test]
@@ -159,11 +159,11 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("MyCustomTab", 3, 1, 5, 5);
 
-            Assert.AreEqual("MyCustomTab!R1C3:R5C5", range.R1C1Notation);
+            Assert.That(range.R1C1Notation, Is.EqualTo("MyCustomTab!R1C3:R5C5"));
 
             var newRange = SheetRangeParser.ConvertFromR1C1Notation("MyCustomTab!R1C3:R5C5");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         [Test]
@@ -171,27 +171,27 @@ namespace GoogleSheetsWrapper.Tests
         {
             var range = new SheetRange("", 3, 1);
 
-            Assert.IsTrue(range.IsSingleCellRange);
+            Assert.That(range.IsSingleCellRange, Is.True);
 
-            Assert.AreEqual("R1C3", range.R1C1Notation);
+            Assert.That(range.R1C1Notation, Is.EqualTo("R1C3"));
 
             var newRange = SheetRangeParser.ConvertFromR1C1Notation("R1C3");
 
-            Assert.IsTrue(range.Equals(newRange));
+            Assert.That(newRange, Is.EqualTo(range));
         }
 
         private static void AssertLettersFromColumnID(int columnID, string expectedLetters)
         {
             var result = SheetRange.GetLettersFromColumnID(columnID);
 
-            Assert.AreEqual(expectedLetters, result);
+            Assert.That(result, Is.EqualTo(expectedLetters));
         }
 
         private static void AssertColumnIDFromLetters(string letters, int expectedColumnID)
         {
             var result = SheetRange.GetColumnIDFromLetters(letters);
 
-            Assert.AreEqual(expectedColumnID, result);
+            Assert.That(result, Is.EqualTo(expectedColumnID));
         }
     }
 }
