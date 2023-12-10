@@ -10,28 +10,14 @@ namespace GoogleSheetsWrapper.Tests
         {
         }
 
-        [Test]
-        public void ParseCurrencyWithDollarSign()
+        [TestCase("$100.00", 100)]
+        [TestCase("100.00", 100)]
+        [TestCase("$  100.00", 100)]
+        public void CurrencyTests(string input, double expected)
         {
-            var result = CurrencyParsing.ParseCurrencyString("$100.00");
+            var result = CurrencyParsing.ParseCurrencyString(input);
 
-            Assert.That(result, Is.EqualTo(100));
-        }
-
-        [Test]
-        public void ParseCurrencyWithoutDollarSign()
-        {
-            var result = CurrencyParsing.ParseCurrencyString("100.00");
-
-            Assert.That(result, Is.EqualTo(100));
-        }
-
-        [Test]
-        public void ParseCurrencyWithDollarSignAndWhiteSpace()
-        {
-            var result = CurrencyParsing.ParseCurrencyString("$  100.00");
-
-            Assert.That(result, Is.EqualTo(100));
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 }
