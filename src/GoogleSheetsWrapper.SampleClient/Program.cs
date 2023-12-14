@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetRequest;
 
 namespace GoogleSheetsWrapper.SampleClient
 {
@@ -21,47 +19,44 @@ namespace GoogleSheetsWrapper.SampleClient
             var jsonCredsContent = File.ReadAllText(jsonCredsPath);
 
             // Create a new SheetHelper class
-            var sheetHelper = new SheetHelper(documentId, serviceAccount, "");
+            var sheetHelper = new SheetHelper<SampleRecord>(documentId, serviceAccount, "");
             sheetHelper.Init(jsonCredsContent);
 
-            // Get all the rows for the first 2 columns in the spreadsheet
-            var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 2),
-                ValueRenderOptionEnum.FORMATTEDVALUE,
-                DateTimeRenderOptionEnum.FORMATTEDSTRING);
+            var respository = new SampleRepository(sheetHelper);
 
-            // Write all the values from the result set
-            foreach (var row in rows)
+            var records = respository.GetAllRecords();
+
+            foreach (var record in records)
             {
-                foreach (var col in row)
+                try
                 {
-                    Console.Write($"{col}\t");
+                    Foo(record.TaskName);
+                    record.Result = true;
+                    record.DateExecuted = DateTime.UtcNow;
+
+                    var result = respository.SaveFields(
+                        record,
+                        r => r.Result,
+                        r => r.DateExecuted);
                 }
-                Console.Write("\n");
-            }
-
-            var appender = new SheetAppender(sheetHelper);
-
-            // Appends weakly typed rows to the spreadsheeet
-            appender.AppendRows(new List<List<string>>()
-            {
-                new(){"7/1/2022", "abc"},
-                new(){"8/1/2022", "def"}
-            });
-
-            // Get all the rows for the first 2 columns in the spreadsheet
-            var rows2 = sheetHelper.GetRows(new SheetRange("", 1, 1, 2),
-                ValueRenderOptionEnum.FORMATTEDVALUE,
-                DateTimeRenderOptionEnum.FORMATTEDSTRING);
-
-            // Write all the values from the result set
-            foreach (var row in rows2)
-            {
-                foreach (var col in row)
+                catch (Exception ex)
                 {
-                    Console.Write($"{col}\t");
+                    record.Result = false;
+                    record.ErrorMessage = ex.Message;
+                    record.DateExecuted = DateTime.UtcNow;
+
+                    var result = respository.SaveFields(
+                        record,
+                        r => r.Result,
+                        r => r.ErrorMessage,
+                        r => r.DateExecuted);
                 }
-                Console.Write("\n");
             }
+        }
+
+        private static void Foo(string name)
+        {
+            // Do some operation based on the record
         }
 
         /// <summary>
