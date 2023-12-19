@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using GoogleSheetsWrapper.SampleClient.SampleModel;
 
 namespace GoogleSheetsWrapper.SampleClient
 {

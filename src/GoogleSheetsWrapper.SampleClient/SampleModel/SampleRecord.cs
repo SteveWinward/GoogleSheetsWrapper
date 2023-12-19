@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoogleSheetsWrapper.SampleClient
+namespace GoogleSheetsWrapper.SampleClient.SampleModel
 {
     public class SampleRecord : BaseRecord
     {
