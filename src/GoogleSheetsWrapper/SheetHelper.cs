@@ -15,7 +15,10 @@ namespace GoogleSheetsWrapper
     public class SheetHelper
     {
         /// <summary>
-        /// 
+        /// A Spreadsheet resource represents every spreadsheet and has a unique 
+        /// spreadsheetId value, containing letters, numbers, hyphens, or underscores. 
+        /// You can find the spreadsheet ID in a Google Sheets URL: 
+        /// https://docs.google.com/spreadsheets/d/spreadsheetId/edit#gid=0
         /// </summary>
         public string SpreadsheetID { get; set; }
 
@@ -25,12 +28,12 @@ namespace GoogleSheetsWrapper
         public string TabName { get; private set; }
 
         /// <summary>
-        /// The Sheet ID for the Google Sheets document
+        /// The Sheet ID for the Google Sheets document.  This value is set by the Google Sheets API.
         /// </summary>
         public int? SheetID { get; set; }
 
         /// <summary>
-        /// 
+        /// The Google Service Account email address used for authentication
         /// </summary>
         public string ServiceAccountEmail { get; set; }
 
@@ -40,7 +43,7 @@ namespace GoogleSheetsWrapper
         public string[] Scopes { get; set; } = { SheetsService.Scope.Spreadsheets };
 
         /// <summary>
-        /// 
+        /// The Google API SheetsService object.  This is the core object we "wrap" CRUD operations against
         /// </summary>
         public SheetsService Service { get; private set; }
 

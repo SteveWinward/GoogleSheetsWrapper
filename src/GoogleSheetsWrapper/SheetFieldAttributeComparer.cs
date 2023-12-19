@@ -9,7 +9,8 @@ namespace GoogleSheetsWrapper
     public class SheetFieldAttributeComparer : IComparer<SheetFieldAttribute>
     {
         /// <summary>
-        /// 
+        /// IComparer interface implementation.  
+        /// This allows us to use the == and != operators to compare one SheetFieldAttribute to another SheetFieldAttribute.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
