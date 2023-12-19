@@ -7,7 +7,7 @@ namespace GoogleSheetsWrapper.SampleClient
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var config = BuildConfig();
 
@@ -58,6 +58,7 @@ namespace GoogleSheetsWrapper.SampleClient
         private static void Foo(string name)
         {
             // Do some operation based on the record
+            Console.WriteLine(name);
         }
 
         /// <summary>
