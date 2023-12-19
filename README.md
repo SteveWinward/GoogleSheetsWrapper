@@ -10,6 +10,8 @@
 | Latest Build Status | ![build status](https://github.com/SteveWinward/GoogleSheetsWrapper/actions/workflows/main_build.yml/badge.svg) |
 
 ## Google Sheets API .NET Wrapper Library
+> [!IMPORTANT]
+> Using this library requires you to use a Service Account to access your Google Sheets spreadsheets.  Please review the authentication section farther down for more details on how to set this up.
 
 This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
 
@@ -34,6 +36,7 @@ To setup the sample application, you also need to configure [User Secrets in Vis
 
 Extending the ````BaseRecord```` class you can decorate properties with the ````SheetFieldAttribute```` to describe the column header name, the column index and the field type (ie ````string````, ````DateTime````, etc)
 
+> [!NOTE]
 > The column index is 1 based and not 0 based. The first column 'A' is equivalent to the column ID of 1. 
 
 ```csharp
@@ -388,7 +391,8 @@ using (var stream = new FileStream(filepath, FileMode.Create))
 ```
 
 ## Authentication
-You need to setup a Google API Service Account before you can use this library.  
+> [!IMPORTANT] 
+> You need to setup a Google API Service Account before you can use this library.  
 
 1. Create a service account.  Steps to do that are documented below,
 
