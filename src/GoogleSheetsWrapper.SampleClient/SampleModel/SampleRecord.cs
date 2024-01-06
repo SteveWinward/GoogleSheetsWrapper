@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GoogleSheetsWrapper.SampleClient.SampleModel
 {
@@ -27,5 +28,12 @@ namespace GoogleSheetsWrapper.SampleClient.SampleModel
                 ColumnID = 4,
                 FieldType = SheetFieldType.DateTime)]
         public DateTime DateExecuted { get; set; }
+
+        public SampleRecord() { }
+
+        public SampleRecord(IList<object> row, int rowId, int minColumnId = 1)
+            : base(row, rowId, minColumnId)
+        {
+        }
     }
 }
