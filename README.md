@@ -74,6 +74,7 @@ public class TestRecord : BaseRecord
 
     public TestRecord() { }
 
+    // This constructor signature is required to define!
     public TestRecord(IList<object> row, int rowId, int minColumnId = 1)
         : base(row, rowId, minColumnId)
     {
