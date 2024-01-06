@@ -126,19 +126,30 @@ namespace GoogleSheetsWrapper
         {
             var result = SheetHelper.GetRows(SheetDataRange);
 
-            var records = new List<T>(result.Count);
+            List<T> records;
 
-            for (var r = 0; r < result.Count; r++)
+            // Check if the result is null first
+            if (result == null)
             {
-                var currentRecord = result[r];
+                records = new List<T>();
+            }
+            // Otherwise, loop over all rows to create strongly typed objects for each row
+            else
+            {
+                records = new List<T>(result.Count);
 
-                var record = (T)Activator.CreateInstance(
-                    typeof(T),
-                    currentRecord,
-                    r + SheetDataRange.StartRow,
-                    SheetDataRange.StartColumn);
+                for (var r = 0; r < result.Count; r++)
+                {
+                    var currentRecord = result[r];
 
-                records.Add(record);
+                    var record = (T)Activator.CreateInstance(
+                        typeof(T),
+                        currentRecord,
+                        r + SheetDataRange.StartRow,
+                        SheetDataRange.StartColumn);
+
+                    records.Add(record);
+                }
             }
 
             return records;
