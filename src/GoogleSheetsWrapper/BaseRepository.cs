@@ -32,6 +32,10 @@ namespace GoogleSheetsWrapper
         /// </summary>
         public bool HasHeaderRow { get; private set; }
 
+        private bool BaseRecordConstructorWasVerified;
+
+        private bool BaseRecordConstructorExists;
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -124,6 +128,15 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public List<T> GetAllRecords()
         {
+            // Validate the BaseRecord class has the correct constructor signature
+            if (!ValidateBaseRecordHasConstructorDefined())
+            {
+                throw new ArgumentException(
+                    $@"Type {typeof(T).Name} does not implement a constructor with parameters 
+                    (IList<object> row, int rowId, int minColumnId).  
+                    Please define this constructor signature and recompile your code");
+            }
+
             var result = SheetHelper.GetRows(SheetDataRange);
 
             List<T> records;
@@ -283,6 +296,25 @@ namespace GoogleSheetsWrapper
             }
 
             return result;
+        }
+
+        private bool ValidateBaseRecordHasConstructorDefined()
+        {
+            if (!BaseRecordConstructorWasVerified)
+            {
+                var types = new Type[]
+                    {
+                        typeof(IList<object>),
+                        typeof(int),
+                        typeof(int)
+                    };
+
+                var constructor = typeof(T).GetConstructor(types);
+
+                BaseRecordConstructorExists = constructor != null;
+                BaseRecordConstructorWasVerified = true;
+            }
+            return BaseRecordConstructorExists;
         }
     }
 }
