@@ -394,15 +394,25 @@ using (var stream = new FileStream(filepath, FileMode.Create))
 > [!IMPORTANT] 
 > You need to setup a Google API Service Account before you can use this library.  
 
-1. Create a service account.  Steps to do that are documented below,
+1. If you have not yet created a Google Cloud project, you will need to create one before you create a service account.  Documentation on this can be found below,
+
+    https://developers.google.com/workspace/guides/create-project
+
+2. Create a service account.  Steps to do that are documented below,
 
     https://cloud.google.com/docs/authentication/production#create_service_account
 
-2. After you download the JSON key, you need to decide how you want to store it and load it into the application.  
+3. Enable the ````Google Sheets API```` for your Google Cloud project.  Details on this can be found below,
 
-3. Use the service account identity that is created and add that email address to grant it permissions to the Google Sheets Spreadsheet you want to interact with.
+    https://cloud.google.com/endpoints/docs/openapi/enable-api
+  
+4. For the service account you created, create a new service account key.  When you do this, it will also download the key, choose the JSON key format.
 
-4. Configure your code with the following parameters to initialize a ````SheetHelper```` object
+    https://cloud.google.com/iam/docs/keys-create-delete  
+
+5. Use the service account identity that is created and add that email address to grant it permissions to the Google Sheets Spreadsheet you want to interact with.
+
+6. Configure your code with the following parameters to initialize a ````SheetHelper```` object
 
 ```csharp
 // You need to implement your own configuration management solution here!
