@@ -105,8 +105,11 @@ var settings = AppSettings.FromEnvironment();
 
 // Create a SheetHelper class for the specified Google Sheet and Tab name
 var sheetHelper = new SheetHelper<TestRecord>(
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
     settings.GoogleSpreadsheetId,
+    // The email for the service account you created
     settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 sheetHelper.Init(settings.JsonCredential);
@@ -288,8 +291,11 @@ Full list of the different fields you can specify in the field mask property are
 
 ```csharp
 var appender = new SheetAppender(
-    settings.GoogleSpreadsheetId, 
-    settings.GoogleServiceAccountName, 
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
+    settings.GoogleSpreadsheetId,
+    // The email for the service account you created
+    settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 appender.Init(settings.JsonCredential);
@@ -317,8 +323,11 @@ If you wanted to delete the existing rows in your tab first, you can use
 ```csharp
 // Create a SheetHelper class
 var sheetHelper = new SheetHelper(
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
     settings.GoogleSpreadsheetId,
+    // The email for the service account you created
     settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 sheetHelper.Init(settings.JsonCredential);
@@ -352,8 +361,11 @@ using (var stream = new FileStream(filepath, FileMode.Open))
 
 ```csharp
 var exporter = new SheetExporter(
-    settings.GoogleSpreadsheetId, 
-    settings.GoogleServiceAccountName, 
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
+    settings.GoogleSpreadsheetId,
+    // The email for the service account you created
+    settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 exporter.Init(settings.JsonCredential);
@@ -373,8 +385,11 @@ using (var stream = new FileStream(filepath, FileMode.Create))
 
 ```csharp
 var exporter = new SheetExporter(
-    settings.GoogleSpreadsheetId, 
-    settings.GoogleServiceAccountName, 
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
+    settings.GoogleSpreadsheetId,
+    // The email for the service account you created
+    settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 exporter.Init(settings.JsonCredential);
@@ -420,8 +435,11 @@ var settings = AppSettings.FromEnvironment();
 
 // Create a SheetHelper class for the specified Google Sheet and Tab name
 var sheetHelper = new SheetHelper<TestRecord>(
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
     settings.GoogleSpreadsheetId,
+    // The email for the service account you created
     settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
 sheetHelper.Init(settings.JsonCredential);
