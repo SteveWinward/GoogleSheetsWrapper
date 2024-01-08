@@ -152,15 +152,6 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public List<T> GetAllRecords()
         {
-            // Validate the BaseRecord class has the correct constructor signature
-            if (!ValidateBaseRecordHasConstructorDefined())
-            {
-                throw new ArgumentException(
-                    $@"Type {typeof(T).Name} does not implement a constructor with parameters 
-                    (IList<object> row, int rowId, int minColumnId).  
-                    Please define this constructor signature and recompile your code");
-            }
-
             var result = SheetHelper.GetRows(SheetDataRange);
 
             List<T> records;
@@ -173,6 +164,15 @@ namespace GoogleSheetsWrapper
             // Otherwise, loop over all rows to create strongly typed objects for each row
             else
             {
+                // Validate the BaseRecord class has the correct constructor signature
+                if (!ValidateBaseRecordHasConstructorDefined())
+                {
+                    throw new ArgumentException(
+                        $@"Type {typeof(T).Name} does not implement a constructor with parameters 
+                        (IList<object> row, int rowId, int minColumnId).  
+                        Please define this constructor signature and recompile your code");
+                }
+
                 records = new List<T>(result.Count);
 
                 for (var r = 0; r < result.Count; r++)
