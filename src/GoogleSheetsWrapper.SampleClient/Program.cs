@@ -23,7 +23,17 @@ namespace GoogleSheetsWrapper.SampleClient
             var sheetHelper = new SheetHelper<SampleRecord>(documentId, serviceAccount, "");
             sheetHelper.Init(jsonCredsContent);
 
-            var respository = new SampleRepository(sheetHelper);
+            var repoConfig = new BaseRepositoryConfiguration()
+            {
+                // Does the table have a header row?
+                HasHeaderRow = true,
+                // Are there any blank rows before the header row starts?
+                HeaderRowOffset = 0,
+                // Are there any blank rows before the first row in the data table starts?                
+                DataTableRowOffset = 0,
+            };
+
+            var respository = new SampleRepository(sheetHelper, repoConfig);                
 
             var records = respository.GetAllRecords();
 

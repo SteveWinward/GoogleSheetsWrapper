@@ -4,7 +4,7 @@
     {
         public SampleRepository() { }
 
-        public SampleRepository(SheetHelper<SampleRecord> sheetsHelper)
-            : base(sheetsHelper) { }
+        public SampleRepository(SheetHelper<SampleRecord> sheetsHelper, BaseRepositoryConfiguration config)
+            : base(sheetsHelper, config) { }
     }
 }
