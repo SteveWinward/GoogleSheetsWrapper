@@ -89,8 +89,8 @@ public class TestRepository : BaseRepository<TestRecord>
 {
     public TestRepository() { }
 
-    public TestRepository(SheetHelper<TestRecord> sheetsHelper)
-        : base(sheetsHelper) { }
+    public TestRepository(SheetHelper<TestRecord> sheetsHelper, BaseRepositoryConfiguration config)
+        : base(sheetsHelper, config) { }
 }
 ```
 
@@ -115,12 +115,18 @@ var sheetHelper = new SheetHelper<TestRecord>(
 
 sheetHelper.Init(settings.JsonCredential);
 
-// Get all rows from the sheet starting with the 1st row, between the 1st and 8th columns
-// Leaving the last row blank tells Google Sheets to return all rows from the Sheet
-var allRows = sheetHelper.GetRows("TabName", 1, 1, 8);
-
 // Create a Repository for the TestRecord class
-var repository = new TestRepository(sheetHelper);
+var repoConfig = new BaseRepositoryConfiguration()
+{
+    // Does the table have a header row?
+    HasHeaderRow = true,
+    // Are there any blank rows before the header row starts?
+    HeaderRowOffset = 0,
+    // Are there any blank rows before the first row in the data table starts?                
+    DataTableRowOffset = 0,
+};
+
+var repository = new TestRepository(sheetHelper, repoConfig);
 
 // Validate that the header names match the expected format defined with the SheetFieldAttribute values
 var result = repository.ValidateSchema();

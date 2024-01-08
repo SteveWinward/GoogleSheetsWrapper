@@ -36,10 +36,26 @@ namespace GoogleSheetsWrapper
 
         private bool BaseRecordConstructorExists;
 
+        private readonly BaseRepositoryConfiguration Configuration;
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public BaseRepository() { }
+
+        /// <summary>
+        /// BaseRepository constructor
+        /// </summary>
+        /// <param name="sheetHelper">SheetHelper object</param>
+        /// <param name="config">BaseRepositoryConfiguration config options for the repository class</param>
+        public BaseRepository(SheetHelper<T> sheetHelper, BaseRepositoryConfiguration config)
+        {
+            SheetHelper = sheetHelper;
+
+            Configuration = config;
+
+            InitSheetRanges();
+        }
 
         /// <summary>
         /// BaseRepository constructor
@@ -50,7 +66,10 @@ namespace GoogleSheetsWrapper
         {
             SheetHelper = sheetHelper;
 
-            HasHeaderRow = hasHeaderRow;
+            Configuration = new BaseRepositoryConfiguration()
+            {
+                HasHeaderRow = hasHeaderRow,
+            };
 
             InitSheetRanges();
         }
@@ -63,13 +82,17 @@ namespace GoogleSheetsWrapper
         /// <param name="tabName">The Google Sheets tab name</param>
         /// <param name="jsonCredentials">The Google Sheets JSON credentials</param>
         /// <param name="hasHeaderRow">Does the tab have headers?</param>
+        [Obsolete("This constructer is deprecated.  Please use the BaseRepository(SheetHelper<T> sheetHelper, BaseRepositoryConfiguration config) moving forward.")]
         public BaseRepository(string spreadsheetID, string serviceAccountEmail, string tabName, string jsonCredentials, bool hasHeaderRow = true)
         {
             SheetHelper = new SheetHelper<T>(spreadsheetID, serviceAccountEmail, tabName);
 
             SheetHelper.Init(jsonCredentials);
 
-            HasHeaderRow = hasHeaderRow;
+            Configuration = new BaseRepositoryConfiguration()
+            {
+                HasHeaderRow = hasHeaderRow,
+            };
 
             InitSheetRanges();
         }
@@ -79,6 +102,8 @@ namespace GoogleSheetsWrapper
         /// </summary>
         protected void InitSheetRanges()
         {
+            HasHeaderRow = Configuration.HasHeaderRow;
+
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
 
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
@@ -86,12 +111,17 @@ namespace GoogleSheetsWrapper
 
             if (HasHeaderRow)
             {
-                SheetHeaderRange = new SheetRange(SheetHelper.TabName, minColumnId, 1, maxColumnId, 1);
-                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, 2, maxColumnId);
+                var headerRow = 1 + Configuration.HeaderRowOffset;
+                var dataTableRowStart = headerRow + 1 + Configuration.DataTableRowOffset;
+
+                SheetHeaderRange = new SheetRange(SheetHelper.TabName, minColumnId, headerRow, maxColumnId, headerRow);
+                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, dataTableRowStart, maxColumnId);
             }
             else
             {
-                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, 1, maxColumnId);
+                var dataTableRowStart = 1 + Configuration.DataTableRowOffset;
+
+                SheetDataRange = new SheetRange(SheetHelper.TabName, minColumnId, dataTableRowStart, maxColumnId);
             }
         }
 
