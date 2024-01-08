@@ -63,15 +63,9 @@ namespace GoogleSheetsWrapper
         /// <param name="sheetHelper">SheetHelper object</param>
         /// <param name="hasHeaderRow">Does the tab have headers?</param>
         public BaseRepository(SheetHelper<T> sheetHelper, bool hasHeaderRow = true)
+            : this(sheetHelper, new BaseRepositoryConfiguration() { HasHeaderRow = hasHeaderRow })
         {
-            SheetHelper = sheetHelper;
 
-            Configuration = new BaseRepositoryConfiguration()
-            {
-                HasHeaderRow = hasHeaderRow,
-            };
-
-            InitSheetRanges();
         }
 
         /// <summary>
