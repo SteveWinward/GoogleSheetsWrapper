@@ -54,6 +54,7 @@ namespace GoogleSheetsWrapper
 
             Configuration = config;
 
+            InitConfiguration();
             InitSheetRanges();
         }
 
@@ -88,7 +89,27 @@ namespace GoogleSheetsWrapper
                 HasHeaderRow = hasHeaderRow,
             };
 
+            InitConfiguration();
             InitSheetRanges();
+        }
+
+        /// <summary>
+        /// Initializes and validates the BaseRepositoryConfiguration values
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        protected void InitConfiguration()
+        {
+            HasHeaderRow = Configuration.HasHeaderRow;
+
+            if (Configuration.HeaderRowOffset < 0)
+            {
+                throw new ArgumentException("BaseRepositoryConfiguration.HeaderRowOffset cannot be less than 0");
+            }
+
+            if (Configuration.DataTableRowOffset < 0)
+            {
+                throw new ArgumentException("BaseRepositoryConfiguration.DataTableRowOffset cannot be less than 0");
+            }
         }
 
         /// <summary>
@@ -96,8 +117,6 @@ namespace GoogleSheetsWrapper
         /// </summary>
         protected void InitSheetRanges()
         {
-            HasHeaderRow = Configuration.HasHeaderRow;
-
             var attributes = SheetFieldAttributeUtils.GetAllSheetFieldAttributes<T>();
 
             var maxColumnId = attributes.Max(a => a.Key.ColumnID);
