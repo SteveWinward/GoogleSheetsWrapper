@@ -72,8 +72,6 @@ namespace GoogleSheetsWrapper
         public void Init(string jsonCredentials)
         {
             Init(jsonCredentials, default);
-
-            IsInitialized = true;
         }
 
         /// <summary>
@@ -103,10 +101,9 @@ namespace GoogleSheetsWrapper
             });
 
             Service = service;
+            IsInitialized = true;
 
             UpdateTabName(TabName);
-
-            IsInitialized = true;
         }
 
         /// <summary>
