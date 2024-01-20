@@ -521,12 +521,15 @@ namespace GoogleSheetsWrapper
 
             foreach (var record in records)
             {
-                var row = new RowData
+                if (record != null)
                 {
-                    Values = record.ConvertToCellData(TabName).Select(b => b.Data).ToList(),
-                };
+                    var row = new RowData
+                    {
+                        Values = record.ConvertToCellData(TabName).Select(b => b.Data).ToList(),
+                    };
 
-                rows.Add(row);
+                    rows.Add(row);
+                }
             }
 
             var appendRequest = new AppendCellsRequest
