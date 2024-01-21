@@ -33,7 +33,7 @@ namespace GoogleSheetsWrapper.SampleClient
                 DataTableRowOffset = 0,
             };
 
-            var respository = new SampleRepository(sheetHelper, repoConfig);                
+            var respository = new SampleRepository(sheetHelper, repoConfig);
 
             var records = respository.GetAllRecords();
 
