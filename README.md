@@ -367,7 +367,8 @@ using (var stream = new FileStream(filepath, FileMode.Open))
 ## Export Google Sheet to CSV
 
 ```csharp
-var exporter = new SheetExporter(
+// Create a SheetHelper class
+var sheetHelper = new SheetHelper(
     // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
     settings.GoogleSpreadsheetId,
     // The email for the service account you created
@@ -375,15 +376,35 @@ var exporter = new SheetExporter(
     // the name of the tab you want to access, leave blank if you want the default first tab
     settings.GoogleMainSheetName);
 
-exporter.Init(settings.JsonCredential);
+sheetHelper.Init(settings.JsonCredential);
+
+var exporter = new SheetExporter(sheetHelper);
 
 var filepath = @"C:\Output\output.csv";
 
+
+// OPTION 1: Default to CultureInfo.InvariantCulture and "," as the delimiter
 using (var stream = new FileStream(filepath, FileMode.Create))
 {
     // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
     var range = new SheetRange("TAB_NAME", 1, 1, 8);
     exporter.ExportAsCsv(range, stream);
+}
+
+// OPTION 2: Create your own CsvConfiguration object with full control on Culture and delimiter
+using (var stream = new FileStream(filepath, FileMode.Create))
+{
+    // Query the range A1:G (ie 1st column, 1st row, 8th column and last row in the sheet)
+    var range = new SheetRange("TAB_NAME", 1, 1, 8);
+
+    // This gives you full control on the CSV file CultureInfo and Delimiter value
+    var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+    {
+        Delimiter = ";",
+    };
+
+    // Export with the customer CsvConfiguration value
+    exporter.ExportAsCsv(range, stream, csvConfig);
 }
 
 ```

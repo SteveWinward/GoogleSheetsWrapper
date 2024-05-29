@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using GoogleSheetsWrapper.SampleClient.SampleModel;
+using CsvHelper.Configuration;
+using System.Globalization;
 
 namespace GoogleSheetsWrapper.SampleClient
 {
@@ -22,6 +24,11 @@ namespace GoogleSheetsWrapper.SampleClient
             // Create a new SheetHelper class
             var sheetHelper = new SheetHelper<SampleRecord>(documentId, serviceAccount, "");
             sheetHelper.Init(jsonCredsContent);
+
+            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+            {
+                Delimiter = ";",
+            };
 
             var repoConfig = new BaseRepositoryConfiguration()
             {
