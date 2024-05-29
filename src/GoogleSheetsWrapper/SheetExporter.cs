@@ -52,15 +52,26 @@ namespace GoogleSheetsWrapper
         /// <param name="delimiter"></param>
         public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
-            var rows = _sheetHelper.GetRowsFormatted(range);
-
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 Delimiter = delimiter,
             };
 
+            ExportAsCsv(range, stream, config);
+        }
+
+        /// <summary>
+        /// Exports the current Google Sheet tab to a CSV file.  This override lets you explicitly specify the CsvConfiguration object for the CsvHelper library.
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="stream"></param>
+        /// <param name="csvConfiguration"></param>
+        public void ExportAsCsv(SheetRange range, Stream stream, CsvConfiguration csvConfiguration)
+        {
+            var rows = _sheetHelper.GetRowsFormatted(range);
+
             using var streamWriter = new StreamWriter(stream);
-            using var csv = new CsvWriter(streamWriter, config);
+            using var csv = new CsvWriter(streamWriter, csvConfiguration);
             foreach (var row in rows)
             {
                 foreach (var cell in row)
