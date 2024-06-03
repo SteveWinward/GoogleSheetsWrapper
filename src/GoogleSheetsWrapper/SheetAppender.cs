@@ -67,11 +67,24 @@ namespace GoogleSheetsWrapper
         /// <param name="batchWaitTime"></param>
         public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000)
         {
-            using var streamReader = new StreamReader(stream);
-            using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = includeHeaders
-            });
+            };
+
+            AppendCsv(stream, csvConfig, batchWaitTime);
+        }
+
+        /// <summary>
+        /// Appends a CSV file and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="csvConfig"></param>
+        /// <param name="batchWaitTime"></param>
+        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000)
+        {
+            using var streamReader = new StreamReader(stream);
+            using var csv = new CsvReader(streamReader, csvConfig);
             {
                 var batchRowLimit = 100;
 
@@ -84,7 +97,7 @@ namespace GoogleSheetsWrapper
 
                 var currentBatchCount = 0;
 
-                if (includeHeaders)
+                if (csvConfig.HasHeaderRecord)
                 {
                     currentBatchCount++;
 
