@@ -44,3 +44,7 @@ jobs:
     - name: Integration Tests
       run: dotnet test GoogleSheetsWrapper.IntegrationTests.csproj --no-build --verbosity normal
       working-directory: 'src/GoogleSheetsWrapper.IntegrationTests'
+      env:
+        GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
+        GOOGLE_JSON_CREDS: ${{ secrets.GOOGLE_JSON_CREDS }}
