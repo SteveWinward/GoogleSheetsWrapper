@@ -37,8 +37,10 @@ jobs:
       
       # Run the unit tests
     - name: Unit Tests
-      run: dotnet test ~/GoogleSheetsWrapper.Tests/GoogleSheetsWrapper.Tests.csproj --no-build --verbosity normal
+      run: dotnet test GoogleSheetsWrapper.Tests.csproj --no-build --verbosity normal
+      working-directory: 'src/GoogleSheetsWrapper.Tests'
 
       # Run the integration tests
     - name: Integration Tests
-      run: dotnet test ~/GoogleSheetsWrapper.IntegrationTests/GoogleSheetsWrapper.IntegrationTests.csproj --no-build --verbosity normal
+      run: dotnet test GoogleSheetsWrapper.IntegrationTests.csproj --no-build --verbosity normal
+      working-directory: 'src/GoogleSheetsWrapper.IntegrationTests'
