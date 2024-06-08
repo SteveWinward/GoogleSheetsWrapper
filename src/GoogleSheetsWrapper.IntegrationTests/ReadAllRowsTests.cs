@@ -21,11 +21,41 @@ namespace GoogleSheetsWrapper.IntegrationTests
 
             sheetHelper.Init(Config.JsonCredentials);
 
-            var respository = new ReadAllRowsTestRepository(sheetHelper);
+            var repository = new ReadAllRowsTestRepository(sheetHelper, hasHeaderRow: false);
 
-            var rows = respository.GetAllRecords();
+            // Get the total row count for the existing sheet
+            var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 1));
 
-            Assert.That(rows, Has.Count.EqualTo(5));
+            // Delete all of the rows
+            if (rows != null)
+            {
+                _ = sheetHelper.DeleteRows(1, rows.Count);
+            }
+
+            // Add 5 records manually before doing the query
+            var records = new List<ReadAllRowsTestRecord>();
+
+            repository.WriteHeaders();
+
+            for (var i = 0; i < 5; i++)
+            {
+                records.Add(new ReadAllRowsTestRecord()
+                {
+                    Task = $"Task {i + 1}",
+                    Value = $"Value {i + 1}"
+                });
+            }
+
+            _ = repository.AddRecords(records);
+
+            // Create new repository class to query the records
+            repository = new ReadAllRowsTestRepository(sheetHelper, hasHeaderRow: true);
+
+            // Get all the records
+            records = repository.GetAllRecords();
+
+            // Validate there are 5 records
+            Assert.That(records, Has.Count.EqualTo(5));
         }
     }
 }

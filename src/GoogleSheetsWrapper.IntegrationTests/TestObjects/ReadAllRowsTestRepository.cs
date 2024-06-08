@@ -4,7 +4,7 @@
     {
         public ReadAllRowsTestRepository() { }
 
-        public ReadAllRowsTestRepository(SheetHelper<ReadAllRowsTestRecord> sheetsHelper)
-            : base(sheetsHelper) { }
+        public ReadAllRowsTestRepository(SheetHelper<ReadAllRowsTestRecord> sheetsHelper, bool hasHeaderRow)
+            : base(sheetsHelper, hasHeaderRow) { }
     }
 }
