@@ -32,11 +32,21 @@ jobs:
       
       # build the source
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Release      
       
       # Run the unit tests
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+    - name: Unit Tests
+      run: dotnet test GoogleSheetsWrapper.Tests.csproj --no-build --verbosity normal --configuration Release
+      working-directory: 'src/GoogleSheetsWrapper.Tests'
+
+      # Run the integration tests
+    - name: Integration Tests
+      run: dotnet test GoogleSheetsWrapper.IntegrationTests.csproj --no-build --verbosity normal --configuration Release
+      working-directory: 'src/GoogleSheetsWrapper.IntegrationTests'
+      env:
+        GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
+        GOOGLE_JSON_CREDS: ${{ secrets.GOOGLE_JSON_CREDS }}
       
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
