@@ -124,7 +124,7 @@ namespace GoogleSheetsWrapper
         /// <param name="newTabName"></param>
         public void UpdateTabName(string newTabName)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var spreadsheet = Service.Spreadsheets.Get(SpreadsheetID);
 
@@ -159,7 +159,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public List<string> GetAllTabNames()
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var spreadsheet = Service.Spreadsheets.Get(SpreadsheetID);
 
@@ -170,8 +170,6 @@ namespace GoogleSheetsWrapper
             return tabs;
         }
 
-#nullable enable
-
         /// <summary>
         /// Return a collection of rows for a given SheetRange input
         /// </summary>
@@ -179,11 +177,11 @@ namespace GoogleSheetsWrapper
         /// <param name="valueRenderOption"></param>
         /// <param name="dateTimeRenderOption"></param>
         /// <returns></returns>
-        public IList<IList<object>>? GetRows(SheetRange range,
+        public IList<IList<object>> GetRows(SheetRange range,
             ValueRenderOptionEnum valueRenderOption = ValueRenderOptionEnum.UNFORMATTEDVALUE,
             DateTimeRenderOptionEnum dateTimeRenderOption = DateTimeRenderOptionEnum.SERIALNUMBER)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
@@ -194,7 +192,15 @@ namespace GoogleSheetsWrapper
             request.DateTimeRenderOption = dateTimeRenderOption;
 
             var response = request.Execute();
-            return response.Values;
+
+            if (response.Values != null)
+            {
+                return response.Values;
+            }
+            else
+            {
+                return new List<IList<object>>();
+            }
         }
 
         /// <summary>
@@ -202,9 +208,9 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public IList<IList<object>>? GetRowsFormatted(SheetRange range)
+        public IList<IList<object>> GetRowsFormatted(SheetRange range)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
@@ -215,10 +221,16 @@ namespace GoogleSheetsWrapper
             request.DateTimeRenderOption = DateTimeRenderOptionEnum.FORMATTEDSTRING;
 
             var response = request.Execute();
-            return response.Values;
-        }
 
-#nullable disable
+            if (response.Values != null)
+            {
+                return response.Values;
+            }
+            else
+            {
+                return new List<IList<object>>();
+            }
+        }
 
         /// <summary>
         /// Clears values from a spreadsheet (NOTE: All other properties of the cell (such as formatting, data validation, etc..) are kept.)
@@ -227,7 +239,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public ClearValuesResponse ClearRange(SheetRange range)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var rangeValue = range.CanSupportA1Notation ? range.A1Notation : range.R1C1Notation;
 
@@ -244,7 +256,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteColumn(int col)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var request = new Request()
             {
@@ -276,7 +288,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteColumn(string columnLetter)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
 
@@ -290,7 +302,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteRow(int row)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var request = new Request()
             {
@@ -323,7 +335,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse DeleteRows(int startRow, int endRow)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var request = new Request()
             {
@@ -355,7 +367,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse InsertBlankColumn(int column)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             if (column < 1)
             {
@@ -393,7 +405,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse InsertBlankColumn(string columnLetter)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var columnId = SheetRange.GetColumnIDFromLetters(columnLetter);
 
@@ -407,7 +419,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse InsertBlankRow(int row)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             if (row < 1)
             {
@@ -451,7 +463,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates, string fieldMask = "userEnteredValue")
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var bussr = new BatchUpdateSpreadsheetRequest();
 
@@ -505,7 +517,7 @@ namespace GoogleSheetsWrapper
         /// <param name="newTabName"></param>
         private BatchUpdateSpreadsheetResponse CreateNewTab(string newTabName)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest
             {
@@ -553,7 +565,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse AppendRow(T record)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             return AppendRows(new T[] { record });
         }
@@ -565,7 +577,7 @@ namespace GoogleSheetsWrapper
         /// <returns></returns>
         public BatchUpdateSpreadsheetResponse AppendRows(IList<T> records)
         {
-            this.EnsureServiceInitialized();
+            EnsureServiceInitialized();
 
             var rows = new List<RowData>(records.Count);
 

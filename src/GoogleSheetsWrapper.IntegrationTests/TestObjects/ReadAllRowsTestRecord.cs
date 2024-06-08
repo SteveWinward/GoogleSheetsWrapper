@@ -6,13 +6,13 @@
                 DisplayName = "Task",
                 ColumnID = 1,
                 FieldType = SheetFieldType.String)]
-        public string Task { get; set; }
+        public string Task { get; set; } = "";
 
         [SheetField(
             DisplayName = "Value",
             ColumnID = 2,
             FieldType = SheetFieldType.String)]
-        public string Value { get; set; }
+        public string Value { get; set; } = "";
 
 
         public ReadAllRowsTestRecord() { }

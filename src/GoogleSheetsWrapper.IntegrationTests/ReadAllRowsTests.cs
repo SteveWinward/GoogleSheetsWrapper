@@ -27,10 +27,7 @@ namespace GoogleSheetsWrapper.IntegrationTests
             var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 1));
 
             // Delete all of the rows
-            if (rows != null)
-            {
-                _ = sheetHelper.DeleteRows(1, rows.Count);
-            }
+            _ = sheetHelper.DeleteRows(1, rows.Count);
 
             // Add 5 records manually before doing the query
             var records = new List<ReadAllRowsTestRecord>();

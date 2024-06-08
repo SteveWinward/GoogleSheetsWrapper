@@ -16,9 +16,13 @@ namespace GoogleSheetsWrapper.IntegrationTests
         {
             Config = BuildConfig();
 
+#pragma warning disable CS8601 // Possible null reference assignment.
+
             GoogleServiceAccount = Config["GOOGLE_SERVICE_ACCOUNT"];
             GoogleSpreadsheetId = Config["GOOGLE_SPREADSHEET_ID"];
             JsonCredentials = Config["GOOGLE_JSON_CREDS"];
+
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
