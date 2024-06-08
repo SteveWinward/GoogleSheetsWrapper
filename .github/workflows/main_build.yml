@@ -36,5 +36,9 @@ jobs:
       run: dotnet build --no-restore
       
       # Run the unit tests
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Unit Tests
+      run: dotnet test ~/GoogleSheetsWrapper.Tests/GoogleSheetsWrapper.Tests.csproj --no-build --verbosity normal
+
+      # Run the integration tests
+    - name: Integration Tests
+      run: dotnet test ~/GoogleSheetsWrapper.IntegrationTests/GoogleSheetsWrapper.IntegrationTests.csproj --no-build --verbosity normal
