@@ -164,18 +164,19 @@ repository.AddRecord(new TestRecord()
 If you don't want to extend the ````BaseRecord```` class, you can use non typed operations with the ````SheetHelper```` class.  Below is an example of that,
 
 ````csharp
-// Get the Google Spreadsheet Config Values
-var serviceAccount = config["GOOGLE_SERVICE_ACCOUNT"];
-var documentId = config["GOOGLE_SPREADSHEET_ID"];
-var jsonCredsPath = config["GOOGLE_JSON_CREDS_PATH"];
+// You need to implement your own configuration management solution here!
+var settings = AppSettings.FromEnvironment();
 
-// In this case the json creds file is stored locally, 
-// but you can store this however you want to (Azure Key Vault, HSM, etc)
-var jsonCredsContent = File.ReadAllText(jsonCredsPath);
+// Create a SheetHelper class for the specified Google Sheet and Tab name
+var sheetHelper = new SheetHelper<TestRecord>(
+    // https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID_IS_HERE>/edit#gid=0
+    settings.GoogleSpreadsheetId,
+    // The email for the service account you created
+    settings.GoogleServiceAccountName,
+    // the name of the tab you want to access, leave blank if you want the default first tab
+    settings.GoogleMainSheetName);
 
-// Create a new SheetHelper class
-var sheetHelper = new SheetHelper(documentId, serviceAccount, "");
-sheetHelper.Init(jsonCredsContent);
+sheetHelper.Init(settings.JsonCredential);
 
 // Append new rows to the spreadsheet
 var appender = new SheetAppender(sheetHelper);
