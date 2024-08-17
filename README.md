@@ -362,7 +362,10 @@ sheetHelper.Init(settings.JsonCredential);
 var rows = sheetHelper.GetRows(new SheetRange("", 1, 1, 1));
 
 // Delete all of the rows
-sheetHelper.DeleteRows(1, rows.Count);
+if (rows.Count > 0)
+{
+    sheetHelper.DeleteRows(1, rows.Count);
+}
 
 // Create the SheetAppender class
 var appender = new SheetAppender(sheetHelper);
@@ -418,7 +421,6 @@ sheetHelper.Init(settings.JsonCredential);
 var exporter = new SheetExporter(sheetHelper);
 
 var filepath = @"C:\Output\output.csv";
-
 
 // OPTION 1: Default to CultureInfo.InvariantCulture and "," as the delimiter
 using (var stream = new FileStream(filepath, FileMode.Create))
