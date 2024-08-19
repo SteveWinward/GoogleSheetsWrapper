@@ -50,12 +50,13 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="includeHeaders"></param>
-        /// <param name="batchWaitTime"></param>
-        public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000)
+        /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
+        /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
+        public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                AppendCsv(stream, includeHeaders, batchWaitTime);
+                AppendCsv(stream, includeHeaders, batchWaitTime, batchSize);
             }
         }
 
@@ -64,15 +65,16 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="includeHeaders"></param>
-        /// <param name="batchWaitTime"></param>
-        public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000)
+        /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
+        /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
+        public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = includeHeaders
             };
 
-            AppendCsv(stream, csvConfig, batchWaitTime);
+            AppendCsv(stream, csvConfig, batchWaitTime, batchSize);
         }
 
         /// <summary>
@@ -80,13 +82,14 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="csvConfig"></param>
-        /// <param name="batchWaitTime"></param>
-        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000)
+        /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
+        /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
+        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000, int batchSize = 100)
         {
             using var streamReader = new StreamReader(stream);
             using var csv = new CsvReader(streamReader, csvConfig);
             {
-                var batchRowLimit = 100;
+                var batchRowLimit = batchSize;
 
                 var dataRecords =
                     csv.GetRecords<dynamic>()
