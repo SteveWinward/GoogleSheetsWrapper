@@ -49,7 +49,7 @@ namespace GoogleSheetsWrapper
         /// Appends a CSV file and all its rows into the current Google Sheets tab
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="includeHeaders"></param>
+        /// <param name="includeHeaders">If true include all rows, otherwise skip first row</param>
         /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
         /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
         public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
@@ -64,14 +64,14 @@ namespace GoogleSheetsWrapper
         /// Appends a CSV file and all its rows into the current Google Sheets tab
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="includeHeaders"></param>
+        /// <param name="includeHeaders">If true include all rows, otherwise skip first row</param>
         /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
         /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
         public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                HasHeaderRecord = includeHeaders
+                HasHeaderRecord = !includeHeaders
             };
 
             AppendCsv(stream, csvConfig, batchWaitTime, batchSize);
@@ -99,25 +99,6 @@ namespace GoogleSheetsWrapper
                 var rowData = new List<RowData>();
 
                 var currentBatchCount = 0;
-
-                if (csvConfig.HasHeaderRecord)
-                {
-                    currentBatchCount++;
-
-                    var row = new RowData()
-                    {
-                        Values = new List<CellData>()
-                    };
-
-                    var headers = csv.HeaderRecord;
-
-                    foreach (var header in headers)
-                    {
-                        row.Values.Add(StringToCellData(header));
-                    }
-
-                    rowData.Add(row);
-                }
 
                 foreach (var record in dataRecords)
                 {
