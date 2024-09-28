@@ -320,8 +320,9 @@ using (var stream = new FileStream(filepath, FileMode.Open))
     // with this setting. 
     appender.AppendCsv(
         stream, // The CSV FileStrem 
-        true, // true indicating to include the header row
-        1000); // 1000 milliseconds to wait every 100 rows that are batch sent to the Google Sheets API
+        csvHasHeaderRecord: true, // true indicating the CSV file has a header record as the first row
+        skipWritingHeaderRow: false, // false indicating to not skip writing the header record to the Google sheets file
+        batchWaitTime: 1000); // 1000 milliseconds to wait every 100 rows that are batch sent to the Google Sheets API
 
     // OPTION 2: Create your own CsvConfiguration object with full control on Culture and delimiter
     var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -337,7 +338,7 @@ using (var stream = new FileStream(filepath, FileMode.Open))
     appender.AppendCsv(
         stream, // The CSV FileStrem 
         csvConfig, // The custom CsvConfiguration object defined previously
-        1000); // 1000 milliseconds to wait every 100 rows that are batch sent to the Google Sheets API
+        batchWaitTime: 1000); // 1000 milliseconds to wait every 100 rows that are batch sent to the Google Sheets API
 }
 
 ```
