@@ -49,14 +49,15 @@ namespace GoogleSheetsWrapper
         /// Appends a CSV file and all its rows into the current Google Sheets tab
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="includeHeaders"></param>
+        /// <param name="csvHasHeaderRecord">This boolean indicates whether the CSV file has a header record row or not</param>
         /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
         /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
-        public void AppendCsv(string filePath, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
+        /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
+        public void AppendCsv(string filePath, bool csvHasHeaderRecord, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false)
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                AppendCsv(stream, includeHeaders, batchWaitTime, batchSize);
+                AppendCsv(stream, csvHasHeaderRecord, batchWaitTime, batchSize, skipWritingHeaderRow);
             }
         }
 
@@ -64,17 +65,18 @@ namespace GoogleSheetsWrapper
         /// Appends a CSV file and all its rows into the current Google Sheets tab
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="includeHeaders"></param>
+        /// <param name="csvHasHeaderRecord">This boolean indicates whether the CSV file has a header record row or not</param>
         /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
         /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
-        public void AppendCsv(Stream stream, bool includeHeaders, int batchWaitTime = 1000, int batchSize = 100)
+        /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
+        public void AppendCsv(Stream stream, bool csvHasHeaderRecord, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                HasHeaderRecord = includeHeaders
+                HasHeaderRecord = csvHasHeaderRecord
             };
 
-            AppendCsv(stream, csvConfig, batchWaitTime, batchSize);
+            AppendCsv(stream, csvConfig, batchWaitTime, batchSize, skipWritingHeaderRow);
         }
 
         /// <summary>
@@ -84,7 +86,8 @@ namespace GoogleSheetsWrapper
         /// <param name="csvConfig"></param>
         /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
         /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
-        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000, int batchSize = 100)
+        /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
+        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false)
         {
             using var streamReader = new StreamReader(stream);
             using var csv = new CsvReader(streamReader, csvConfig);
@@ -100,7 +103,8 @@ namespace GoogleSheetsWrapper
 
                 var currentBatchCount = 0;
 
-                if (csvConfig.HasHeaderRecord)
+                // Only write the header record if its specified to not skip writing the header row
+                if (csvConfig.HasHeaderRecord && !skipWritingHeaderRow)
                 {
                     currentBatchCount++;
 
