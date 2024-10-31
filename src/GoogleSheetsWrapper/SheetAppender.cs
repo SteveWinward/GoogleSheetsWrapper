@@ -158,6 +158,14 @@ namespace GoogleSheetsWrapper
             }
         }
 
+        /// <summary>
+        /// This lets you append a list of objects to the Google Sheet with any object using reflection to determine the property types during runtime.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataRecords">The list of records</param>
+        /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
+        /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
+        /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
         public void AppendObject<T>(IEnumerable<T> dataRecords, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false) where T : class
         {
             var batchRowLimit = batchSize;
@@ -346,7 +354,7 @@ namespace GoogleSheetsWrapper
                 }
                 else if (value is decimal dec)
                 {
-                    cell.UserEnteredValue.NumberValue = Decimal.ToDouble(dec);
+                    cell.UserEnteredValue.NumberValue = decimal.ToDouble(dec);
                 }
                 else if (value is DateTime dt)
                 {
