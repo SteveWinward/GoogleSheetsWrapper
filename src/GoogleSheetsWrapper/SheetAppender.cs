@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -158,6 +159,76 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
+        /// This lets you append a list of objects to the Google Sheet with any object using reflection to determine the property types during runtime.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataRecords">The list of records</param>
+        /// <param name="batchWaitTime">See https://developers.google.com/sheets/api/limits at last check is 60 requests a minute, so 1 second delay per request should avoid limiting</param>
+        /// <param name="batchSize">Increasing batch size may improve throughput. Default is conservative.</param>
+        /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
+        public void AppendObject<T>(IEnumerable<T> dataRecords, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false) where T : class
+        {
+            var batchRowLimit = batchSize;
+
+            var rowData = new List<RowData>();
+
+            var currentBatchCount = 0;
+
+            var properties = typeof(T).GetProperties().Where(x => !x.CustomAttributes.Any(a => a.AttributeType == typeof(CsvHelper.Configuration.Attributes.IgnoreAttribute)));
+
+            // Only write the header record if its specified to not skip writing the header row
+            if (!skipWritingHeaderRow)
+            {
+                currentBatchCount++;
+
+                var row = new RowData()
+                {
+                    Values = new List<CellData>()
+                };
+
+                foreach (var header in properties)
+                {
+                    row.Values.Add(StringToCellData(header.Name));
+                }
+
+                rowData.Add(row);
+            }
+
+            foreach (var record in dataRecords)
+            {
+                currentBatchCount++;
+
+                var row = new RowData()
+                {
+                    Values = new List<CellData>()
+                };
+
+                foreach (var property in properties)
+                {
+                    var propertyValue = property.GetValue(record);
+                    row.Values.Add(ObjectToCellData(propertyValue));
+                }
+
+                rowData.Add(row);
+
+                if (currentBatchCount >= batchRowLimit)
+                {
+                    AppendRows(rowData);
+
+                    rowData = new List<RowData>();
+                    currentBatchCount = 0;
+
+                    Thread.Sleep(batchWaitTime);
+                }
+            }
+
+            if (rowData.Count > 0)
+            {
+                AppendRows(rowData);
+            }
+        }
+
+        /// <summary>
         /// Append a single row to the spreadsheet
         /// </summary>
         /// <param name="row"></param>
@@ -246,6 +317,54 @@ namespace GoogleSheetsWrapper
             if (value != null)
             {
                 cell.UserEnteredValue.StringValue = value.ToString();
+            }
+            else
+            {
+                cell.UserEnteredValue.StringValue = string.Empty;
+            }
+
+            return cell;
+        }
+
+        /// <summary>
+        /// Converts a object into its appropriate cell data object
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static CellData ObjectToCellData(object value)
+        {
+            var cell = new CellData
+            {
+                UserEnteredValue = new ExtendedValue()
+            };
+
+            if (value != null)
+            {
+                if (value is bool b)
+                {
+                    cell.UserEnteredValue.BoolValue = b;
+                }
+                else if (value is int i)
+                {
+                    cell.UserEnteredValue.NumberValue = i;
+                }
+                else if (value is double dbl)
+                {
+                    cell.UserEnteredValue.NumberValue = dbl;
+                }
+                else if (value is decimal dec)
+                {
+                    cell.UserEnteredValue.NumberValue = decimal.ToDouble(dec);
+                }
+                else if (value is DateTime dt)
+                {
+                    cell.UserEnteredFormat = new CellFormat { NumberFormat = new NumberFormat { Type = "Date" } };
+                    cell.UserEnteredValue.NumberValue = dt.ToOADate();
+                }
+                else
+                {
+                    cell.UserEnteredValue.StringValue = value.ToString();
+                }
             }
             else
             {
