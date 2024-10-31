@@ -188,6 +188,12 @@ namespace GoogleSheetsWrapper
 
                 foreach (var header in properties)
                 {
+                    var name = header.Name;
+                    var nameAttribute = header.GetCustomAttributes(typeof(CsvHelper.Configuration.Attributes.NameAttribute), true).FirstOrDefault();
+                    if (nameAttribute != null)
+                    {
+                        name = (nameAttribute as CsvHelper.Configuration.Attributes.NameAttribute).Names.FirstOrDefault() ?? name;
+                    }
                     row.Values.Add(StringToCellData(header.Name));
                 }
 
