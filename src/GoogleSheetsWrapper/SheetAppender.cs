@@ -194,7 +194,7 @@ namespace GoogleSheetsWrapper
                     {
                         name = (nameAttribute as CsvHelper.Configuration.Attributes.NameAttribute).Names.FirstOrDefault() ?? name;
                     }
-                    row.Values.Add(StringToCellData(header.Name));
+                    row.Values.Add(StringToCellData(name));
                 }
 
                 rowData.Add(row);
