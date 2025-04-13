@@ -7,9 +7,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  DOTNET_VERSION: '9.0.x'
-
 jobs:
   build:
 
@@ -20,11 +17,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
+    # Uses the latest version of dotnet since we don't specific a version here
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
         
       # Restore nuget packages
     - name: Restore dependencies
