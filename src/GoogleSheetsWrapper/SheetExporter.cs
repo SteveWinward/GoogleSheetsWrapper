@@ -16,7 +16,7 @@ namespace GoogleSheetsWrapper
         private readonly SheetHelper _sheetHelper;
 
         /// <summary>
-        /// Constructor
+        /// Constructor for use with service account authentication
         /// </summary>
         /// <param name="spreadsheetID"></param>
         /// <param name="serviceAccountEmail"></param>
@@ -24,6 +24,16 @@ namespace GoogleSheetsWrapper
         public SheetExporter(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             _sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
+        }
+
+        /// <summary>
+        /// Constructor for use with OAuth or other credential types
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="tabName"></param>
+        public SheetExporter(string spreadsheetID, string tabName)
+        {
+            _sheetHelper = new SheetHelper(spreadsheetID, tabName);
         }
 
         /// <summary>
@@ -36,12 +46,21 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Initializes the SheetExporter object with service account authentication to Google Sheets API
         /// </summary>
         /// <param name="jsonCredentials"></param>
         public void Init(string jsonCredentials)
         {
             _sheetHelper.Init(jsonCredentials);
+        }
+
+        /// <summary>
+        /// Initializes the SheetExporter object with a credential (supports OAuth user credentials, service account credentials, etc.)
+        /// </summary>
+        /// <param name="credential">Google credential (e.g., UserCredential from OAuth, ServiceAccountCredential, etc.)</param>
+        public void Init(Google.Apis.Auth.OAuth2.ICredential credential)
+        {
+            _sheetHelper.Init(credential);
         }
 
         /// <summary>
