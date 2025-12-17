@@ -11,7 +11,11 @@
 
 ## Google Sheets API .NET Wrapper Library
 > [!IMPORTANT]
-> Using this library requires you to use a Service Account to access your Google Sheets spreadsheets.  Please review the authentication section farther down for more details on how to set this up.
+> This library supports two authentication methods:
+> - **Service Account Authentication** - for server-to-server scenarios
+> - **OAuth 2.0 User Authentication** - for accessing organization Shared Drives and user-specific resources
+> 
+> Please review the authentication section below for details on how to set up each method.
 
 This library allows you to use strongly typed objects against a Google Sheets spreadsheet without having to have knowledge on the Google Sheets API methods and protocols. 
 
@@ -478,8 +482,18 @@ using (var stream = new FileStream(filepath, FileMode.Create))
 ```
 
 ## Authentication
+
+This library supports two authentication methods:
+1. **Service Account Authentication** (recommended for server-to-server scenarios)
+2. **OAuth 2.0 User Authentication** (recommended for accessing organization Shared Drives)
+
+> [!NOTE]
+> Service accounts cannot access Shared Drives that are restricted to organization members. Use OAuth 2.0 authentication if you need to access organization Shared Drives.
+
+### Option 1: Service Account Authentication
+
 > [!IMPORTANT] 
-> You need to setup a Google API Service Account before you can use this library.  
+> You need to setup a Google API Service Account before you can use this authentication method.  
 
 1. If you have not yet created a Google Cloud project, you will need to create one before you create a service account.  Documentation on this can be found below,
 
@@ -520,3 +534,68 @@ sheetHelper.Init(settings.JsonCredential);
 Another good article on how to setup a Google Service Account can be found below on Robocorp's documentation site,
 
 https://robocorp.com/docs/development-guide/google-sheets/interacting-with-google-sheets#create-a-google-service-account
+
+### Option 2: OAuth 2.0 User Authentication
+
+OAuth 2.0 authentication allows users to authenticate with their Google account, which enables access to organization Shared Drives and resources restricted to organization members.
+
+1. Create OAuth 2.0 credentials in your Google Cloud project:
+
+    https://developers.google.com/workspace/guides/create-credentials#oauth-client-id
+
+2. Enable the ````Google Sheets API```` for your Google Cloud project (if not already enabled).
+
+3. Install the necessary NuGet package for OAuth authentication in your project:
+   ```bash
+   dotnet add package Google.Apis.Auth
+   ```
+
+4. Implement OAuth 2.0 flow and initialize ````SheetHelper```` with user credentials:
+
+```csharp
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
+using System.IO;
+using System.Threading;
+
+// Load client secrets from the OAuth credentials file you downloaded
+UserCredential credential;
+using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
+{
+    string credPath = "token.json";
+    credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+        GoogleClientSecrets.FromStream(stream).Secrets,
+        new[] { SheetsService.Scope.Spreadsheets },
+        "user",
+        CancellationToken.None,
+        new FileDataStore(credPath, true));
+}
+
+// Create a SheetHelper without service account email (not needed for OAuth)
+var sheetHelper = new SheetHelper<TestRecord>(
+    settings.GoogleSpreadsheetId,
+    settings.GoogleMainSheetName);
+
+// Initialize with the OAuth credential
+sheetHelper.Init(credential);
+```
+
+You can also use OAuth credentials with ````SheetAppender```` and ````SheetExporter````:
+
+```csharp
+// Using SheetAppender with OAuth
+var appender = new SheetAppender(
+    settings.GoogleSpreadsheetId,
+    settings.GoogleMainSheetName);
+appender.Init(credential);
+
+// Using SheetExporter with OAuth  
+var exporter = new SheetExporter(
+    settings.GoogleSpreadsheetId,
+    settings.GoogleMainSheetName);
+exporter.Init(credential);
+```
+
+For more information on OAuth 2.0 authentication with Google APIs:
+- https://developers.google.com/identity/protocols/oauth2
+- https://developers.google.com/api-client-library/dotnet/guide/aaa_oauth

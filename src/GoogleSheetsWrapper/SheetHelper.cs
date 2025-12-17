@@ -53,7 +53,7 @@ namespace GoogleSheetsWrapper
         private bool IsInitialized;
 
         /// <summary>
-        /// Constructor
+        /// Constructor for use with service account authentication
         /// </summary>
         /// <param name="spreadsheetID"></param>
         /// <param name="serviceAccountEmail"></param>
@@ -62,6 +62,17 @@ namespace GoogleSheetsWrapper
         {
             SpreadsheetID = spreadsheetID;
             ServiceAccountEmail = serviceAccountEmail;
+            TabName = tabName;
+        }
+
+        /// <summary>
+        /// Constructor for use with OAuth or other credential types that don't require a service account email
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="tabName"></param>
+        public SheetHelper(string spreadsheetID, string tabName)
+        {
+            SpreadsheetID = spreadsheetID;
             TabName = tabName;
         }
 
@@ -107,6 +118,34 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
+        /// Initializes the SheetHelper object with a credential (supports OAuth user credentials, service account credentials, etc.)
+        /// </summary>
+        /// <param name="credential">Google credential (e.g., UserCredential from OAuth, ServiceAccountCredential, etc.)</param>
+        public void Init(ICredential credential)
+        {
+            Init(credential, default);
+        }
+
+        /// <summary>
+        /// Initializes the SheetHelper object with a credential and optional HTTP client factory
+        /// </summary>
+        /// <param name="credential">Google credential (e.g., UserCredential from OAuth, ServiceAccountCredential, etc.)</param>
+        /// <param name="httpClientFactory">Optional HTTP client factory</param>
+        public void Init(ICredential credential, Google.Apis.Http.IHttpClientFactory httpClientFactory)
+        {
+            var service = new SheetsService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                HttpClientFactory = httpClientFactory,
+            });
+
+            Service = service;
+            IsInitialized = true;
+
+            UpdateTabName(TabName);
+        }
+
+        /// <summary>
         /// Throws ArgumentException if the Init() method has not been called yet.
         /// </summary>
         /// <exception cref="ArgumentException"></exception>
@@ -114,7 +153,7 @@ namespace GoogleSheetsWrapper
         {
             if (!IsInitialized)
             {
-                throw new ArgumentException("SheetHelper requires the Init(string jsonCredentials) method to be called before using any of its methods.");
+                throw new ArgumentException("SheetHelper requires an Init() method to be called before using any of its methods.");
             }
         }
 
@@ -550,13 +589,21 @@ namespace GoogleSheetsWrapper
     public class SheetHelper<T> : SheetHelper where T : BaseRecord
     {
         /// <summary>
-        /// Constructor
+        /// Constructor for use with service account authentication
         /// </summary>
         /// <param name="spreadsheetID"></param>
         /// <param name="serviceAccountEmail"></param>
         /// <param name="tabName"></param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
             : base(spreadsheetID, serviceAccountEmail, tabName) { }
+
+        /// <summary>
+        /// Constructor for use with OAuth or other credential types that don't require a service account email
+        /// </summary>
+        /// <param name="spreadsheetID"></param>
+        /// <param name="tabName"></param>
+        public SheetHelper(string spreadsheetID, string tabName)
+            : base(spreadsheetID, tabName) { }
 
         /// <summary>
         /// Adds a record to the next row in the Google Sheet tab
