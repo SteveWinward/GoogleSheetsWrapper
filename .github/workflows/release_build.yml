@@ -7,10 +7,17 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for NuGet trusted publishing (OIDC)
+      id-token: write
     defaults:
       run:
         working-directory: 'src'
@@ -44,6 +51,13 @@ jobs:
         GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
         GOOGLE_JSON_CREDS: ${{ secrets.GOOGLE_JSON_CREDS }}
       
+      # Login to Nuget.org using trusted publishing (OIDC) to get a short lived API key
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
-      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
