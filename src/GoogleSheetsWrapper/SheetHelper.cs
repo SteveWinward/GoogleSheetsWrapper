@@ -571,7 +571,7 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// Adds mulitlpe rows to the next row in the Google Sheets tab
+        /// Adds multiple rows to the next row in the Google Sheets tab
         /// </summary>
         /// <param name="records">The records to append.</param>
         /// <returns>The response from the batch update operation.</returns>
