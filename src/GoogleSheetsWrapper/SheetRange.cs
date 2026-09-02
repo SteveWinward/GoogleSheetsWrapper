@@ -266,7 +266,7 @@ namespace GoogleSheetsWrapper
         /// <returns><see langword="true"/> when the ranges are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals(SheetRange other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }
