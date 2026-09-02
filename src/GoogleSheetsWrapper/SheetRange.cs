@@ -277,8 +277,12 @@ namespace GoogleSheetsWrapper
             }
 
             return
+                A1Notation == other.A1Notation &&
+                CanSupportA1Notation == other.CanSupportA1Notation &&
                 EndColumn == other.EndColumn &&
                 EndRow == other.EndRow &&
+                IsSingleCellRange == other.IsSingleCellRange &&
+                R1C1Notation == other.R1C1Notation &&
                 StartColumn == other.StartColumn &&
                 StartRow == other.StartRow &&
                 TabName == other.TabName;
