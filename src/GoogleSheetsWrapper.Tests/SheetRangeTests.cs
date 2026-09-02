@@ -180,6 +180,28 @@ namespace GoogleSheetsWrapper.Tests
             Assert.That(newRange, Is.EqualTo(range));
         }
 
+        [Test]
+        public void SheetRangeEqualsHandlesNullAndDifferentObjectType()
+        {
+            var range = new SheetRange("Tab", 1, 1, 2, 2);
+
+            Assert.That(range.Equals((SheetRange)null), Is.False);
+            Assert.That(range.Equals((object)null), Is.False);
+            Assert.That(range.Equals("not-a-range"), Is.False);
+        }
+
+        [Test]
+        public void SheetRangeEqualsUsesRangeCoordinatesAndTabName()
+        {
+            var rangeA = new SheetRange("Tab", 1, 1, 2, 2);
+            var rangeB = new SheetRange("Tab", 1, 1, 2, 2);
+            var rangeC = new SheetRange("Tab", 1, 1, 3, 2);
+
+            Assert.That(rangeA.Equals(rangeB), Is.True);
+            Assert.That(rangeA.GetHashCode(), Is.EqualTo(rangeB.GetHashCode()));
+            Assert.That(rangeA.Equals(rangeC), Is.False);
+        }
+
         private static void AssertLettersFromColumnID(int columnID, string expectedLetters)
         {
             var result = SheetRange.GetLettersFromColumnID(columnID);

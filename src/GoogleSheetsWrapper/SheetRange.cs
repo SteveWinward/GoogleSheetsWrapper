@@ -266,13 +266,19 @@ namespace GoogleSheetsWrapper
         /// <returns><see langword="true"/> when the ranges are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals(SheetRange other)
         {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return
-                A1Notation == other.A1Notation &&
-                CanSupportA1Notation == other.CanSupportA1Notation &&
                 EndColumn == other.EndColumn &&
                 EndRow == other.EndRow &&
-                IsSingleCellRange == other.IsSingleCellRange &&
-                R1C1Notation == other.R1C1Notation &&
                 StartColumn == other.StartColumn &&
                 StartRow == other.StartRow &&
                 TabName == other.TabName;
@@ -285,7 +291,7 @@ namespace GoogleSheetsWrapper
         /// <returns><see langword="true"/> when the object is an equal range; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
-            return Equals((SheetRange)obj);
+            return obj is SheetRange other && Equals(other);
         }
 
         /// <summary>
