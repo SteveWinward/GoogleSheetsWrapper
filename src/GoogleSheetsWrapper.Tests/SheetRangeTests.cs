@@ -200,6 +200,13 @@ namespace GoogleSheetsWrapper.Tests
             Assert.That(rangeA.Equals(rangeB), Is.True);
             Assert.That(rangeA.GetHashCode(), Is.EqualTo(rangeB.GetHashCode()));
             Assert.That(rangeA.Equals(rangeC), Is.False);
+
+            // Derived notation/flags should not participate in equality
+            var mutated = new SheetRange("Tab", 1, 1, 2, 2);
+            mutated.EndColumn = null;
+            var constructed = new SheetRange("Tab", 1, 1, null, 2);
+
+            Assert.That(mutated.Equals(constructed), Is.True);
         }
 
         private static void AssertLettersFromColumnID(int columnID, string expectedLetters)
