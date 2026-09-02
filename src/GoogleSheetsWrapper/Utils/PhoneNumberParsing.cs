@@ -9,7 +9,7 @@ namespace GoogleSheetsWrapper.Utils
     public class PhoneNumberParsing
     {
         /// <summary>
-        /// Removes a leading United States country code and all non-numeric characters.
+        /// Removes any occurrence of the United States country code ("+1") and all non-numeric characters.
         /// </summary>
         /// <param name="number">The phone number to normalize.</param>
         /// <returns>The normalized phone number containing digits only.</returns>
@@ -32,7 +32,7 @@ namespace GoogleSheetsWrapper.Utils
         /// Converts a normalized United States phone number to a numeric value.
         /// </summary>
         /// <param name="number">The phone number to convert.</param>
-        /// <returns>The numeric phone number without its country code.</returns>
+        /// <returns>The numeric phone number with any occurrence of the United States country code ("+1") removed.</returns>
         public static long ConvertToLong(string number)
         {
             var numberAsString = RemoveExtraCharactersFromPhoneNumber(number.Replace("+1", ""));
