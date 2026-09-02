@@ -14,12 +14,12 @@ namespace GoogleSheetsWrapper
     public class SheetFieldAttributeUtils
     {
         /// <summary>
-        /// 
+        /// Populates the attributed properties of a record from a row returned by Google Sheets.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="record"></param>
-        /// <param name="row"></param>
-        /// <param name="minColumnId"></param>
+        /// <typeparam name="T">The record type to populate.</typeparam>
+        /// <param name="record">The record instance to populate.</param>
+        /// <param name="row">The source row values.</param>
+        /// <param name="minColumnId">The one-based column index represented by the first value in <paramref name="row"/>.</param>
         /// <exception cref="ArgumentException"></exception>
         public static void PopulateRecord<T>(T record, IList<object> row, int minColumnId = 1) where T : BaseRecord
         {
@@ -99,11 +99,11 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Converts the objects values to CellData object for Google Sheets API
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="record"></param>
-        /// <param name="attribute"></param>
-        /// <param name="property"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The record type containing the property.</typeparam>
+        /// <param name="record">The record that provides the property value.</param>
+        /// <param name="attribute">The sheet metadata that defines the cell format.</param>
+        /// <param name="property">The property to convert.</param>
+        /// <returns>A Google Sheets cell containing the property's value and formatting.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static CellData GetCellDataForSheetField<T>(T record, SheetFieldAttribute attribute, PropertyInfo property)
         {
@@ -238,11 +238,11 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Gets the one-based sheet column index associated with a record property.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The record type that declares the property.</typeparam>
+        /// <param name="expression">An expression that selects the attributed property.</param>
+        /// <returns>The property's configured column index.</returns>
         public static int GetColumnId<T>(Expression<Func<T, object>> expression) where T : BaseRecord
         {
             var attribute = GetSheetFieldAttribute(expression);
@@ -251,20 +251,20 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Gets all sheet field metadata declared by a record type, ordered by column index.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The record type to inspect.</typeparam>
+        /// <returns>The sheet field attributes and their associated properties.</returns>
         public static SortedDictionary<SheetFieldAttribute, PropertyInfo> GetAllSheetFieldAttributes<T>()
         {
             return GetAllSheetFieldAttributes(typeof(T));
         }
 
         /// <summary>
-        /// 
+        /// Gets all sheet field metadata declared by a type, ordered by column index.
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="type">The type to inspect.</param>
+        /// <returns>The sheet field attributes and their associated properties.</returns>
         public static SortedDictionary<SheetFieldAttribute, PropertyInfo> GetAllSheetFieldAttributes(Type type)
         {
             var result = new SortedDictionary<SheetFieldAttribute, PropertyInfo>(new SheetFieldAttributeComparer());

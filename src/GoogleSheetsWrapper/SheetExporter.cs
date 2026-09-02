@@ -18,9 +18,9 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="spreadsheetID"></param>
-        /// <param name="serviceAccountEmail"></param>
-        /// <param name="tabName"></param>
+        /// <param name="spreadsheetID">The identifier of the spreadsheet to export.</param>
+        /// <param name="serviceAccountEmail">The service account email used for authentication.</param>
+        /// <param name="tabName">The tab to export.</param>
         public SheetExporter(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             _sheetHelper = new SheetHelper(spreadsheetID, serviceAccountEmail, tabName);
@@ -29,16 +29,16 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="sheetHelper"></param>
+        /// <param name="sheetHelper">The initialized sheet helper to use for export operations.</param>
         public SheetExporter(SheetHelper sheetHelper)
         {
             _sheetHelper = sheetHelper;
         }
 
         /// <summary>
-        /// 
+        /// Initializes the underlying sheet helper using service account credentials.
         /// </summary>
-        /// <param name="jsonCredentials"></param>
+        /// <param name="jsonCredentials">Service account credentials in JSON format.</param>
         public void Init(string jsonCredentials)
         {
             _sheetHelper.Init(jsonCredentials);
@@ -47,9 +47,9 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Exports the current Google Sheet tab to a CSV file
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="stream"></param>
-        /// <param name="delimiter"></param>
+        /// <param name="range">The range to export.</param>
+        /// <param name="stream">The destination stream for the CSV content.</param>
+        /// <param name="delimiter">The delimiter used between CSV fields.</param>
         public void ExportAsCsv(SheetRange range, Stream stream, string delimiter = ",")
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -63,9 +63,9 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Exports the current Google Sheet tab to a CSV file.  This override lets you explicitly specify the CsvConfiguration object for the CsvHelper library.
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="stream"></param>
-        /// <param name="csvConfiguration"></param>
+        /// <param name="range">The range to export.</param>
+        /// <param name="stream">The destination stream for the CSV content.</param>
+        /// <param name="csvConfiguration">The CsvHelper settings used to generate the CSV content.</param>
         public void ExportAsCsv(SheetRange range, Stream stream, CsvConfiguration csvConfiguration)
         {
             var rows = _sheetHelper.GetRowsFormatted(range);
@@ -84,10 +84,10 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// Exports the current Google Sheet tab to a CSV file
+        /// Exports the specified Google Sheet range to an Excel workbook.
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="stream"></param>
+        /// <param name="range">The range to export.</param>
+        /// <param name="stream">The destination stream for the Excel workbook.</param>
         public void ExportAsExcel(SheetRange range, Stream stream)
         {
             var rows = _sheetHelper.GetRowsFormatted(range);

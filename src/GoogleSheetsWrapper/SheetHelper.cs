@@ -38,7 +38,7 @@ namespace GoogleSheetsWrapper
         public string ServiceAccountEmail { get; set; }
 
         /// <summary>
-        /// 
+        /// OAuth scopes requested when authenticating with the Google Sheets API.
         /// </summary>
         public string[] Scopes { get; set; } = { SheetsService.Scope.Spreadsheets };
 
@@ -55,9 +55,9 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="spreadsheetID"></param>
-        /// <param name="serviceAccountEmail"></param>
-        /// <param name="tabName"></param>
+        /// <param name="spreadsheetID">The identifier of the spreadsheet to access.</param>
+        /// <param name="serviceAccountEmail">The service account email used to impersonate an account.</param>
+        /// <param name="tabName">The tab to select after initialization.</param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
         {
             SpreadsheetID = spreadsheetID;
@@ -68,7 +68,7 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Initializes the SheetHelper object
         /// </summary>
-        /// <param name="jsonCredentials"></param>
+        /// <param name="jsonCredentials">Service account credentials in JSON format.</param>
         public void Init(string jsonCredentials)
         {
             Init(jsonCredentials, default);
@@ -77,8 +77,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Initializes the SheetHelper object with authentication
         /// </summary>
-        /// <param name="jsonCredentials"></param>
-        /// <param name="httpClientFactory"></param>
+        /// <param name="jsonCredentials">Service account credentials in JSON format.</param>
+        /// <param name="httpClientFactory">Factory used to create HTTP clients for API requests.</param>
         public void Init(string jsonCredentials, Google.Apis.Http.IHttpClientFactory httpClientFactory)
         {
             var credential = (ServiceAccountCredential)
@@ -121,7 +121,7 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Set the tab to the specified newTabName value
         /// </summary>
-        /// <param name="newTabName"></param>
+        /// <param name="newTabName">The existing tab to select, or the name of a tab to create.</param>
         public void UpdateTabName(string newTabName)
         {
             EnsureServiceInitialized();
@@ -156,7 +156,7 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Returns a list of all tab names in the Google Spreadsheet
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The titles of all tabs in the spreadsheet.</returns>
         public List<string> GetAllTabNames()
         {
             EnsureServiceInitialized();
@@ -173,10 +173,10 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Return a collection of rows for a given SheetRange input
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="valueRenderOption"></param>
-        /// <param name="dateTimeRenderOption"></param>
-        /// <returns></returns>
+        /// <param name="range">The range to retrieve.</param>
+        /// <param name="valueRenderOption">How cell values are returned by the API.</param>
+        /// <param name="dateTimeRenderOption">How date and time values are returned by the API.</param>
+        /// <returns>The values in the requested rows, or an empty collection when no values exist.</returns>
         public IList<IList<object>> GetRows(SheetRange range,
             ValueRenderOptionEnum valueRenderOption = ValueRenderOptionEnum.UNFORMATTEDVALUE,
             DateTimeRenderOptionEnum dateTimeRenderOption = DateTimeRenderOptionEnum.SERIALNUMBER)
@@ -206,8 +206,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Return a collection of rows formatted values for a given SheetRange input
         /// </summary>
-        /// <param name="range"></param>
-        /// <returns></returns>
+        /// <param name="range">The range to retrieve.</param>
+        /// <returns>The formatted values in the requested rows, or an empty collection when no values exist.</returns>
         public IList<IList<object>> GetRowsFormatted(SheetRange range)
         {
             EnsureServiceInitialized();
@@ -235,8 +235,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Clears values from a spreadsheet (NOTE: All other properties of the cell (such as formatting, data validation, etc..) are kept.)
         /// </summary>
-        /// <param name="range"></param>
-        /// <returns></returns>
+        /// <param name="range">The range whose values should be cleared.</param>
+        /// <returns>The API response describing the cleared range.</returns>
         public ClearValuesResponse ClearRange(SheetRange range)
         {
             EnsureServiceInitialized();
@@ -252,8 +252,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Deletes a specified column
         /// </summary>
-        /// <param name="col"></param>
-        /// <returns></returns>
+        /// <param name="col">The one-based index of the column to delete.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse DeleteColumn(int col)
         {
             EnsureServiceInitialized();
@@ -284,8 +284,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Deletes a specified column
         /// </summary>
-        /// <param name="columnLetter"></param>
-        /// <returns></returns>
+        /// <param name="columnLetter">The letter-based column identifier to delete.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse DeleteColumn(string columnLetter)
         {
             EnsureServiceInitialized();
@@ -298,8 +298,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Deletes a specified row
         /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
+        /// <param name="row">The one-based index of the row to delete.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse DeleteRow(int row)
         {
             EnsureServiceInitialized();
@@ -328,11 +328,11 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        ///
+        /// Deletes all rows in the inclusive range.
         /// </summary>
-        /// <param name="startRow"></param>
-        /// <param name="endRow"></param>
-        /// <returns></returns>
+        /// <param name="startRow">The one-based index of the first row to delete.</param>
+        /// <param name="endRow">The one-based index of the last row to delete.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse DeleteRows(int startRow, int endRow)
         {
             EnsureServiceInitialized();
@@ -363,8 +363,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Inserts a blank new column using the column index as the id (NOTE: 1 is the first index for the column based index)
         /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
+        /// <param name="column">The one-based index where the column is inserted.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse InsertBlankColumn(int column)
         {
             EnsureServiceInitialized();
@@ -401,8 +401,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Inserts a blank new column using a letter notation (i.e. B2 as the column id)
         /// </summary>
-        /// <param name="columnLetter"></param>
-        /// <returns></returns>
+        /// <param name="columnLetter">The letter-based column identifier where the column is inserted.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse InsertBlankColumn(string columnLetter)
         {
             EnsureServiceInitialized();
@@ -415,8 +415,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Inserts a new blank row
         /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
+        /// <param name="row">The one-based index where the row is inserted.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse InsertBlankRow(int row)
         {
             EnsureServiceInitialized();
@@ -455,12 +455,12 @@ namespace GoogleSheetsWrapper
         ///
         /// This is useful to avoid throttling limits with the Google Sheets API
         /// </summary>
-        /// <param name="updates"></param>
+        /// <param name="updates">The cell ranges and data to update.</param>
         /// <param name="fieldMask">Allows you to specify what fields you want to update in the BatchUpdate call,
         /// defaults to userEnteredValue to keep existing cell styles, use "*" to update all properties here.
         /// Other valid field mask values are: dataSourceFormula, dataSourceTable, dataValidation, effectiveFormat, effectiveValue, formattedValue, hyperlink, note, pivotTable, textFormatRuns, userEnteredFormat, userEnteredValue
         /// </param>
-        /// <returns></returns>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse BatchUpdate(List<BatchUpdateRequestObject> updates, string fieldMask = "userEnteredValue")
         {
             EnsureServiceInitialized();
@@ -554,15 +554,15 @@ namespace GoogleSheetsWrapper
         /// </summary>
         /// <param name="spreadsheetID"></param>
         /// <param name="serviceAccountEmail"></param>
-        /// <param name="tabName"></param>
+        /// <param name="tabName">The tab to which records are appended.</param>
         public SheetHelper(string spreadsheetID, string serviceAccountEmail, string tabName)
             : base(spreadsheetID, serviceAccountEmail, tabName) { }
 
         /// <summary>
         /// Adds a record to the next row in the Google Sheet tab
         /// </summary>
-        /// <param name="record"></param>
-        /// <returns></returns>
+        /// <param name="record">The record to append.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse AppendRow(T record)
         {
             EnsureServiceInitialized();
@@ -571,10 +571,10 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// Adds mulitlpe rows to the next row in the Google Sheets tab
+        /// Adds multiple rows to the next row in the Google Sheets tab
         /// </summary>
-        /// <param name="records"></param>
-        /// <returns></returns>
+        /// <param name="records">The records to append.</param>
+        /// <returns>The response from the batch update operation.</returns>
         public BatchUpdateSpreadsheetResponse AppendRows(IList<T> records)
         {
             EnsureServiceInitialized();

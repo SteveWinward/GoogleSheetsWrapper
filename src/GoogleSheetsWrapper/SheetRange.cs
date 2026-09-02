@@ -10,12 +10,12 @@ namespace GoogleSheetsWrapper
     public class SheetRange : IEquatable<SheetRange>
     {
         /// <summary>
-        /// Is this A1 notation?
+        /// Gets the range expressed in A1 notation when the range has an end column.
         /// </summary>
         public string A1Notation { get; private set; }
 
         /// <summary>
-        /// Is this R1C1 notation?
+        /// Gets the range expressed in R1C1 notation.
         /// </summary>
         public string R1C1Notation { get; private set; }
 
@@ -95,11 +95,11 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Row and column numbers are 1 based indexes
         /// </summary>
-        /// <param name="tabName"></param>
-        /// <param name="startColumn"></param>
-        /// <param name="endColumn"></param>
-        /// <param name="startRow"></param>
-        /// <param name="endRow"></param>
+        /// <param name="tabName">The optional sheet tab name.</param>
+        /// <param name="startColumn">The one-based index of the first column.</param>
+        /// <param name="startRow">The one-based index of the first row.</param>
+        /// <param name="endColumn">The optional one-based index of the last column.</param>
+        /// <param name="endRow">The optional one-based index of the last row.</param>
         public SheetRange(string tabName, int startColumn, int startRow, int? endColumn = null, int? endRow = null)
         {
             _startColumn = startColumn;
@@ -114,7 +114,7 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// Create a SheetRange from an A1 notation or an R1C1 notation
         /// </summary>
-        /// <param name="rangeValue"></param>
+        /// <param name="rangeValue">A valid A1 or R1C1 range expression.</param>
         public SheetRange(string rangeValue)
         {
             SheetRange range;
@@ -146,8 +146,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// columnId is a 1 based index
         /// </summary>
-        /// <param name="columnID"></param>
-        /// <returns></returns>
+        /// <param name="columnID">The one-based column index.</param>
+        /// <returns>The corresponding A1 column letters.</returns>
         public static string GetLettersFromColumnID(int columnID)
         {
             var block = columnID - 1;
@@ -169,8 +169,8 @@ namespace GoogleSheetsWrapper
         /// <summary>
         /// The resulting column id is on a 1 based index (i.e. A => 1)
         /// </summary>
-        /// <param name="letters"></param>
-        /// <returns></returns>
+        /// <param name="letters">The A1 column letters to convert.</param>
+        /// <returns>The corresponding one-based column index.</returns>
         public static int GetColumnIDFromLetters(string letters)
         {
             var result = 0;
@@ -245,10 +245,10 @@ namespace GoogleSheetsWrapper
         #region IEquatable Interface Implementation
 
         /// <summary>
-        /// 
+        /// Calculates a hash code from the range coordinates and tab name.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">The range for which to calculate a hash code.</param>
+        /// <returns>A hash code for the specified range.</returns>
         public static int GetHashCode(SheetRange obj)
         {
             return HashCode.Combine(
@@ -260,10 +260,10 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Determines whether this range has the same coordinates and notation as another range.
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The range to compare with this instance.</param>
+        /// <returns><see langword="true"/> when the ranges are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals(SheetRange other)
         {
             return
@@ -279,19 +279,19 @@ namespace GoogleSheetsWrapper
         }
 
         /// <summary>
-        /// 
+        /// Determines whether this range equals another object.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">The object to compare with this instance.</param>
+        /// <returns><see langword="true"/> when the object is an equal range; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
             return Equals((SheetRange)obj);
         }
 
         /// <summary>
-        /// 
+        /// Returns a hash code based on the range coordinates and tab name.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A hash code for this range.</returns>
         public override int GetHashCode()
         {
             return GetHashCode(this);
