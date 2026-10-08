@@ -58,7 +58,26 @@ namespace GoogleSheetsWrapper
         {
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                AppendCsv(stream, csvHasHeaderRecord, batchWaitTime, batchSize, skipWritingHeaderRow);
+                AppendCsv(stream, csvHasHeaderRecord, new BatchInformation
+                {
+                    BatchWaitTime = batchWaitTime,
+                    BatchSize = batchSize,
+                    SkipWritingHeaderRow = skipWritingHeaderRow
+                });
+            }
+        }
+
+        /// <summary>
+        /// Appends a CSV file and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="csvHasHeaderRecord">This boolean indicates whether the CSV file has a header record row or not</param>
+        /// <param name="batchInformation">Batch configuration for appending rows</param>
+        public void AppendCsv(string filePath, bool csvHasHeaderRecord, BatchInformation batchInformation)
+        {
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                AppendCsv(stream, csvHasHeaderRecord, batchInformation);
             }
         }
 
@@ -77,7 +96,28 @@ namespace GoogleSheetsWrapper
                 HasHeaderRecord = csvHasHeaderRecord
             };
 
-            AppendCsv(stream, csvConfig, batchWaitTime, batchSize, skipWritingHeaderRow);
+            AppendCsv(stream, csvConfig, new BatchInformation
+            {
+                BatchWaitTime = batchWaitTime,
+                BatchSize = batchSize,
+                SkipWritingHeaderRow = skipWritingHeaderRow
+            });
+        }
+
+        /// <summary>
+        /// Appends a CSV stream and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="csvHasHeaderRecord">This boolean indicates whether the CSV file has a header record row or not</param>
+        /// <param name="batchInformation">Batch configuration for appending rows</param>
+        public void AppendCsv(Stream stream, bool csvHasHeaderRecord, BatchInformation batchInformation)
+        {
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = csvHasHeaderRecord
+            };
+
+            AppendCsv(stream, csvConfig, batchInformation);
         }
 
         /// <summary>
@@ -90,11 +130,25 @@ namespace GoogleSheetsWrapper
         /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
         public void AppendCsv(Stream stream, CsvConfiguration csvConfig, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false)
         {
+            AppendCsv(stream, csvConfig, new BatchInformation
+            {
+                BatchWaitTime = batchWaitTime,
+                BatchSize = batchSize,
+                SkipWritingHeaderRow = skipWritingHeaderRow
+            });
+        }
+
+        /// <summary>
+        /// Appends a CSV stream and all its rows into the current Google Sheets tab
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="csvConfig"></param>
+        /// <param name="batchInformation">Batch configuration for appending rows</param>
+        public void AppendCsv(Stream stream, CsvConfiguration csvConfig, BatchInformation batchInformation)
+        {
             using var streamReader = new StreamReader(stream);
             using var csv = new CsvReader(streamReader, csvConfig);
             {
-                var batchRowLimit = batchSize;
-
                 var dataRecords =
                     csv.GetRecords<dynamic>()
                     .Select(x => (IDictionary<string, object>)x)
@@ -102,13 +156,9 @@ namespace GoogleSheetsWrapper
 
                 var rowData = new List<RowData>();
 
-                var currentBatchCount = 0;
-
                 // Only write the header record if its specified to not skip writing the header row
-                if (csvConfig.HasHeaderRecord && !skipWritingHeaderRow)
+                if (csvConfig.HasHeaderRecord && !batchInformation.SkipWritingHeaderRow)
                 {
-                    currentBatchCount++;
-
                     var row = new RowData()
                     {
                         Values = new List<CellData>()
@@ -124,37 +174,15 @@ namespace GoogleSheetsWrapper
                     rowData.Add(row);
                 }
 
-                foreach (var record in dataRecords)
-                {
-                    currentBatchCount++;
-
-                    var row = new RowData()
+                AppendDataRecords(
+                    dataRecords,
+                    record => new RowData
                     {
-                        Values = new List<CellData>()
-                    };
-
-                    foreach (var property in record.Keys)
-                    {
-                        row.Values.Add(StringToCellData(record[property]));
-                    }
-
-                    rowData.Add(row);
-
-                    if (currentBatchCount >= batchRowLimit)
-                    {
-                        AppendRows(rowData);
-
-                        rowData = new List<RowData>();
-                        currentBatchCount = 0;
-
-                        Thread.Sleep(batchWaitTime);
-                    }
-                }
-
-                if (rowData.Count > 0)
-                {
-                    AppendRows(rowData);
-                }
+                        Values = record.Keys.Select(property => StringToCellData(record[property])).ToList()
+                    },
+                    batchInformation,
+                    rowData,
+                    csvConfig.HasHeaderRecord && !batchInformation.SkipWritingHeaderRow ? 1 : 0);
             }
         }
 
@@ -168,19 +196,29 @@ namespace GoogleSheetsWrapper
         /// <param name="skipWritingHeaderRow">This boolean indicates if you want to actually write the header row to the Google sheet</param>
         public void AppendObject<T>(IEnumerable<T> dataRecords, int batchWaitTime = 1000, int batchSize = 100, bool skipWritingHeaderRow = false) where T : class
         {
-            var batchRowLimit = batchSize;
+            AppendObject(dataRecords, new BatchInformation
+            {
+                BatchWaitTime = batchWaitTime,
+                BatchSize = batchSize,
+                SkipWritingHeaderRow = skipWritingHeaderRow
+            });
+        }
 
+        /// <summary>
+        /// This lets you append a list of objects to the Google Sheet with any object using reflection to determine the property types during runtime.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataRecords">The list of records</param>
+        /// <param name="batchInformation">Batch configuration for appending rows</param>
+        public void AppendObject<T>(IEnumerable<T> dataRecords, BatchInformation batchInformation) where T : class
+        {
             var rowData = new List<RowData>();
-
-            var currentBatchCount = 0;
 
             var properties = typeof(T).GetProperties().Where(x => !x.CustomAttributes.Any(a => a.AttributeType == typeof(CsvHelper.Configuration.Attributes.IgnoreAttribute)));
 
             // Only write the header record if its specified to not skip writing the header row
-            if (!skipWritingHeaderRow)
+            if (!batchInformation.SkipWritingHeaderRow)
             {
-                currentBatchCount++;
-
                 var row = new RowData()
                 {
                     Values = new List<CellData>()
@@ -200,31 +238,36 @@ namespace GoogleSheetsWrapper
                 rowData.Add(row);
             }
 
+            AppendDataRecords(
+                dataRecords,
+                record => new RowData
+                {
+                    Values = properties.Select(property => ObjectToCellData(property.GetValue(record))).ToList()
+                },
+                batchInformation,
+                rowData,
+                batchInformation.SkipWritingHeaderRow ? 0 : 1);
+        }
+
+        private void AppendDataRecords<T>(IEnumerable<T> dataRecords, Func<T, RowData> rowFactory, BatchInformation batchInformation, List<RowData> rowData, int currentBatchCount)
+        {
             foreach (var record in dataRecords)
             {
                 currentBatchCount++;
+                rowData.Add(rowFactory(record));
 
-                var row = new RowData()
-                {
-                    Values = new List<CellData>()
-                };
-
-                foreach (var property in properties)
-                {
-                    var propertyValue = property.GetValue(record);
-                    row.Values.Add(ObjectToCellData(propertyValue));
-                }
-
-                rowData.Add(row);
-
-                if (currentBatchCount >= batchRowLimit)
+                if (currentBatchCount >= batchInformation.BatchSize)
                 {
                     AppendRows(rowData);
-
                     rowData = new List<RowData>();
                     currentBatchCount = 0;
 
-                    Thread.Sleep(batchWaitTime);
+                    if (batchInformation.ShouldCancel?.Invoke() == true)
+                    {
+                        return;
+                    }
+
+                    Thread.Sleep(batchInformation.BatchWaitTime);
                 }
             }
 
