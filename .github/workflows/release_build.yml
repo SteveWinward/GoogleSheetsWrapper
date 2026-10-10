@@ -23,11 +23,11 @@ jobs:
         working-directory: 'src'
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     # Uses the latest version of dotnet since we don't specific a version here
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
         
       # Restore nuget packages
     - name: Restore dependencies
