@@ -251,8 +251,11 @@ namespace GoogleSheetsWrapper
 
         private void AppendDataRecords<T>(IEnumerable<T> dataRecords, Func<T, RowData> rowFactory, BatchInformation batchInformation, List<RowData> rowData, int currentBatchCount)
         {
-            foreach (var record in dataRecords)
+            var records = dataRecords.ToList();
+
+            for (var recordIndex = 0; recordIndex < records.Count; recordIndex++)
             {
+                var record = records[recordIndex];
                 currentBatchCount++;
                 rowData.Add(rowFactory(record));
 
@@ -262,12 +265,16 @@ namespace GoogleSheetsWrapper
                     rowData = new List<RowData>();
                     currentBatchCount = 0;
 
-                    if (batchInformation.ShouldCancel?.Invoke() == true)
+                    var hasMoreRecords = recordIndex < records.Count - 1;
+                    if (hasMoreRecords && batchInformation.ShouldCancel?.Invoke() == true)
                     {
                         return;
                     }
 
-                    Thread.Sleep(batchInformation.BatchWaitTime);
+                    if (hasMoreRecords)
+                    {
+                        Thread.Sleep(batchInformation.BatchWaitTime);
+                    }
                 }
             }
 
