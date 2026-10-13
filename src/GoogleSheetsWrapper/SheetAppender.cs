@@ -154,7 +154,7 @@ namespace GoogleSheetsWrapper
 
             if (csvConfig.HasHeaderRecord && csv.Read())
             {
-                csv.ReadHeader();
+                _ = csv.ReadHeader();
 
                 if (!batchInformation.SkipWritingHeaderRow)
                 {
