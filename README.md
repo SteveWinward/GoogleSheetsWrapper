@@ -49,26 +49,20 @@ public class TestRecord : BaseRecord
     public string Name { get; set; }
 
     [SheetField(
-        DisplayName = "Number",
-        ColumnID = 2,
-        FieldType = SheetFieldType.PhoneNumber)]
-    public long? PhoneNumber { get; set; }
-
-    [SheetField(
         DisplayName = "Price Amount",
-        ColumnID = 3,
+        ColumnID = 2,
         FieldType = SheetFieldType.Currency)]
     public double? PriceAmount { get; set; }
 
     [SheetField(
         DisplayName = "Date",
-        ColumnID = 4,
+        ColumnID = 3,
         FieldType = SheetFieldType.DateTime)]
     public DateTime? DateTime { get; set; }
 
     [SheetField(
         DisplayName = "Quantity",
-        ColumnID = 5,
+        ColumnID = 4,
         FieldType = SheetFieldType.Number)]
     public double? Quantity { get; set; }
 
