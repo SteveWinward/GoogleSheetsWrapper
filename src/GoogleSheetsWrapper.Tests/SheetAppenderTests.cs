@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,6 +82,29 @@ namespace GoogleSheetsWrapper.Tests
             Assert.That(_httpHandler.RequestBodies[0], Does.Contain("Name"));
             Assert.That(_httpHandler.RequestBodies[0], Does.Contain("Alice"));
             Assert.That(_httpHandler.RequestBodies[0], Does.Contain("30"));
+        }
+
+        [Test]
+        public void AppendCsvReadsRecordsIncrementally()
+        {
+            var csv = "Name,Age\n" + string.Join("\n", Enumerable.Range(0, 10000).Select(index => $"Person{index},{index}"));
+            using var stream = new TrackingMemoryStream(System.Text.Encoding.UTF8.GetBytes(csv));
+
+            _appender.AppendCsv(stream, true, new BatchInformation
+            {
+                BatchSize = 1,
+                BatchWaitTime = 0,
+                SkipWritingHeaderRow = true,
+                ShouldCancel = () =>
+                {
+                    Assert.That(stream.BytesRead, Is.LessThan(stream.Length));
+                    return true;
+                }
+            });
+
+            Assert.That(_httpHandler.RequestBodies, Has.Count.EqualTo(1));
+            Assert.That(_httpHandler.RequestBodies[0], Does.Contain("Person0"));
+            Assert.That(_httpHandler.RequestBodies[0], Does.Not.Contain("Person1"));
         }
 
         [Test]
@@ -175,6 +199,30 @@ namespace GoogleSheetsWrapper.Tests
                 using var reader = new StreamReader(bodyStream);
 
                 return reader.ReadToEnd();
+            }
+        }
+
+        private sealed class TrackingMemoryStream : MemoryStream
+        {
+            public TrackingMemoryStream(byte[] buffer)
+                : base(buffer)
+            {
+            }
+
+            public long BytesRead { get; private set; }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                var bytesRead = base.Read(buffer, offset, count);
+                BytesRead += bytesRead;
+                return bytesRead;
+            }
+
+            public override int Read(Span<byte> buffer)
+            {
+                var bytesRead = base.Read(buffer);
+                BytesRead += bytesRead;
+                return bytesRead;
             }
         }
 

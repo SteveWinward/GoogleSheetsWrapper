@@ -148,42 +148,33 @@ namespace GoogleSheetsWrapper
         {
             using var streamReader = new StreamReader(stream);
             using var csv = new CsvReader(streamReader, csvConfig);
+
+            var rowData = new List<RowData>();
+            var headerRowCount = 0;
+
+            if (csvConfig.HasHeaderRecord && csv.Read())
             {
-                var dataRecords =
-                    csv.GetRecords<dynamic>()
-                    .Select(x => (IDictionary<string, object>)x)
-                    .ToList();
+                csv.ReadHeader();
 
-                var rowData = new List<RowData>();
-
-                // Only write the header record if its specified to not skip writing the header row
-                if (csvConfig.HasHeaderRecord && !batchInformation.SkipWritingHeaderRow)
+                if (!batchInformation.SkipWritingHeaderRow)
                 {
-                    var row = new RowData()
+                    rowData.Add(new RowData
                     {
-                        Values = new List<CellData>()
-                    };
-
-                    var headers = csv.HeaderRecord;
-
-                    foreach (var header in headers)
-                    {
-                        row.Values.Add(StringToCellData(header));
-                    }
-
-                    rowData.Add(row);
+                        Values = csv.HeaderRecord.Select(StringToCellData).ToList()
+                    });
+                    headerRowCount = 1;
                 }
-
-                AppendDataRecords(
-                    dataRecords,
-                    record => new RowData
-                    {
-                        Values = record.Keys.Select(property => StringToCellData(record[property])).ToList()
-                    },
-                    batchInformation,
-                    rowData,
-                    csvConfig.HasHeaderRecord && !batchInformation.SkipWritingHeaderRow ? 1 : 0);
             }
+
+            AppendDataRecords(
+                ReadCsvRecords(csv),
+                record => new RowData
+                {
+                    Values = record.Select(StringToCellData).ToList()
+                },
+                batchInformation,
+                rowData,
+                headerRowCount);
         }
 
         /// <summary>
@@ -249,15 +240,30 @@ namespace GoogleSheetsWrapper
                 batchInformation.SkipWritingHeaderRow ? 0 : 1);
         }
 
+        private static IEnumerable<IList<string>> ReadCsvRecords(CsvReader csv)
+        {
+            while (csv.Read())
+            {
+                var record = new List<string>(csv.Parser.Count);
+
+                for (var fieldIndex = 0; fieldIndex < csv.Parser.Count; fieldIndex++)
+                {
+                    record.Add(csv.GetField(fieldIndex));
+                }
+
+                yield return record;
+            }
+        }
+
         private void AppendDataRecords<T>(IEnumerable<T> dataRecords, Func<T, RowData> rowFactory, BatchInformation batchInformation, List<RowData> rowData, int currentBatchCount)
         {
-            var records = dataRecords.ToList();
+            using var records = dataRecords.GetEnumerator();
+            var hasRecord = records.MoveNext();
 
-            for (var recordIndex = 0; recordIndex < records.Count; recordIndex++)
+            while (hasRecord)
             {
-                var record = records[recordIndex];
                 currentBatchCount++;
-                rowData.Add(rowFactory(record));
+                rowData.Add(rowFactory(records.Current));
 
                 if (currentBatchCount >= batchInformation.BatchSize)
                 {
@@ -265,16 +271,20 @@ namespace GoogleSheetsWrapper
                     rowData = new List<RowData>();
                     currentBatchCount = 0;
 
-                    var hasMoreRecords = recordIndex < records.Count - 1;
-                    if (hasMoreRecords && batchInformation.ShouldCancel?.Invoke() == true)
+                    hasRecord = records.MoveNext();
+                    if (hasRecord && batchInformation.ShouldCancel?.Invoke() == true)
                     {
                         return;
                     }
 
-                    if (hasMoreRecords)
+                    if (hasRecord)
                     {
                         Thread.Sleep(batchInformation.BatchWaitTime);
                     }
+                }
+                else
+                {
+                    hasRecord = records.MoveNext();
                 }
             }
 
